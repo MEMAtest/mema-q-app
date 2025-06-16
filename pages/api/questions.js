@@ -1,6 +1,6 @@
 // pages/api/questions.js
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+
+import prisma from '../../lib/prisma';
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {
@@ -12,7 +12,8 @@ export default async function handler(req, res) {
       });
       res.status(200).json(questions);
     } catch (error) {
-      res.status(500).json({ message: 'Error fetching questions' });
+      console.error("Error fetching questions:", error);
+      res.status(500).json({ message: 'Internal Server Error: Could not fetch questions.' });
     }
   } else {
     res.setHeader('Allow', ['GET']);

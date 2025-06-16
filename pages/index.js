@@ -1,92 +1,190 @@
-// pages/index.js
 import { useState, useEffect } from 'react';
+import Head from 'next/head';
 import WelcomeScreen from '../components/WelcomeScreen';
 import Questionnaire from '../components/Questionnaire';
 import ResultsPage from '../components/ResultsPage';
+import Stepper from '../components/Stepper';
 
-export default function HomePage() {
-  // State to manage the overall application flow
-  const [quizState, setQuizState] = useState('welcome'); // 'welcome', 'active', 'results'
-  
-  // State to hold data fetched from our API
+export default function Home() {
+  const [appState, setAppState] = useState('welcome');
   const [questions, setQuestions] = useState([]);
-  
-  // State to track user's progress
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentSection, setCurrentSection] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
+  const [analysisResult, setAnalysisResult] = useState(null);
 
-  // Fetch questions from our API when the component loads
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
         const response = await fetch('/api/questions');
+        if (!response.ok) throw new Error('Failed to fetch questions');
         const data = await response.json();
         setQuestions(data);
       } catch (error) {
-        console.error("Failed to fetch questions:", error);
+        console.error("Error fetching questions:", error);
       }
     };
     fetchQuestions();
-  }, []); // The empty array means this effect runs only once
+  }, []);
 
-  // --- Handler Functions ---
-
-  const startQuiz = () => {
-    setQuizState('active');
+  const handleStart = () => {
+    setAppState('questionnaire');
   };
 
-  const handleAnswer = (questionId, answer) => {
-    // Record the answer
-    setAnswers(prev => ({ ...prev, [questionId]: answer }));
-
-    // Move to the next question or show results
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-    } else {
-      setQuizState('results');
+  const handleStepClick = (sectionIndex) => {
+    if (sectionIndex <= currentSection) {
+      setCurrentSection(sectionIndex);
+      setCurrentQuestion(0);
     }
   };
 
-  const restartQuiz = () => {
-    setAnswers({});
-    setCurrentQuestionIndex(0);
-    setQuizState('welcome');
+  const handleAnswer = (questionId, answerPayload) => {
+    setAnswers(prev => ({ ...prev, [questionId]: answerPayload }));
+  };
+
+  const handleNext = () => {
+    const section = questions[currentSection];
+    if (currentQuestion < section.items.length - 1) {
+      setCurrentQuestion(prev => prev + 1);
+    } else if (currentSection < questions.length - 1) {
+      setCurrentSection(prev => prev + 1);
+      setCurrentQuestion(0);
+    } else {
+      handleShowResults();
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(prev => prev - 1);
+    } else if (currentSection > 0) {
+      const prevSectionIndex = currentSection - 1;
+      const prevSection = questions[prevSectionIndex];
+      setCurrentSection(prevSectionIndex);
+      setCurrentQuestion(prevSection.items.length - 1);
+    }
   };
   
-  // --- Render Logic ---
-  
-  // Don't render anything until the questions have loaded
-  if (questions.length === 0) {
-    return <div>Loading Questionnaire...</div>;
-  }
+  const handleShowResults = () => {
+    const results = analyzeResults();
+    setAnalysisResult(results);
+    setAppState('results');
+  };
 
+  const handleGoBack = () => {
+    setAppState('questionnaire');
+  };
+
+  const analyzeResults = () => {
+    const potentialFailures = [];
+    let compliantAnswersForScore = 0;
+    let answeredQuestionsForScore = 0;
+
+    const sectionData = questions.map(section => {
+        let sectionYesCount = 0, sectionNoCount = 0, sectionOtherCount = 0, sectionUnansweredCount = 0;
+        section.items.forEach(item => {
+            const answer = answers[item.id]?.answer;
+            let isFailure = false;
+            let implicationText = '';
+            if (answer) answeredQuestionsForScore++;
+
+            if (item.type === 'yesno') {
+                if (answer === 'Yes') {
+                    compliantAnswersForScore++;
+                    sectionYesCount++;
+                } else if (answer === 'No') {
+                    sectionNoCount++;
+                    if (item.complianceImplicationIfNo) {
+                        isFailure = true;
+                        implicationText = item.complianceImplicationIfNo;
+                    }
+                } else {
+                    sectionUnansweredCount++;
+                }
+            } else if (item.type === 'dropdown') {
+                if (answer && item.complianceImplicationIfSelected && item.complianceImplicationIfSelected[answer]) {
+                    isFailure = true;
+                    implicationText = item.complianceImplicationIfSelected[answer];
+                    sectionNoCount++;
+                } else if (answer) {
+                    compliantAnswersForScore++;
+                    sectionOtherCount++;
+                } else {
+                    sectionUnansweredCount++;
+                }
+            }
+            if (isFailure) {
+                potentialFailures.push({ id: item.id, question: item.questionText, ref: item.ref, implication: implicationText,notes: answers[item.id]?.notes || '' });
+            }
+        });
+        return {
+            title: section.sectionTitle.replace(/Section \d+: /g, ""),
+            counts: [sectionYesCount, sectionNoCount, sectionOtherCount, sectionUnansweredCount]
+        };
+    });
+    
+    const healthScore = answeredQuestionsForScore > 0 ? Math.round((compliantAnswersForScore / answeredQuestionsForScore) * 100) : 0;
+    const chartData = {
+        doughnut: [healthScore, 100 - healthScore],
+        bar: {
+            labels: sectionData.map(s => s.title),
+            datasets: [
+                { label: 'Yes', data: sectionData.map(s => s.counts[0]), backgroundColor: 'rgba(56, 189, 123, 0.7)' },
+                { label: 'No / Issue', data: sectionData.map(s => s.counts[1]), backgroundColor: 'rgba(239, 68, 68, 0.7)' },
+                { label: 'Other', data: sectionData.map(s => s.counts[2]), backgroundColor: 'rgba(99, 102, 241, 0.7)' },
+                { label: 'Unanswered', data: sectionData.map(s => s.counts[3]), backgroundColor: 'rgba(245, 158, 11, 0.7)' }
+            ]
+        }
+    };
+    return { potentialFailures, healthScore, chartData };
+  };
+
+  const sectionsForStepper = questions.map(section => ({
+      id: section.id,
+      title: section.sectionTitle
+  }));
+  
   return (
-    <div className="min-h-screen bg-slate-100 font-sans">
-      <header className="bg-indigo-700 text-white p-4 shadow-lg sticky top-0 z-50">
-        <div className="container mx-auto flex justify-between items-center">
-            <h1 className="text-xl sm:text-2xl font-semibold">MEMA Consultants - Financial Promotions Questionnaire</h1>
-            {quizState === 'active' && <button onClick={() => setQuizState('results')} className="bg-indigo-500 hover:bg-indigo-400 text-white font-semibold py-2 px-4 rounded-lg transition">View Results</button>}
-        </div>
-      </header>
-      
-      <main className="app-container flex-grow">
-        {quizState === 'welcome' && <WelcomeScreen onStart={startQuiz} />}
-        
-        {quizState === 'active' && (
+    <div>
+      <Head>
+        <title>MEMA Financial Promotions App</title>
+      </Head>
+
+      <main>
+        {appState === 'questionnaire' && questions.length > 0 && (
+          <div className="container mx-auto px-4 mt-6">
+             <Stepper
+                sections={sectionsForStepper}
+                currentSectionIndex={currentSection}
+                onStepClick={handleStepClick}
+              />
+          </div>
+        )}
+
+        {appState === 'welcome' && <WelcomeScreen onStart={handleStart} />}
+
+        {appState === 'questionnaire' && questions.length > 0 ? (
           <Questionnaire
-            question={questions[currentQuestionIndex]}
+            section={questions[currentSection]}
+            question={questions[currentSection].items[currentQuestion]}
             onAnswer={handleAnswer}
-            currentIndex={currentQuestionIndex}
-            totalQuestions={questions.length}
+            onNext={handleNext}
+            onPrev={handlePrev}
+            isFirstQuestion={currentSection === 0 && currentQuestion === 0}
+            isLastQuestion={currentSection === questions.length - 1 && currentQuestion === questions[currentSection].items.length - 1}
+            currentAnswer={answers[questions[currentSection].items[currentQuestion].id]}
+          />
+        ) : appState === 'questionnaire' ? (
+          <div className="app-container text-center">Loading questions...</div>
+        ) : null}
+
+        {appState === 'results' && (
+          <ResultsPage 
+            results={analysisResult} 
+            onGoBack={handleGoBack} 
           />
         )}
-        
-        {quizState === 'results' && <ResultsPage answers={answers} questions={questions} onRestart={restartQuiz} />}
       </main>
-
-      <footer className="text-center p-4 text-sm text-slate-500 bg-slate-200 mt-auto">
-         MEMA Consultants - Financial Promotions Questionnaire
-      </footer>
     </div>
   );
 }
