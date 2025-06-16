@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+// Stores all the questions, options, and compliance info
+model Question {
+  id                          String  @id @default(cuid())
+  sectionId                   String
+  sectionTitle                String
+  questionText                String
+  questionRef                 String
+  explanation                 String?
+  type                        String // "yesno", "dropdown", "multiselect"
+  options                     Json?   // To store dropdown/multiselect options
+  complianceImplicationIfNo   String?
+  complianceImplicationIfSelected Json?
+
+  // Relation to answers
+  responses UserResponse[]
+}
+
+// Stores a user's answer to a specific question
+model UserResponse {
+  id          String   @id @default(cuid())
+  sessionId   String   // An identifier for a single user's questionnaire session
+  answer      Json     // Flexible to store "Yes", an array of selections, or a dropdown value
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  // Relation to the question it answers
+  question    Question @relation(fields: [questionId], references: [id])
+  questionId  String
+}
+
+// Stores the contact details from the final form
+model Lead {
+  id        String   @id @default(cuid())
+  email     String
+  phone     String
+  createdAt DateTime @default(now())
+}
