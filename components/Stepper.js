@@ -1,38 +1,48 @@
+// components/Stepper.js
 import React from 'react';
+import {
+  ClipboardDocumentCheckIcon,
+  SparklesIcon,
+  BuildingOfficeIcon,
+  ExclamationTriangleIcon,
+  ChatBubbleBottomCenterTextIcon,
+  ArchiveBoxIcon
+} from '@heroicons/react/24/outline';
 
-// The Stepper component receives three props:
-// 1. 'sections' - An array of objects, where each object has a 'title'.
-// 2. 'currentSectionIndex' - A number indicating the user's current position.
-// 3. 'onStepClick' - A function to call when a user clicks on a step.
-const Stepper = ({ sections, currentSectionIndex, onStepClick }) => {
+// Map section IDs to icons for a more visual experience
+const iconMap = {
+  '1': ClipboardDocumentCheckIcon,
+  '2': SparklesIcon,
+  '3': BuildingOfficeIcon,
+  '4': ExclamationTriangleIcon,
+  '5': ChatBubbleBottomCenterTextIcon,
+  '6': ArchiveBoxIcon,
+};
+
+const Stepper = ({ sections, currentSectionId, completedSections, onStepClick }) => {
+  // Defensive check to ensure completedSections is always an array
+  const safeCompletedSections = completedSections || [];
+
   return (
-    // The <ol> element acts as the container for our stepper.
-    <ol className="stepper">
-      {sections.map((section, index) => {
-        // Determine the CSS class for the current step.
-        const isCompleted = index < currentSectionIndex;
-        const isActive = index === currentSectionIndex;
+    <nav aria-label="Progress">
+      <ol role="list" className="stepper">
+        {sections.map((section) => {
+          const IconComponent = iconMap[section.id.split('.')[0]];
+          const isCompleted = safeCompletedSections.includes(section.id);
+          const isActive = section.id === currentSectionId;
+          const statusClass = isCompleted ? 'completed' : isActive ? 'active' : '';
 
-        let stepClass = 'step';
-        if (isActive) {
-          stepClass += ' active';
-        } else if (isCompleted) {
-          stepClass += ' completed';
-        }
-
-        return (
-          <li
-            key={section.id || index}
-            className={stepClass}
-            // The onClick handler allows users to navigate by clicking the stepper.
-            onClick={() => onStepClick(index)}
-          >
-            <div className="dot" />
-            <div className="label">{section.title}</div>
-          </li>
-        );
-      })}
-    </ol>
+          return (
+            <li key={section.title} className={`step ${statusClass}`} onClick={() => onStepClick(section.id)}>
+              <div className="dot">
+                {IconComponent && <IconComponent className="icon" aria-hidden="true" />}
+              </div>
+              <span className="label">{section.title}</span>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
   );
 };
 

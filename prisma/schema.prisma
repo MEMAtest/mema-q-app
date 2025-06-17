@@ -43,5 +43,6 @@ model Lead {
   id        String   @id @default(cuid())
   email     String
   phone     String
+  firm      String?  // --- ADDED THIS LINE ---
   createdAt DateTime @default(now())
 }
