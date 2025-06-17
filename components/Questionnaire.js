@@ -86,41 +86,42 @@ const Questionnaire = ({
   };
 
   return (
-    <div className="content-wrapper">
-      <div className="layout-wrapper">
-        <div className="layout-main">
-          {/* Ensure question object exists before rendering */}
-          {question ? (
-            <>
-              <h4 className="question-text">{question.id}. {question.questionText}</h4>
-              <p className="text-sm text-slate-500 mb-6">Reference: {question.questionRef}</p>
-              <div className="answer-options mb-6">{renderAnswerOptions()}</div>
-              <div className="notes-area">
-                <label htmlFor="notes" className="block text-sm font-semibold text-slate-700 mb-1">Notes/Considerations (Optional):</label>
-                <textarea id="notes" placeholder="Enter any specific notes or justifications..." value={currentAnswer?.notes || ''} onChange={handleNotesChange} rows="4"/>
+    <div className="app-container">
+      <div className="content-wrapper">
+        <div className="layout-wrapper">
+          <div className="layout-main">
+            {/* Ensure question object exists before rendering */}
+            {question ? (
+              <>
+                <h4 className="question-text">{question.id}. {question.questionText}</h4>
+                <p className="question-ref">Reference: {question.questionRef}</p>
+                <div className="answer-options">{renderAnswerOptions()}</div>
+                <div className="notes-area">
+                  <label htmlFor="notes" className="block text-sm font-semibold text-slate-700 mb-1">Notes/Considerations (Optional):</label>
+                  <textarea id="notes" placeholder="Enter any specific notes or justifications..." value={currentAnswer?.notes || ''} onChange={handleNotesChange} rows="4"/>
+                </div>
+              </>
+            ) : (
+              <p>Loading question...</p>
+            )}
+          </div>
+          <div className="layout-sidebar">
+            {question && (
+              <div className="question-explanation sticky top-8">
+                  <h4 className="font-bold text-slate-700 mb-2">Why this is important</h4>
+                  <p>{question.explanation}</p>
               </div>
-            </>
-          ) : (
-            <p>Loading question...</p>
-          )}
+            )}
+          </div>
         </div>
-        <div className="layout-sidebar">
-          {question && (
-            <div className="question-explanation sticky top-8">
-                <h4 className="font-bold text-slate-700 mb-2">Why this is important</h4>
-                <p>{question.explanation}</p>
-            </div>
-          )}
+        <div className="navigation-buttons">
+          <button onClick={onPrev} disabled={isFirstQuestion} style={{ visibility: isFirstQuestion ? 'hidden' : 'visible' }}>
+              Previous
+          </button>
+          <button onClick={onNext} className={isLastQuestion ? 'btn-finish' : ''}>
+              {isLastQuestion ? 'Finish & View Results' : 'Next'}
+          </button>
         </div>
-      </div>
-      <div className="navigation-buttons">
-        <button onClick={onPrev} disabled={isFirstQuestion} style={{ visibility: isFirstQuestion ? 'hidden' : 'visible' }}>
-            Previous
-        </button>
-        {/* --- MODIFIED: Added conditional className for the finish button --- */}
-        <button onClick={onNext} className={isLastQuestion ? 'btn-finish' : ''}>
-            {isLastQuestion ? 'Finish & View Results' : 'Next'}
-        </button>
       </div>
     </div>
   );

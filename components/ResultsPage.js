@@ -6,7 +6,6 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarEle
 
 export default function ResultsPage({ results, onGoBack, questions, answers }) {
   const [isFullReportUnlocked, setIsFullReportUnlocked] = useState(false);
-  // --- ADDED: State for the new 'Name' field ---
   const [leadName, setLeadName] = useState('');
   const [leadEmail, setLeadEmail] = useState('');
   const [leadPhone, setLeadPhone] = useState('');
@@ -34,7 +33,6 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          // --- ADDED: Include 'name' in the API request ---
           name: leadName,
           firm: leadFirm,
           email: leadEmail,
@@ -106,6 +104,31 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
           <p className="text-4xl font-bold mt-4 text-green-600">{results.healthScore}%</p>
       </div>
 
+      {/* Preview Section - Always show first */}
+      <div className="mb-10">
+          <h3 className="text-2xl font-semibold text-indigo-700 mb-4">Preview: Key Issues Identified</h3>
+          {previewFailures.length > 0 ? (
+              previewFailures.map(failure => (
+                <div key={failure.id} className="potential-failure-item">
+                    <p className="font-semibold text-slate-800">{failure.id}: {failure.question}</p>
+                    {failure.notes && <p className="text-sm text-slate-600 mt-1"><em>Your Notes: {failure.notes}</em></p>}
+                    <div className="mt-2 text-sm p-2 rounded bg-red-100 border border-red-200">
+                        <strong className="text-red-800">Potential Implication: </strong>
+                        <span className="text-slate-700">{failure.implication}</span>
+                    </div>
+                </div>
+              ))
+          ) : (
+              <p className="text-green-700 bg-green-100 p-4 rounded-md">No critical issues found in the first two sections.</p>
+          )}
+      </div>
+
+      <div className="mb-10">
+          <h3 className="text-2xl font-semibold text-indigo-700 mb-4">Preview: Section Breakdown</h3>
+          <div className="chart-container" style={{height: '300px'}}><Bar data={previewBarData} options={barOptions} /></div>
+          <p className="text-center text-slate-600 text-sm mt-2">Showing first 2 sections. Unlock full report to see all 6 sections.</p>
+      </div>
+
       {isFullReportUnlocked ? (
         <>
           <div className="mb-10">
@@ -141,7 +164,6 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
             <h3 className="text-xl font-bold text-indigo-700 mb-2 text-center">Unlock & Download Full Report</h3>
             <p className="text-slate-600 text-sm mb-4 text-center">Provide your details to view the full report and receive a copy by email.</p>
             <form onSubmit={handleLeadSubmit} className="space-y-4">
-              {/* --- ADDED: The new 'Name' input field --- */}
               <div>
                 <label htmlFor="user-name" className="block text-sm font-medium text-slate-700">Full Name</label>
                 <input id="user-name" type="text" name="name" placeholder="Jane Doe" required className="w-full p-2 border border-slate-300 rounded-md" value={leadName} onChange={(e) => setLeadName(e.target.value)} />
@@ -158,7 +180,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
                 <label htmlFor="user-phone" className="block text-sm font-medium text-slate-700">Contact Number (Optional)</label>
                 <input id="user-phone" type="tel" name="phone" placeholder="07123 456789" className="w-full p-2 border border-slate-300 rounded-md" value={leadPhone} onChange={(e) => setLeadPhone(e.target.value)} />
               </div>
-              <button type="submit" disabled={formState.status === 'loading'} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg">
+              <button type="submit" disabled={formState.status === 'loading'} className="w-full start-button" style={{margin: '0', justifyContent: 'center'}}>
                 {formState.status === 'loading' ? 'Submitting...' : 'Unlock Full Report'}
               </button>
             </form>
@@ -168,7 +190,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
         </>
       )}
       <div className="text-center mt-8">
-        <button onClick={onGoBack} className="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg">
+        <button onClick={onGoBack} className="btn-back">
             ← Back to Questionnaire
         </button>
       </div>

@@ -4,8 +4,7 @@ import { PlayCircleIcon, CheckBadgeIcon, DocumentTextIcon, ShieldCheckIcon } fro
 
 const WelcomeScreen = ({ onStart }) => {
   return (
-    // This wrapper ensures the content is centered
-    <div className="content-wrapper">
+    <div className="app-container">
       <div className="welcome-screen">
         <div className="welcome-text">
           <h1 className="welcome-title">

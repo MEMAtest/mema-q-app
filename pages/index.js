@@ -152,7 +152,7 @@ export default function Home() {
             }
         });
         return {
-            title: section.sectionTitle.replace(/Section \d+: /g, ""),
+            title: (section.title || section.sectionTitle || 'Unknown Section').replace(/Section \d+: /g, ""),
             counts: [sectionYesCount, sectionNoCount, sectionOtherCount, sectionUnansweredCount]
         };
     });
@@ -174,7 +174,7 @@ export default function Home() {
   
   const sectionsForStepper = questions.map(section => ({
       id: section.id,
-      title: section.sectionTitle
+      title: section.title
   }));
 
   const iconMap = {
@@ -208,7 +208,7 @@ export default function Home() {
                 />
             </div>
             {appState === 'questionnaire' && (
-                <button onClick={handleShowResults} className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+                <button onClick={handleShowResults} className="start-button" style={{margin: '0'}}>
                     View Results
                 </button>
             )}
