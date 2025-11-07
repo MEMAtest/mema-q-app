@@ -233,7 +233,26 @@ export default function Home() {
         <meta name="description" content="Navigate FCA PERG 8.4 compliance with confidence. FinProms provides intelligent regulatory guidance and automated assessment for financial promotions." />
       </Head>
 
-      <header className="bg-white text-slate-800 p-4 shadow-md sticky top-0 z-50">
+      {/* Skip to main content link for accessibility */}
+      <a href="#main-content" style={{
+        position: 'absolute',
+        left: '-9999px',
+        zIndex: 999,
+        padding: '1rem',
+        background: 'var(--color-accent-primary)',
+        color: 'white',
+        textDecoration: 'none',
+        fontWeight: 'bold'
+      }} onFocus={(e) => {
+        e.target.style.left = '0';
+        e.target.style.top = '0';
+      }} onBlur={(e) => {
+        e.target.style.left = '-9999px';
+      }}>
+        Skip to main content
+      </a>
+
+      <header className="bg-white text-slate-800 p-4 shadow-md sticky top-0 z-50" role="banner">
         <div className="container mx-auto flex justify-between items-center">
             <div className="flex items-center">
                 <Image
@@ -245,14 +264,14 @@ export default function Home() {
                 />
             </div>
             {appState === 'questionnaire' && (
-                <button onClick={handleShowResults} className="start-button" style={{margin: '0'}}>
+                <button onClick={handleShowResults} className="start-button" style={{margin: '0'}} aria-label="View assessment results">
                     View Results
                 </button>
             )}
         </div>
       </header>
 
-      <main>
+      <main id="main-content" role="main">
         {appState === 'questionnaire' && questions.length > 0 && (
           <div className="container mx-auto px-4 mt-6">
              <Stepper

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { InformationCircleIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 import ProgressBar from './ProgressBar';
 import QuestionnaireLeftSidebar from './QuestionnaireLeftSidebar';
@@ -19,6 +19,25 @@ const Questionnaire = ({
   onStepClick,
   currentSectionIndex
 }) => {
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Alt + Arrow keys for navigation
+      if (e.altKey) {
+        if (e.key === 'ArrowRight' && !isLastQuestion) {
+          e.preventDefault();
+          onNext();
+        } else if (e.key === 'ArrowLeft' && !isFirstQuestion) {
+          e.preventDefault();
+          onPrev();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onNext, onPrev, isFirstQuestion, isLastQuestion]);
 
   const handleOptionChange = (e) => {
     onAnswer(question.id, {
@@ -100,6 +119,11 @@ const Questionnaire = ({
       minHeight: '100vh',
       background: 'var(--color-bg-light)'
     }}>
+      {/* Screen reader announcement for question changes */}
+      <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        {progressData && `Question ${progressData.currentQuestionIndex} of ${progressData.totalQuestions}`}
+      </div>
+
       {/* Progress Bar */}
       {progressData && (
         <ProgressBar
@@ -245,7 +269,7 @@ const Questionnaire = ({
                 </div>
 
                 {/* Navigation Buttons */}
-                <div className="navigation-buttons" style={{ marginTop: 'var(--spacing-xl)' }}>
+                <div className="navigation-buttons" style={{ marginTop: 'var(--spacing-xl)' }} role="navigation" aria-label="Question navigation">
                   <button
                     onClick={onPrev}
                     disabled={isFirstQuestion}
@@ -254,6 +278,8 @@ const Questionnaire = ({
                       visibility: isFirstQuestion ? 'hidden' : 'visible',
                       opacity: isFirstQuestion ? 0 : 1
                     }}
+                    aria-label="Go to previous question"
+                    tabIndex={isFirstQuestion ? -1 : 0}
                   >
                     ← Previous
                   </button>
@@ -263,6 +289,7 @@ const Questionnaire = ({
                     style={{
                       background: isLastQuestion ? 'var(--color-success)' : 'var(--color-accent-primary)'
                     }}
+                    aria-label={isLastQuestion ? 'Finish assessment and view results' : 'Go to next question'}
                   >
                     {isLastQuestion ? '✓ Finish & View Results' : 'Next →'}
                   </button>
