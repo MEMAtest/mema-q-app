@@ -193,7 +193,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-100 font-sans">
       <Head>
-        <title>MEMA Financial Promotions App</title>
+        <title>FinProms - FCA Financial Promotions Compliance by MEMA Consultants</title>
+        <meta name="description" content="Navigate FCA PERG 8.4 compliance with confidence. FinProms provides intelligent regulatory guidance and automated assessment for financial promotions." />
       </Head>
 
       <header className="bg-white text-slate-800 p-4 shadow-md sticky top-0 z-50">
@@ -201,7 +202,7 @@ export default function Home() {
             <div className="flex items-center">
                 <Image
                     src="/mema-logo.png"
-                    alt="MEMA Consultants Logo"
+                    alt="FinProms by MEMA Consultants"
                     width={160}
                     height={40}
                     className="object-contain"

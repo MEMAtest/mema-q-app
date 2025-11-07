@@ -23,7 +23,7 @@ const WelcomeScreen = ({ onStart }) => {
       {/* Header Navigation */}
       <header className="header">
         <div className="header-logo">
-          <img src="/mema-logo-new.svg" alt="MEMA Connect" style={{ color: 'var(--color-text-primary)' }} />
+          <img src="/mema-logo-new.svg" alt="FinProms" style={{ color: 'var(--color-text-primary)' }} />
         </div>
         <nav className="header-nav">
           <a href="#how-it-works">How It Works</a>
@@ -48,7 +48,7 @@ const WelcomeScreen = ({ onStart }) => {
             <div className="hero-text">
               <h1>Future-Proofing Compliance. Built for Tomorrow's Finance.</h1>
               <p>
-                MEMA Connect delivers the advanced regulatory guidance and automated solutions
+                FinProms delivers the advanced regulatory guidance and automated solutions
                 financial institutions need to thrive in an ever-evolving landscape.
               </p>
 
@@ -363,7 +363,7 @@ const WelcomeScreen = ({ onStart }) => {
             {/* Left: Testimonial */}
             <div className="testimonial-card">
               <div className="testimonial-quote">
-                "MEMA Connect transformed how we approach financial promotions compliance.
+                "FinProms transformed how we approach financial promotions compliance.
                 What used to take weeks now takes hours, with greater accuracy and confidence."
               </div>
               <div className="testimonial-author">
