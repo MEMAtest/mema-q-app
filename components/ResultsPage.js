@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
 import {
@@ -8,7 +8,11 @@ import {
   DocumentTextIcon,
   ArrowDownTrayIcon,
   ChartBarIcon,
-  ClipboardDocumentCheckIcon
+  ClipboardDocumentCheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  RocketLaunchIcon,
+  ClockIcon
 } from '@heroicons/react/24/outline';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
@@ -20,6 +24,32 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
   const [leadPhone, setLeadPhone] = useState('');
   const [leadFirm, setLeadFirm] = useState('');
   const [formState, setFormState] = useState({ status: 'idle', message: '' });
+  const [expandedIssues, setExpandedIssues] = useState({});
+  const [animateScore, setAnimateScore] = useState(0);
+
+  // Animate score gauge on mount
+  useEffect(() => {
+    if (results) {
+      let currentScore = 0;
+      const targetScore = results.healthScore;
+      const interval = setInterval(() => {
+        currentScore += Math.ceil(targetScore / 30);
+        if (currentScore >= targetScore) {
+          currentScore = targetScore;
+          clearInterval(interval);
+        }
+        setAnimateScore(currentScore);
+      }, 30);
+      return () => clearInterval(interval);
+    }
+  }, [results]);
+
+  const toggleIssue = (issueId) => {
+    setExpandedIssues(prev => ({
+      ...prev,
+      [issueId]: !prev[issueId]
+    }));
+  };
 
   if (!results) {
     return (
@@ -171,8 +201,22 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
                 transform: 'translate(-50%, -50%)',
                 textAlign: 'center'
               }}>
-                <div className="score-value">{results.healthScore}%</div>
-                <div className="score-label">Health Score</div>
+                <div className="score-value" style={{
+                  fontSize: '3.5rem',
+                  fontWeight: 'var(--font-black)',
+                  color: 'var(--color-text-primary)',
+                  lineHeight: 1
+                }}>
+                  {animateScore}%
+                </div>
+                <div className="score-label" style={{
+                  fontSize: '0.875rem',
+                  color: 'var(--color-text-muted)',
+                  marginTop: 'var(--spacing-xs)',
+                  fontWeight: 'var(--font-medium)'
+                }}>
+                  Health Score
+                </div>
               </div>
             </div>
             <div style={{
@@ -253,28 +297,242 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
         </p>
 
         {previewFailures.length > 0 ? (
-          previewFailures.map(failure => (
-            <div key={failure.id} className="risk-card risk-card-critical">
-              <div className="risk-card-header">
-                <ExclamationTriangleIcon className="risk-card-icon" />
-                <h4>Question {failure.id}: {failure.question}</h4>
+          previewFailures.map((failure, index) => {
+            const isExpanded = expandedIssues[failure.id];
+            const severity = index === 0 ? 'critical' : 'medium';
+            const severityColor = severity === 'critical' ? 'var(--color-danger)' : 'var(--color-warning)';
+            const severityBg = severity === 'critical' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(245, 158, 11, 0.1)';
+
+            return (
+              <div
+                key={failure.id}
+                style={{
+                  background: 'var(--color-bg-white)',
+                  borderRadius: 'var(--radius-lg)',
+                  border: `2px solid ${severityColor}`,
+                  marginBottom: 'var(--spacing-lg)',
+                  overflow: 'hidden',
+                  boxShadow: 'var(--shadow-md)',
+                  transition: 'all var(--transition-base)',
+                  animation: `fadeInUp 0.5s ease-out ${index * 0.1}s backwards`
+                }}
+              >
+                {/* Accordion Header */}
+                <button
+                  onClick={() => toggleIssue(failure.id)}
+                  style={{
+                    width: '100%',
+                    padding: 'var(--spacing-lg)',
+                    background: severityBg,
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: 'var(--spacing-md)',
+                    transition: 'all var(--transition-base)',
+                    textAlign: 'left'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = `${severityBg}`;
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = severityBg;
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                  aria-expanded={isExpanded}
+                  aria-label={`${isExpanded ? 'Collapse' : 'Expand'} issue details`}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', flex: 1 }}>
+                    <div style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      background: severityColor,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}>
+                      {severity === 'critical' ? '🔴' : '🟠'}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{
+                        fontSize: '0.75rem',
+                        fontWeight: 'var(--font-bold)',
+                        color: severityColor,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        marginBottom: '0.25rem'
+                      }}>
+                        {severity === 'critical' ? 'CRITICAL ISSUE' : 'MEDIUM PRIORITY'}
+                      </div>
+                      <div style={{
+                        fontSize: '1rem',
+                        fontWeight: 'var(--font-semibold)',
+                        color: 'var(--color-text-primary)',
+                        lineHeight: 1.4
+                      }}>
+                        Question {failure.id}: {failure.question}
+                      </div>
+                    </div>
+                  </div>
+                  {isExpanded ? (
+                    <ChevronUpIcon style={{ width: '1.5rem', height: '1.5rem', color: severityColor, flexShrink: 0 }} />
+                  ) : (
+                    <ChevronDownIcon style={{ width: '1.5rem', height: '1.5rem', color: severityColor, flexShrink: 0 }} />
+                  )}
+                </button>
+
+                {/* Accordion Content */}
+                {isExpanded && (
+                  <div style={{
+                    padding: 'var(--spacing-xl)',
+                    animation: 'fadeInUp 0.3s ease-out'
+                  }}>
+                    {/* Regulatory Impact */}
+                    <div style={{ marginBottom: 'var(--spacing-lg)' }}>
+                      <h5 style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 'var(--font-bold)',
+                        color: 'var(--color-text-primary)',
+                        marginBottom: 'var(--spacing-sm)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em'
+                      }}>
+                        📋 Regulatory Impact
+                      </h5>
+                      <div style={{
+                        padding: 'var(--spacing-md)',
+                        background: severityBg,
+                        borderRadius: 'var(--radius-md)',
+                        borderLeft: `4px solid ${severityColor}`
+                      }}>
+                        <p style={{ margin: 0, lineHeight: 1.6, color: 'var(--color-text-secondary)' }}>
+                          {failure.implication}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* User Notes */}
+                    {failure.notes && (
+                      <div style={{ marginBottom: 'var(--spacing-lg)' }}>
+                        <h5 style={{
+                          fontSize: '0.875rem',
+                          fontWeight: 'var(--font-bold)',
+                          color: 'var(--color-text-primary)',
+                          marginBottom: 'var(--spacing-sm)',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em'
+                        }}>
+                          📝 Your Justification
+                        </h5>
+                        <p style={{
+                          padding: 'var(--spacing-md)',
+                          background: 'var(--color-bg-light)',
+                          borderRadius: 'var(--radius-md)',
+                          margin: 0,
+                          fontStyle: 'italic',
+                          lineHeight: 1.6,
+                          color: 'var(--color-text-secondary)'
+                        }}>
+                          {failure.notes}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Recommended Actions */}
+                    <div style={{ marginBottom: 'var(--spacing-lg)' }}>
+                      <h5 style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 'var(--font-bold)',
+                        color: 'var(--color-text-primary)',
+                        marginBottom: 'var(--spacing-sm)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em'
+                      }}>
+                        💡 Recommended Actions
+                      </h5>
+                      <ul style={{
+                        margin: 0,
+                        paddingLeft: 'var(--spacing-lg)',
+                        lineHeight: 1.8,
+                        color: 'var(--color-text-secondary)'
+                      }}>
+                        <li>Review communication content against {failure.ref} guidance</li>
+                        <li>Consult with compliance team or legal advisor</li>
+                        <li>Document assessment rationale and decision</li>
+                        {severity === 'critical' && <li><strong>Priority: Address within 14 days</strong></li>}
+                      </ul>
+                    </div>
+
+                    {/* Resource Links */}
+                    <div style={{
+                      padding: 'var(--spacing-md)',
+                      background: 'var(--color-accent-primary-bg)',
+                      borderRadius: 'var(--radius-md)',
+                      border: '1px solid var(--color-accent-primary)',
+                      marginBottom: 'var(--spacing-lg)'
+                    }}>
+                      <p style={{
+                        margin: 0,
+                        fontSize: '0.875rem',
+                        color: 'var(--color-accent-primary)',
+                        fontWeight: 'var(--font-medium)'
+                      }}>
+                        📚 Reference: {failure.ref} • <a href="#" style={{ color: 'var(--color-accent-primary)', textDecoration: 'underline' }}>View FCA Guidance</a>
+                      </p>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div style={{
+                      display: 'flex',
+                      gap: 'var(--spacing-sm)',
+                      flexWrap: 'wrap'
+                    }}>
+                      <button style={{
+                        padding: 'var(--spacing-sm) var(--spacing-lg)',
+                        background: 'var(--color-accent-primary)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: 'var(--radius-md)',
+                        fontSize: '0.875rem',
+                        fontWeight: 'var(--font-semibold)',
+                        cursor: 'pointer',
+                        transition: 'all var(--transition-base)'
+                      }} onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'var(--color-accent-primary-hover)';
+                      }} onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'var(--color-accent-primary)';
+                      }}>
+                        Edit Answer
+                      </button>
+                      <button style={{
+                        padding: 'var(--spacing-sm) var(--spacing-lg)',
+                        background: 'transparent',
+                        color: 'var(--color-text-primary)',
+                        border: '2px solid var(--color-border-light)',
+                        borderRadius: 'var(--radius-md)',
+                        fontSize: '0.875rem',
+                        fontWeight: 'var(--font-semibold)',
+                        cursor: 'pointer',
+                        transition: 'all var(--transition-base)'
+                      }} onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = 'var(--color-accent-primary)';
+                        e.currentTarget.style.color = 'var(--color-accent-primary)';
+                      }} onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = 'var(--color-border-light)';
+                        e.currentTarget.style.color = 'var(--color-text-primary)';
+                      }}>
+                        Add to Report
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-              {failure.notes && (
-                <p style={{ fontSize: '0.9375rem', fontStyle: 'italic', marginBottom: 'var(--spacing-sm)' }}>
-                  <strong>Your Notes:</strong> {failure.notes}
-                </p>
-              )}
-              <div style={{
-                padding: 'var(--spacing-md)',
-                background: 'rgba(239, 68, 68, 0.05)',
-                borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--color-danger)'
-              }}>
-                <strong style={{ color: 'var(--color-danger-dark)' }}>Potential Implication: </strong>
-                <span>{failure.implication}</span>
-              </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <div className="card" style={{
             background: 'var(--color-success-bg)',
