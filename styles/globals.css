@@ -1268,6 +1268,85 @@ a:hover {
     .progress-mobile-compact {
         display: block !important;
     }
+
+    /* Hide left sidebar on mobile - stack vertically instead */
+    .hero-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .hero-visual {
+        max-width: 100% !important;
+        margin-top: var(--spacing-xl);
+    }
+
+    /* Navigation buttons full width on mobile */
+    .navigation-buttons {
+        flex-direction: column !important;
+        gap: var(--spacing-sm) !important;
+    }
+
+    .navigation-buttons button {
+        width: 100% !important;
+    }
+
+    /* Answer options stack on mobile */
+    .answer-options {
+        flex-direction: column !important;
+    }
+
+    .radio-label,
+    .checkbox-label {
+        width: 100% !important;
+    }
+
+    /* Stats grid on landing page */
+    .stats-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Features grid on landing page */
+    .features-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Header adjustments */
+    .header-nav {
+        display: none !important;
+    }
+
+    .header-actions {
+        gap: var(--spacing-sm) !important;
+    }
+
+    .header-actions .btn-ghost {
+        display: none !important;
+    }
+
+    /* Questionnaire Mobile Sidebar */
+    .questionnaire-sidebar-desktop {
+        display: none !important;
+    }
+
+    .questionnaire-mobile-menu-toggle {
+        display: flex !important;
+    }
+
+    .questionnaire-mobile-backdrop,
+    .questionnaire-sidebar-mobile {
+        display: block !important;
+    }
+}
+
+/* Tablet responsive (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .hero-grid {
+        grid-template-columns: 1fr !important;
+        gap: var(--spacing-xl);
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
 }
 
 /* -- Loading States -- */
@@ -1301,6 +1380,15 @@ a:hover {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
     }
 }
 

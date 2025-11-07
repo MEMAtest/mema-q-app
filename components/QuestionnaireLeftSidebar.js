@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   CheckCircleIcon,
   ClipboardDocumentCheckIcon,
@@ -6,7 +6,9 @@ import {
   BuildingOfficeIcon,
   ExclamationTriangleIcon,
   ChatBubbleBottomCenterTextIcon,
-  ArchiveBoxIcon
+  ArchiveBoxIcon,
+  Bars3Icon,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
 
 const iconMap = {
@@ -26,19 +28,10 @@ const QuestionnaireLeftSidebar = ({
   currentSectionIndex
 }) => {
   const safeCompletedSections = completedSections || [];
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  return (
-    <aside style={{
-      position: 'sticky',
-      top: '80px', // Account for progress bar height
-      height: 'calc(100vh - 100px)',
-      overflowY: 'auto',
-      background: 'var(--color-bg-white)',
-      borderRight: '2px solid var(--color-border-light)',
-      padding: 'var(--spacing-xl) var(--spacing-lg)',
-      width: '280px',
-      flexShrink: 0
-    }}>
+  const sidebarContent = (
+    <>
       <h3 style={{
         fontSize: '1.125rem',
         fontWeight: 'var(--font-bold)',
@@ -68,7 +61,12 @@ const QuestionnaireLeftSidebar = ({
             return (
               <li
                 key={section.id}
-                onClick={() => isClickable && onStepClick(index)}
+                onClick={() => {
+                  if (isClickable) {
+                    onStepClick(index);
+                    setMobileMenuOpen(false); // Close mobile menu after selection
+                  }
+                }}
                 style={{
                   padding: 'var(--spacing-md)',
                   borderRadius: 'var(--radius-md)',
@@ -176,7 +174,99 @@ const QuestionnaireLeftSidebar = ({
           💡 <strong>Tip:</strong> Complete sections to unlock navigation to later sections.
         </p>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Mobile Toggle Button */}
+      <button
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        className="questionnaire-mobile-menu-toggle"
+        style={{
+          display: 'none',
+          position: 'fixed',
+          bottom: 'var(--spacing-lg)',
+          right: 'var(--spacing-lg)',
+          width: '56px',
+          height: '56px',
+          borderRadius: '50%',
+          background: 'var(--color-accent-primary)',
+          color: 'white',
+          border: 'none',
+          boxShadow: 'var(--shadow-xl)',
+          cursor: 'pointer',
+          zIndex: 1000,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+        aria-label="Toggle section navigation"
+      >
+        {mobileMenuOpen ? (
+          <XMarkIcon style={{ width: '28px', height: '28px' }} />
+        ) : (
+          <Bars3Icon style={{ width: '28px', height: '28px' }} />
+        )}
+      </button>
+
+      {/* Desktop Sidebar */}
+      <aside className="questionnaire-sidebar-desktop" style={{
+        position: 'sticky',
+        top: '80px',
+        height: 'calc(100vh - 100px)',
+        overflowY: 'auto',
+        background: 'var(--color-bg-white)',
+        borderRight: '2px solid var(--color-border-light)',
+        padding: 'var(--spacing-xl) var(--spacing-lg)',
+        width: '280px',
+        flexShrink: 0
+      }}>
+        {sidebarContent}
+      </aside>
+
+      {/* Mobile Sidebar Overlay */}
+      {mobileMenuOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 999,
+              display: 'none'
+            }}
+            className="questionnaire-mobile-backdrop"
+          />
+
+          {/* Mobile Sidebar */}
+          <aside
+            className="questionnaire-sidebar-mobile"
+            style={{
+              display: 'none',
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              bottom: 0,
+              width: '85%',
+              maxWidth: '320px',
+              background: 'var(--color-bg-white)',
+              boxShadow: 'var(--shadow-2xl)',
+              zIndex: 1001,
+              overflowY: 'auto',
+              padding: 'var(--spacing-xl) var(--spacing-lg)',
+              animation: 'slideInLeft 0.3s ease-out'
+            }}
+          >
+            {sidebarContent}
+          </aside>
+        </>
+      )}
+    </>
   );
 };
 
