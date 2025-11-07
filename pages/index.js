@@ -186,9 +186,45 @@ export default function Home() {
       '6': ArchiveBoxIcon,
       'results': ChartPieIcon,
   };
-  
+
   // Determine current section ID for active step
   const activeSectionId = appState === 'results' ? 'results' : questions[currentSection]?.id;
+
+  // Calculate progress data for ProgressBar component
+  const calculateProgressData = () => {
+    if (questions.length === 0) return null;
+
+    // Calculate total questions across all sections
+    const totalQuestions = questions.reduce((sum, section) => sum + section.items.length, 0);
+
+    // Calculate current question index (1-based for display)
+    let currentQuestionIndex = 0;
+    for (let i = 0; i < currentSection; i++) {
+      currentQuestionIndex += questions[i].items.length;
+    }
+    currentQuestionIndex += currentQuestion + 1; // +1 for 1-based indexing
+
+    // Count answered questions
+    const answeredCount = Object.keys(answers).length;
+
+    // Get current section info
+    const currentSectionInfo = questions[currentSection];
+    const currentSectionNumber = currentSection + 1;
+    const totalSections = questions.length;
+    const currentSectionName = (currentSectionInfo?.title || currentSectionInfo?.sectionTitle || 'Unknown')
+      .replace(/Section \d+: /g, "");
+
+    return {
+      currentQuestionIndex,
+      totalQuestions,
+      answeredCount,
+      currentSectionNumber,
+      totalSections,
+      currentSectionName
+    };
+  };
+
+  const progressData = calculateProgressData();
 
   return (
     <div className="min-h-screen bg-slate-100 font-sans">
@@ -240,6 +276,7 @@ export default function Home() {
             isFirstQuestion={currentSection === 0 && currentQuestion === 0}
             isLastQuestion={currentSection === questions.length - 1 && currentQuestion === questions[currentSection].items.length - 1}
             currentAnswer={answers[questions[currentSection].items[currentQuestion].id]}
+            progressData={progressData}
           />
         ) : appState === 'questionnaire' ? (
           <div className="app-container text-center">Loading questions...</div>

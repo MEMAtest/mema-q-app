@@ -1263,6 +1263,11 @@ a:hover {
     .hero-section {
         padding: var(--spacing-xl) var(--spacing-md);
     }
+
+    /* Progress Bar Mobile Optimizations */
+    .progress-mobile-compact {
+        display: block !important;
+    }
 }
 
 /* -- Loading States -- */

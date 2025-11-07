@@ -1,5 +1,6 @@
 import React from 'react';
 import { InformationCircleIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import ProgressBar from './ProgressBar';
 
 const Questionnaire = ({
   question,
@@ -8,7 +9,8 @@ const Questionnaire = ({
   onPrev,
   isFirstQuestion,
   isLastQuestion,
-  currentAnswer
+  currentAnswer,
+  progressData
 }) => {
 
   const handleOptionChange = (e) => {
@@ -89,10 +91,23 @@ const Questionnaire = ({
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'var(--color-bg-light)',
-      padding: 'var(--spacing-xl) var(--spacing-md)'
+      background: 'var(--color-bg-light)'
     }}>
-      <div className="content-wrapper">
+      {/* Progress Bar */}
+      {progressData && (
+        <ProgressBar
+          currentQuestionIndex={progressData.currentQuestionIndex}
+          totalQuestions={progressData.totalQuestions}
+          answeredCount={progressData.answeredCount}
+          currentSectionNumber={progressData.currentSectionNumber}
+          totalSections={progressData.totalSections}
+          currentSectionName={progressData.currentSectionName}
+        />
+      )}
+
+      <div className="content-wrapper" style={{
+        padding: 'var(--spacing-xl) var(--spacing-md)'
+      }}>
         <div className="layout-wrapper">
           {/* Main Question Card (Pop-Out) */}
           <div className="layout-main">
