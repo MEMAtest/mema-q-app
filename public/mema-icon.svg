@@ -1,0 +1,20 @@
+<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Geometric Icon: Interconnected Paths representing Guidance/Connection -->
+  <!-- Outer Path -->
+  <path d="M25 5 L35 15 L35 35 L25 45 L15 35 L15 15 Z"
+        stroke="currentColor"
+        stroke-width="2.5"
+        fill="none"
+        stroke-linejoin="round"/>
+
+  <!-- Inner Connected Elements -->
+  <circle cx="25" cy="15" r="3" fill="currentColor"/>
+  <circle cx="25" cy="35" r="3" fill="currentColor"/>
+  <line x1="25" y1="18" x2="25" y2="32" stroke="currentColor" stroke-width="2.5"/>
+
+  <!-- Arrow/Direction indicator -->
+  <path d="M25 30 L28 33 M25 30 L22 33"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"/>
+</svg>

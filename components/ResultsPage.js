@@ -1,6 +1,15 @@
 import { useState } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
+import {
+  CheckCircleIcon,
+  XCircleIcon,
+  ExclamationTriangleIcon,
+  DocumentTextIcon,
+  ArrowDownTrayIcon,
+  ChartBarIcon,
+  ClipboardDocumentCheckIcon
+} from '@heroicons/react/24/outline';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
@@ -13,7 +22,20 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
   const [formState, setFormState] = useState({ status: 'idle', message: '' });
 
   if (!results) {
-    return <div className="app-container text-center">Calculating results...</div>;
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'var(--color-bg-light)'
+      }}>
+        <div className="card" style={{ textAlign: 'center', padding: 'var(--spacing-2xl)' }}>
+          <div className="loading-spinner" style={{ margin: '0 auto' }}></div>
+          <p style={{ marginTop: 'var(--spacing-md)', color: 'var(--color-text-muted)' }}>Calculating results...</p>
+        </div>
+      </div>
+    );
   }
 
   const previewFailures = results.potentialFailures.filter(f => f.id.startsWith('1.') || f.id.startsWith('2.'));
@@ -46,7 +68,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
           throw new Error(errorData.message || 'Submission failed');
       }
       setFormState({ status: 'success', message: 'Thank you! Your full report is unlocked below and a copy has been sent to your email.' });
-      setIsFullReportUnlocked(true); 
+      setIsFullReportUnlocked(true);
     } catch (error) {
       setFormState({ status: 'error', message: error.message || 'Something went wrong. Please try again.' });
     }
@@ -78,7 +100,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
     link.click();
     document.body.removeChild(link);
   };
-  
+
   const doughnutOptions = {
       responsive: true, maintainAspectRatio: false, cutout: '70%',
       plugins: { legend: { display: false } }
@@ -89,109 +111,491 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
       plugins: { title: { display: true, text: 'Responses by Section', font: {size: 16} }, legend: { position: 'top' } }
   };
 
+  // Calculate stats
+  const totalQuestions = Object.keys(answers).length;
+  const compliantAnswers = results.chartData.doughnut[0];
+  const issuesCount = results.potentialFailures.length;
+  const healthStatus = results.healthScore >= 80 ? 'Strong' : results.healthScore >= 60 ? 'Needs Attention' : 'Critical';
+
   return (
-    <div className="app-container">
-      <h2 className="text-3xl font-bold text-indigo-700 mb-6 text-center">Compliance Summary</h2>
-      
-      <div className="text-center p-6 bg-indigo-50 rounded-lg mb-10">
-          <h3 className="text-2xl font-semibold text-indigo-700 mb-2">Overall Compliance Health</h3>
-          <div className="w-full max-w-xs mx-auto h-48">
-              <Doughnut data={{
+    <div style={{
+      minHeight: '100vh',
+      background: 'var(--color-bg-light)',
+      padding: 'var(--spacing-xl) 0'
+    }}>
+      {/* Hero Section: Compliance Score */}
+      <section style={{
+        background: 'var(--color-bg-white)',
+        padding: 'var(--spacing-3xl) var(--spacing-xl)',
+        marginBottom: 'var(--spacing-2xl)',
+        boxShadow: 'var(--shadow-md)'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+          <h1 style={{
+            fontSize: '2.5rem',
+            fontWeight: 'var(--font-black)',
+            color: 'var(--color-text-primary)',
+            marginBottom: 'var(--spacing-md)'
+          }}>
+            Your Compliance Assessment Results
+          </h1>
+          <p style={{
+            fontSize: '1.125rem',
+            color: 'var(--color-text-secondary)',
+            marginBottom: 'var(--spacing-2xl)',
+            maxWidth: '600px',
+            marginLeft: 'auto',
+            marginRight: 'auto'
+          }}>
+            Comprehensive insights and actionable recommendations from your FinProms assessment
+          </p>
+
+          {/* Compliance Score Gauge */}
+          <div className="score-gauge-container" style={{ margin: '0 auto' }}>
+            <div style={{ position: 'relative', width: '250px', height: '250px', margin: '0 auto' }}>
+              <Doughnut
+                data={{
                   labels: ['Compliant', 'Issues/Unanswered'],
-                  datasets: [{ data: results.chartData.doughnut, backgroundColor: ['#10b981', '#ef4444'], borderWidth: 4 }]
-              }} options={doughnutOptions} />
+                  datasets: [{
+                    data: results.chartData.doughnut,
+                    backgroundColor: ['var(--color-success)', 'var(--color-danger)'],
+                    borderWidth: 0
+                  }]
+                }}
+                options={doughnutOptions}
+              />
+              <div style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                textAlign: 'center'
+              }}>
+                <div className="score-value">{results.healthScore}%</div>
+                <div className="score-label">Health Score</div>
+              </div>
+            </div>
+            <div style={{
+              marginTop: 'var(--spacing-lg)',
+              padding: 'var(--spacing-md)',
+              background: results.healthScore >= 80 ? 'var(--color-success-bg)' : results.healthScore >= 60 ? 'var(--color-warning-bg)' : 'var(--color-danger-bg)',
+              borderRadius: 'var(--radius-md)',
+              display: 'inline-block'
+            }}>
+              <p style={{
+                fontSize: '1.125rem',
+                fontWeight: 'var(--font-semibold)',
+                color: results.healthScore >= 80 ? 'var(--color-success-dark)' : results.healthScore >= 60 ? 'var(--color-warning-dark)' : 'var(--color-danger-dark)',
+                margin: 0
+              }}>
+                Overall Status: {healthStatus}
+              </p>
+            </div>
           </div>
-          <p className="text-4xl font-bold mt-4 text-green-600">{results.healthScore}%</p>
-      </div>
+        </div>
+      </section>
 
-      {/* Preview Section - Always show first */}
-      <div className="mb-10">
-          <h3 className="text-2xl font-semibold text-indigo-700 mb-4">Preview: Key Issues Identified</h3>
-          {previewFailures.length > 0 ? (
-              previewFailures.map(failure => (
-                <div key={failure.id} className="potential-failure-item">
-                    <p className="font-semibold text-slate-800">{failure.id}: {failure.question}</p>
-                    {failure.notes && <p className="text-sm text-slate-600 mt-1"><em>Your Notes: {failure.notes}</em></p>}
-                    <div className="mt-2 text-sm p-2 rounded bg-red-100 border border-red-200">
-                        <strong className="text-red-800">Potential Implication: </strong>
-                        <span className="text-slate-700">{failure.implication}</span>
-                    </div>
-                </div>
-              ))
-          ) : (
-              <p className="text-green-700 bg-green-100 p-4 rounded-md">No critical issues found in the first two sections.</p>
-          )}
-      </div>
+      {/* Assessment Overview: Summary Cards */}
+      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 var(--spacing-md)' }}>
+        <h2 style={{
+          fontSize: '2rem',
+          fontWeight: 'var(--font-bold)',
+          color: 'var(--color-text-primary)',
+          marginBottom: 'var(--spacing-xl)',
+          textAlign: 'center'
+        }}>
+          Assessment Overview
+        </h2>
 
-      <div className="mb-10">
-          <h3 className="text-2xl font-semibold text-indigo-700 mb-4">Preview: Section Breakdown</h3>
-          <div className="chart-container" style={{height: '300px'}}><Bar data={previewBarData} options={barOptions} /></div>
-          <p className="text-center text-slate-600 text-sm mt-2">Showing first 2 sections. Unlock full report to see all 6 sections.</p>
-      </div>
+        <div className="summary-cards">
+          <div className="summary-card">
+            <ClipboardDocumentCheckIcon style={{ width: '3rem', height: '3rem', color: 'var(--color-accent-primary)', margin: '0 auto var(--spacing-md)' }} />
+            <div className="summary-card-value">{totalQuestions}</div>
+            <div className="summary-card-label">Total Questions</div>
+          </div>
 
+          <div className="summary-card">
+            <CheckCircleIcon style={{ width: '3rem', height: '3rem', color: 'var(--color-success)', margin: '0 auto var(--spacing-md)' }} />
+            <div className="summary-card-value" style={{ color: 'var(--color-success)' }}>{compliantAnswers}</div>
+            <div className="summary-card-label">Compliant</div>
+          </div>
+
+          <div className="summary-card">
+            <ExclamationTriangleIcon style={{ width: '3rem', height: '3rem', color: issuesCount > 0 ? 'var(--color-danger)' : 'var(--color-success)', margin: '0 auto var(--spacing-md)' }} />
+            <div className="summary-card-value" style={{ color: issuesCount > 0 ? 'var(--color-danger)' : 'var(--color-success)' }}>{issuesCount}</div>
+            <div className="summary-card-label">Needs Action</div>
+          </div>
+
+          <div className="summary-card">
+            <ChartBarIcon style={{ width: '3rem', height: '3rem', color: 'var(--color-accent-primary)', margin: '0 auto var(--spacing-md)' }} />
+            <div className="summary-card-value">{questions.length}</div>
+            <div className="summary-card-label">Sections Reviewed</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Preview: Key Issues (Risk Cards) */}
+      <section style={{ maxWidth: '1200px', margin: 'var(--spacing-3xl) auto 0', padding: '0 var(--spacing-md)' }}>
+        <h2 style={{
+          fontSize: '2rem',
+          fontWeight: 'var(--font-bold)',
+          color: 'var(--color-text-primary)',
+          marginBottom: 'var(--spacing-md)'
+        }}>
+          Key Areas for Review & Action
+        </h2>
+        <p style={{
+          fontSize: '1.125rem',
+          color: 'var(--color-text-secondary)',
+          marginBottom: 'var(--spacing-xl)'
+        }}>
+          Below are the compliance areas that require your attention
+        </p>
+
+        {previewFailures.length > 0 ? (
+          previewFailures.map(failure => (
+            <div key={failure.id} className="risk-card risk-card-critical">
+              <div className="risk-card-header">
+                <ExclamationTriangleIcon className="risk-card-icon" />
+                <h4>Question {failure.id}: {failure.question}</h4>
+              </div>
+              {failure.notes && (
+                <p style={{ fontSize: '0.9375rem', fontStyle: 'italic', marginBottom: 'var(--spacing-sm)' }}>
+                  <strong>Your Notes:</strong> {failure.notes}
+                </p>
+              )}
+              <div style={{
+                padding: 'var(--spacing-md)',
+                background: 'rgba(239, 68, 68, 0.05)',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--color-danger)'
+              }}>
+                <strong style={{ color: 'var(--color-danger-dark)' }}>Potential Implication: </strong>
+                <span>{failure.implication}</span>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="card" style={{
+            background: 'var(--color-success-bg)',
+            border: '2px solid var(--color-success)',
+            textAlign: 'center'
+          }}>
+            <CheckCircleIcon style={{ width: '3rem', height: '3rem', color: 'var(--color-success)', margin: '0 auto var(--spacing-md)' }} />
+            <p style={{ color: 'var(--color-success-dark)', fontWeight: 'var(--font-semibold)', fontSize: '1.125rem', margin: 0 }}>
+              No critical issues found in the first two sections. Great work!
+            </p>
+          </div>
+        )}
+
+        {!isFullReportUnlocked && (
+          <p style={{
+            textAlign: 'center',
+            marginTop: 'var(--spacing-xl)',
+            padding: 'var(--spacing-md)',
+            background: 'var(--color-accent-primary-bg)',
+            borderRadius: 'var(--radius-md)',
+            color: 'var(--color-accent-primary)',
+            fontWeight: 'var(--font-medium)'
+          }}>
+            📊 Showing preview of first 2 sections. Unlock full report to see all 6 sections and detailed analysis.
+          </p>
+        )}
+      </section>
+
+      {/* Section Breakdown Chart */}
+      <section style={{ maxWidth: '1200px', margin: 'var(--spacing-3xl) auto 0', padding: '0 var(--spacing-md)' }}>
+        <h2 style={{
+          fontSize: '2rem',
+          fontWeight: 'var(--font-bold)',
+          color: 'var(--color-text-primary)',
+          marginBottom: 'var(--spacing-xl)'
+        }}>
+          {isFullReportUnlocked ? 'Complete' : 'Preview'}: Section Breakdown
+        </h2>
+        <div className="card" style={{ padding: 'var(--spacing-xl)' }}>
+          <div style={{ height: isFullReportUnlocked ? '400px' : '300px' }}>
+            <Bar data={isFullReportUnlocked ? results.chartData.bar : previewBarData} options={barOptions} />
+          </div>
+        </div>
+      </section>
+
+      {/* Full Report or Lead Capture */}
       {isFullReportUnlocked ? (
         <>
-          <div className="mb-10">
-              <h3 className="text-2xl font-semibold text-indigo-700 mb-4">Full Report: Potential Failures</h3>
-              {results.potentialFailures.length > 0 ? (
-                  results.potentialFailures.map(failure => (
-                    <div key={failure.id} className="potential-failure-item">
-                        <p className="font-semibold text-slate-800">{failure.id}: {failure.question}</p>
-                        {failure.notes && <p className="text-sm text-slate-600 mt-1"><em>Your Notes: {failure.notes}</em></p>}
-                        <div className="mt-2 text-sm p-2 rounded bg-red-100 border border-red-200">
-                            <strong className="text-red-800">Potential Implication: </strong>
-                            <span className="text-slate-700">{failure.implication}</span>
-                        </div>
-                    </div>
-                  ))
-              ) : (
-                  <p className="text-green-700 bg-green-100 p-4 rounded-md">No critical compliance issues were flagged in the full report.</p>
-              )}
-          </div>
-          <div className="mb-10">
-              <h3 className="text-2xl font-semibold text-indigo-700 mb-4">Full Report: Detailed Breakdown</h3>
-              <div className="chart-container" style={{height: '400px'}}><Bar data={results.chartData.bar} options={barOptions} /></div>
-          </div>
-          <div className="text-center">
-            <button onClick={handleCsvExport} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg">
-              Download Full Report as CSV
-            </button>
-          </div>
+          {/* Full Report: All Issues */}
+          {results.potentialFailures.length > previewFailures.length && (
+            <section style={{ maxWidth: '1200px', margin: 'var(--spacing-3xl) auto 0', padding: '0 var(--spacing-md)' }}>
+              <h2 style={{
+                fontSize: '2rem',
+                fontWeight: 'var(--font-bold)',
+                color: 'var(--color-text-primary)',
+                marginBottom: 'var(--spacing-xl)'
+              }}>
+                Complete Compliance Analysis
+              </h2>
+              {results.potentialFailures.slice(previewFailures.length).map(failure => (
+                <div key={failure.id} className="risk-card risk-card-warning">
+                  <div className="risk-card-header">
+                    <ExclamationTriangleIcon className="risk-card-icon" />
+                    <h4>Question {failure.id}: {failure.question}</h4>
+                  </div>
+                  {failure.notes && (
+                    <p style={{ fontSize: '0.9375rem', fontStyle: 'italic', marginBottom: 'var(--spacing-sm)' }}>
+                      <strong>Your Notes:</strong> {failure.notes}
+                    </p>
+                  )}
+                  <div style={{
+                    padding: 'var(--spacing-md)',
+                    background: 'rgba(245, 158, 11, 0.05)',
+                    borderRadius: 'var(--radius-md)',
+                    border: '1px solid var(--color-warning)'
+                  }}>
+                    <strong style={{ color: 'var(--color-warning-dark)' }}>Potential Implication: </strong>
+                    <span>{failure.implication}</span>
+                  </div>
+                </div>
+              ))}
+            </section>
+          )}
+
+          {/* Download Report Section */}
+          <section style={{ maxWidth: '800px', margin: 'var(--spacing-3xl) auto 0', padding: '0 var(--spacing-md)' }}>
+            <div className="card card-lg" style={{
+              textAlign: 'center',
+              background: 'var(--color-success-bg)',
+              border: '2px solid var(--color-success)'
+            }}>
+              <DocumentTextIcon style={{
+                width: '5rem',
+                height: '5rem',
+                color: 'var(--color-success)',
+                margin: '0 auto var(--spacing-lg)'
+              }} />
+              <h2 style={{
+                fontSize: '1.875rem',
+                fontWeight: 'var(--font-bold)',
+                color: 'var(--color-text-primary)',
+                marginBottom: 'var(--spacing-md)'
+              }}>
+                Generate Your Audit-Ready Report
+              </h2>
+              <p style={{
+                fontSize: '1.125rem',
+                color: 'var(--color-text-secondary)',
+                marginBottom: 'var(--spacing-xl)'
+              }}>
+                Download your full assessment report, including all questions, justifications,
+                and regulatory references, optimized for audit review.
+              </p>
+              <button
+                onClick={handleCsvExport}
+                className="start-button"
+                style={{
+                  background: 'var(--color-success)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 'var(--spacing-sm)'
+                }}
+              >
+                <ArrowDownTrayIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                Download Full Report as CSV
+              </button>
+            </div>
+          </section>
         </>
       ) : (
         <>
-          <div id="export-contact-section" className="export-contact-form">
-            <h3 className="text-xl font-bold text-indigo-700 mb-2 text-center">Unlock & Download Full Report</h3>
-            <p className="text-slate-600 text-sm mb-4 text-center">Provide your details to view the full report and receive a copy by email.</p>
-            <form onSubmit={handleLeadSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="user-name" className="block text-sm font-medium text-slate-700">Full Name</label>
-                <input id="user-name" type="text" name="name" placeholder="Jane Doe" required className="w-full p-2 border border-slate-300 rounded-md" value={leadName} onChange={(e) => setLeadName(e.target.value)} />
-              </div>
-              <div>
-                <label htmlFor="user-firm" className="block text-sm font-medium text-slate-700">Firm Name</label>
-                <input id="user-firm" type="text" name="firm" placeholder="Your Company Ltd" required className="w-full p-2 border border-slate-300 rounded-md" value={leadFirm} onChange={(e) => setLeadFirm(e.target.value)} />
-              </div>
-              <div>
-                <label htmlFor="user-email" className="block text-sm font-medium text-slate-700">Email Address</label>
-                <input id="user-email" type="email" name="email" placeholder="you@company.com" required className="w-full p-2 border border-slate-300 rounded-md" value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} />
-              </div>
-              <div>
-                <label htmlFor="user-phone" className="block text-sm font-medium text-slate-700">Contact Number (Optional)</label>
-                <input id="user-phone" type="tel" name="phone" placeholder="07123 456789" className="w-full p-2 border border-slate-300 rounded-md" value={leadPhone} onChange={(e) => setLeadPhone(e.target.value)} />
-              </div>
-              <button type="submit" disabled={formState.status === 'loading'} className="w-full start-button" style={{margin: '0', justifyContent: 'center'}}>
-                {formState.status === 'loading' ? 'Submitting...' : 'Unlock Full Report'}
-              </button>
-            </form>
-            {formState.status === 'success' && <p className="text-green-600 text-center mt-2">{formState.message}</p>}
-            {formState.status === 'error' && <p className="text-red-500 text-center mt-2">{formState.message}</p>}
-          </div>
+          {/* Lead Capture Form */}
+          <section style={{ maxWidth: '600px', margin: 'var(--spacing-3xl) auto 0', padding: '0 var(--spacing-md)' }}>
+            <div className="card card-lg" style={{
+              background: 'var(--color-success-bg)',
+              border: '2px solid var(--color-success-border)'
+            }}>
+              <h2 style={{
+                fontSize: '1.875rem',
+                fontWeight: 'var(--font-bold)',
+                color: 'var(--color-text-primary)',
+                marginBottom: 'var(--spacing-md)',
+                textAlign: 'center'
+              }}>
+                Unlock & Download Full Report
+              </h2>
+              <p style={{
+                fontSize: '1rem',
+                color: 'var(--color-text-secondary)',
+                marginBottom: 'var(--spacing-xl)',
+                textAlign: 'center'
+              }}>
+                Provide your details to view the full report and receive a copy by email
+              </p>
+
+              <form onSubmit={handleLeadSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
+                <div>
+                  <label htmlFor="user-name" style={{
+                    display: 'block',
+                    fontSize: '0.9375rem',
+                    fontWeight: 'var(--font-semibold)',
+                    color: 'var(--color-text-primary)',
+                    marginBottom: 'var(--spacing-xs)'
+                  }}>
+                    Full Name *
+                  </label>
+                  <input
+                    id="user-name"
+                    type="text"
+                    placeholder="Jane Doe"
+                    required
+                    value={leadName}
+                    onChange={(e) => setLeadName(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: 'var(--spacing-md)',
+                      border: '2px solid var(--color-border-light)',
+                      borderRadius: 'var(--radius-md)',
+                      fontSize: '1rem',
+                      fontFamily: 'var(--font-primary)'
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="user-firm" style={{
+                    display: 'block',
+                    fontSize: '0.9375rem',
+                    fontWeight: 'var(--font-semibold)',
+                    color: 'var(--color-text-primary)',
+                    marginBottom: 'var(--spacing-xs)'
+                  }}>
+                    Firm Name *
+                  </label>
+                  <input
+                    id="user-firm"
+                    type="text"
+                    placeholder="Your Company Ltd"
+                    required
+                    value={leadFirm}
+                    onChange={(e) => setLeadFirm(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: 'var(--spacing-md)',
+                      border: '2px solid var(--color-border-light)',
+                      borderRadius: 'var(--radius-md)',
+                      fontSize: '1rem',
+                      fontFamily: 'var(--font-primary)'
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="user-email" style={{
+                    display: 'block',
+                    fontSize: '0.9375rem',
+                    fontWeight: 'var(--font-semibold)',
+                    color: 'var(--color-text-primary)',
+                    marginBottom: 'var(--spacing-xs)'
+                  }}>
+                    Email Address *
+                  </label>
+                  <input
+                    id="user-email"
+                    type="email"
+                    placeholder="you@company.com"
+                    required
+                    value={leadEmail}
+                    onChange={(e) => setLeadEmail(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: 'var(--spacing-md)',
+                      border: '2px solid var(--color-border-light)',
+                      borderRadius: 'var(--radius-md)',
+                      fontSize: '1rem',
+                      fontFamily: 'var(--font-primary)'
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="user-phone" style={{
+                    display: 'block',
+                    fontSize: '0.9375rem',
+                    fontWeight: 'var(--font-semibold)',
+                    color: 'var(--color-text-primary)',
+                    marginBottom: 'var(--spacing-xs)'
+                  }}>
+                    Contact Number (Optional)
+                  </label>
+                  <input
+                    id="user-phone"
+                    type="tel"
+                    placeholder="07123 456789"
+                    value={leadPhone}
+                    onChange={(e) => setLeadPhone(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: 'var(--spacing-md)',
+                      border: '2px solid var(--color-border-light)',
+                      borderRadius: 'var(--radius-md)',
+                      fontSize: '1rem',
+                      fontFamily: 'var(--font-primary)'
+                    }}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={formState.status === 'loading'}
+                  className="start-button"
+                  style={{
+                    width: '100%',
+                    background: 'var(--color-success)',
+                    justifyContent: 'center'
+                  }}
+                >
+                  {formState.status === 'loading' ? 'Submitting...' : '🔓 Unlock Full Report'}
+                </button>
+              </form>
+
+              {formState.status === 'success' && (
+                <p style={{
+                  marginTop: 'var(--spacing-md)',
+                  padding: 'var(--spacing-md)',
+                  background: 'var(--color-success-bg)',
+                  border: '1px solid var(--color-success)',
+                  borderRadius: 'var(--radius-md)',
+                  color: 'var(--color-success-dark)',
+                  textAlign: 'center'
+                }}>
+                  {formState.message}
+                </p>
+              )}
+
+              {formState.status === 'error' && (
+                <p style={{
+                  marginTop: 'var(--spacing-md)',
+                  padding: 'var(--spacing-md)',
+                  background: 'var(--color-danger-bg)',
+                  border: '1px solid var(--color-danger)',
+                  borderRadius: 'var(--radius-md)',
+                  color: 'var(--color-danger-dark)',
+                  textAlign: 'center'
+                }}>
+                  {formState.message}
+                </p>
+              )}
+            </div>
+          </section>
         </>
       )}
-      <div className="text-center mt-8">
+
+      {/* Back Button */}
+      <div style={{
+        textAlign: 'center',
+        marginTop: 'var(--spacing-3xl)',
+        marginBottom: 'var(--spacing-xl)'
+      }}>
         <button onClick={onGoBack} className="btn-back">
-            ← Back to Questionnaire
+          ← Back to Questionnaire
         </button>
       </div>
     </div>

@@ -1,0 +1,39 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Geometric Icon: Interconnected Paths representing Guidance/Connection -->
+  <g id="icon">
+    <!-- Outer Path -->
+    <path d="M25 10 L35 20 L35 40 L25 50 L15 40 L15 20 Z"
+          stroke="currentColor"
+          stroke-width="2.5"
+          fill="none"
+          stroke-linejoin="round"/>
+
+    <!-- Inner Connected Elements -->
+    <circle cx="25" cy="20" r="3" fill="currentColor"/>
+    <circle cx="25" cy="40" r="3" fill="currentColor"/>
+    <line x1="25" y1="23" x2="25" y2="37" stroke="currentColor" stroke-width="2.5"/>
+
+    <!-- Arrow/Direction indicator -->
+    <path d="M25 35 L28 38 M25 35 L22 38"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"/>
+  </g>
+
+  <!-- MEMA Text -->
+  <g id="text" transform="translate(50, 0)">
+    <text x="0" y="40"
+          font-family="Outfit, Inter, sans-serif"
+          font-size="32"
+          font-weight="700"
+          fill="currentColor"
+          letter-spacing="1">MEMA</text>
+    <text x="0" y="52"
+          font-family="Outfit, Inter, sans-serif"
+          font-size="10"
+          font-weight="500"
+          fill="currentColor"
+          letter-spacing="3"
+          opacity="0.7">CONNECT</text>
+  </g>
+</svg>

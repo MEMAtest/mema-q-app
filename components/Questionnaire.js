@@ -1,4 +1,5 @@
 import React from 'react';
+import { InformationCircleIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 
 const Questionnaire = ({
   question,
@@ -9,11 +10,11 @@ const Questionnaire = ({
   isLastQuestion,
   currentAnswer
 }) => {
-  
+
   const handleOptionChange = (e) => {
-    onAnswer(question.id, { 
-      answer: e.target.value, 
-      notes: currentAnswer?.notes || '' 
+    onAnswer(question.id, {
+      answer: e.target.value,
+      notes: currentAnswer?.notes || ''
     });
   };
 
@@ -27,7 +28,7 @@ const Questionnaire = ({
   const handleMultiSelectChange = (e) => {
     const { value, checked } = e.target;
     const currentSelection = Array.isArray(currentAnswer?.answer) ? currentAnswer.answer : [];
-    
+
     let newSelection;
     if (checked) {
       newSelection = [...currentSelection, value];
@@ -55,20 +56,20 @@ const Questionnaire = ({
     }
 
     if (type === 'dropdown') {
-      if (!Array.isArray(options)) return <div className="text-red-500">Error: Dropdown options not available.</div>;
+      if (!Array.isArray(options)) return <div style={{ color: 'var(--color-danger)' }}>Error: Dropdown options not available.</div>;
       return (
         <select value={selectedValue || ''} onChange={handleOptionChange}>
           {options.map((opt) => ( <option key={opt.value} value={opt.value}>{opt.text}</option>))}
         </select>
       );
     }
-    
+
     if (type === 'multiselect') {
-        if (!Array.isArray(options)) return <div className="text-red-500">Error: Multi-select options not available.</div>;
+        if (!Array.isArray(options)) return <div style={{ color: 'var(--color-danger)' }}>Error: Multi-select options not available.</div>;
         return (
-            <div className="space-y-2">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
                 {options.map((opt) => (
-                    <label key={opt.value} className="checkbox-label block" data-checked={selectedValue?.includes(opt.value) || false}>
+                    <label key={opt.value} className="checkbox-label" data-checked={selectedValue?.includes(opt.value) || false} style={{ display: 'block' }}>
                         <input
                             type="checkbox"
                             value={opt.value}
@@ -81,46 +82,159 @@ const Questionnaire = ({
             </div>
         );
     }
-    
+
     return null;
   };
 
   return (
-    <div className="app-container">
+    <div style={{
+      minHeight: '100vh',
+      background: 'var(--color-bg-light)',
+      padding: 'var(--spacing-xl) var(--spacing-md)'
+    }}>
       <div className="content-wrapper">
         <div className="layout-wrapper">
+          {/* Main Question Card (Pop-Out) */}
           <div className="layout-main">
-            {/* Ensure question object exists before rendering */}
             {question ? (
-              <>
-                <h4 className="question-text">{question.id}. {question.questionText}</h4>
-                <p className="question-ref">Reference: {question.questionRef}</p>
-                <div className="answer-options">{renderAnswerOptions()}</div>
-                <div className="notes-area">
-                  <label htmlFor="notes" className="block text-sm font-semibold text-slate-700 mb-1">Notes/Considerations (Optional):</label>
-                  <textarea id="notes" placeholder="Enter any specific notes or justifications..." value={currentAnswer?.notes || ''} onChange={handleNotesChange} rows="4"/>
+              <div className="question-card">
+                {/* Question Header */}
+                <div style={{ marginBottom: 'var(--spacing-lg)' }}>
+                  <h4 className="question-text" style={{
+                    fontSize: '1.5rem',
+                    fontWeight: 'var(--font-semibold)',
+                    color: 'var(--color-text-primary)',
+                    marginBottom: 'var(--spacing-sm)',
+                    lineHeight: 1.4
+                  }}>
+                    {question.id}. {question.questionText}
+                  </h4>
+                  <p className="question-ref" style={{
+                    fontSize: '0.875rem',
+                    color: 'var(--color-accent-primary)',
+                    fontWeight: 'var(--font-medium)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 'var(--spacing-xs)',
+                    cursor: 'pointer'
+                  }}>
+                    <InformationCircleIcon style={{ width: '1rem', height: '1rem' }} />
+                    Reference: {question.questionRef}
+                  </p>
                 </div>
-              </>
+
+                {/* Answer Options */}
+                <div className="answer-options" style={{ marginBottom: 'var(--spacing-xl)' }}>
+                  {renderAnswerOptions()}
+                </div>
+
+                {/* Notes Area */}
+                <div className="notes-area">
+                  <label htmlFor="notes" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--spacing-xs)',
+                    fontSize: '1rem',
+                    fontWeight: 'var(--font-semibold)',
+                    color: 'var(--color-text-primary)',
+                    marginBottom: 'var(--spacing-sm)'
+                  }}>
+                    <DocumentTextIcon style={{ width: '1.25rem', height: '1.25rem' }} />
+                    Your Justification (Optional):
+                  </label>
+                  <textarea
+                    id="notes"
+                    placeholder="Enter any specific notes or justifications..."
+                    value={currentAnswer?.notes || ''}
+                    onChange={handleNotesChange}
+                    rows="4"
+                    style={{
+                      width: '100%',
+                      padding: 'var(--spacing-md)',
+                      border: '2px solid var(--color-border-light)',
+                      borderRadius: 'var(--radius-md)',
+                      fontSize: '1rem',
+                      fontFamily: 'var(--font-primary)',
+                      transition: 'all var(--transition-base)',
+                      resize: 'vertical',
+                      minHeight: '100px'
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = 'var(--color-accent-primary)';
+                      e.target.style.boxShadow = '0 0 0 3px var(--color-accent-primary-bg)';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = 'var(--color-border-light)';
+                      e.target.style.boxShadow = 'none';
+                    }}
+                  />
+                </div>
+              </div>
             ) : (
-              <p>Loading question...</p>
+              <div className="question-card" style={{ textAlign: 'center', padding: 'var(--spacing-2xl)' }}>
+                <div className="loading-spinner" style={{ margin: '0 auto' }}></div>
+                <p style={{ marginTop: 'var(--spacing-md)', color: 'var(--color-text-muted)' }}>Loading question...</p>
+              </div>
             )}
+
+            {/* Navigation Buttons */}
+            <div className="navigation-buttons" style={{ marginTop: 'var(--spacing-xl)' }}>
+              <button
+                onClick={onPrev}
+                disabled={isFirstQuestion}
+                className="btn-previous"
+                style={{
+                  visibility: isFirstQuestion ? 'hidden' : 'visible',
+                  opacity: isFirstQuestion ? 0 : 1
+                }}
+              >
+                ← Previous
+              </button>
+              <button
+                onClick={onNext}
+                className={isLastQuestion ? 'btn-finish' : ''}
+                style={{
+                  background: isLastQuestion ? 'var(--color-success)' : 'var(--color-accent-primary)'
+                }}
+              >
+                {isLastQuestion ? '✓ Finish & View Results' : 'Next →'}
+              </button>
+            </div>
           </div>
+
+          {/* Sidebar: "Why this is important" Panel (Enhanced Pop-Out) */}
           <div className="layout-sidebar">
             {question && (
-              <div className="question-explanation sticky top-8">
-                  <h4 className="font-bold text-slate-700 mb-2">Why this is important</h4>
-                  <p>{question.explanation}</p>
+              <div className="sidebar-panel" style={{
+                position: 'sticky',
+                top: 'var(--spacing-xl)'
+              }}>
+                <h4>
+                  <InformationCircleIcon />
+                  Why this is important
+                </h4>
+                <p>{question.explanation}</p>
+
+                {/* Additional Context (Optional) */}
+                <div style={{
+                  marginTop: 'var(--spacing-lg)',
+                  padding: 'var(--spacing-md)',
+                  background: 'var(--color-accent-primary-bg)',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--color-accent-primary)'
+                }}>
+                  <p style={{
+                    fontSize: '0.875rem',
+                    color: 'var(--color-accent-primary)',
+                    fontWeight: 'var(--font-medium)',
+                    margin: 0
+                  }}>
+                    💡 Tip: Your response will help assess compliance with FCA PERG guidance
+                  </p>
+                </div>
               </div>
             )}
           </div>
-        </div>
-        <div className="navigation-buttons">
-          <button onClick={onPrev} disabled={isFirstQuestion} style={{ visibility: isFirstQuestion ? 'hidden' : 'visible' }}>
-              Previous
-          </button>
-          <button onClick={onNext} className={isLastQuestion ? 'btn-finish' : ''}>
-              {isLastQuestion ? 'Finish & View Results' : 'Next'}
-          </button>
         </div>
       </div>
     </div>
