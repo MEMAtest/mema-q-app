@@ -16,8 +16,6 @@ import {
 } from '@heroicons/react/24/outline';
 
 const WelcomeScreen = ({ onStart }) => {
-  const [videoPlaying, setVideoPlaying] = useState(false);
-
   return (
     <>
       {/* Header Navigation */}
@@ -126,74 +124,141 @@ const WelcomeScreen = ({ onStart }) => {
         </div>
       </section>
 
-      {/* Mini-Demo Section */}
-      <section id="demo-section" className="video-section section-light">
+      {/* Interactive Preview Section - Replacing Video */}
+      <section id="demo-section" className="section-light">
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h2 style={{ textAlign: 'center', fontSize: '2.5rem', fontWeight: 'var(--font-black)', marginBottom: '1rem' }}>
             See FinProms in Action
           </h2>
           <p style={{ textAlign: 'center', fontSize: '1.25rem', color: 'var(--color-text-secondary)', marginBottom: '3rem', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto' }}>
-            Witness how easy it is to navigate complex regulations and generate instant compliance clarity.
+            Experience how easy it is to navigate complex regulations and generate instant compliance clarity.
           </p>
 
-          {/* Video Container */}
-          <div className="video-container">
-            {!videoPlaying ? (
-              <div style={{
-                position: 'relative',
-                minHeight: '500px',
-                background: 'linear-gradient(135deg, var(--color-bg-dark) 0%, var(--color-bg-dark-alt) 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer'
-              }} onClick={() => setVideoPlaying(true)}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{
-                    width: '100px',
-                    height: '100px',
-                    background: 'var(--color-accent-primary)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 1rem',
-                    boxShadow: 'var(--shadow-accent-primary)',
-                    transition: 'all var(--transition-base)'
-                  }} className="play-button-hover">
-                    <PlayCircleIcon style={{ width: '60px', height: '60px', color: 'white' }} />
-                  </div>
-                  <p style={{ color: 'white', fontSize: '1.125rem', fontWeight: 'var(--font-medium)' }}>
-                    Click to Play Demo
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div style={{
-                minHeight: '500px',
-                background: 'var(--color-bg-dark)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '2rem'
+          {/* Interactive Preview Panel */}
+          <div className="card" style={{
+            maxWidth: '900px',
+            margin: '0 auto var(--spacing-2xl)',
+            padding: 'var(--spacing-2xl)',
+            background: 'linear-gradient(135deg, var(--color-bg-white) 0%, var(--color-bg-light) 100%)',
+            border: '2px solid var(--color-accent-primary)'
+          }}>
+            <div style={{
+              background: 'var(--color-bg-white)',
+              borderRadius: 'var(--radius-lg)',
+              padding: 'var(--spacing-xl)',
+              boxShadow: 'var(--shadow-md)',
+              marginBottom: 'var(--spacing-xl)'
+            }}>
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: 'var(--font-semibold)',
+                color: 'var(--color-text-primary)',
+                marginBottom: 'var(--spacing-md)'
               }}>
-                {/* Placeholder for actual video - Replace with iframe/video element */}
-                <p style={{ color: 'white', fontSize: '1.125rem', textAlign: 'center' }}>
-                  [Video Player Placeholder - Add YouTube/Vimeo embed or video file here]
-                  <br /><br />
-                  <span style={{ fontSize: '0.9rem', opacity: 0.7 }}>
-                    This will show a 60-90 second walkthrough of the assessment experience
-                  </span>
+                Sample Question
+              </h3>
+              <p style={{
+                fontSize: '1rem',
+                color: 'var(--color-text-secondary)',
+                marginBottom: 'var(--spacing-lg)',
+                lineHeight: 1.6
+              }}>
+                1.1. Is the communication an "invitation or inducement" to engage in investment activity?
+              </p>
+              <p style={{
+                fontSize: '0.875rem',
+                color: 'var(--color-accent-primary)',
+                marginBottom: 'var(--spacing-lg)'
+              }}>
+                📋 Reference: PERG 8.4
+              </p>
+
+              {/* Sample Answer Buttons */}
+              <div style={{
+                display: 'flex',
+                gap: 'var(--spacing-md)',
+                marginBottom: 'var(--spacing-lg)'
+              }}>
+                <button className="answer-card" style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '1rem',
+                  border: '2px solid var(--color-border)',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'white',
+                  cursor: 'pointer',
+                  transition: 'all var(--transition-base)'
+                }}>
+                  <CheckCircleIcon style={{ width: '2rem', height: '2rem', color: 'var(--color-success)' }} />
+                  <span style={{ fontWeight: 'var(--font-semibold)' }}>Yes</span>
+                </button>
+                <button className="answer-card" style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '1rem',
+                  border: '2px solid var(--color-border)',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'white',
+                  cursor: 'pointer',
+                  transition: 'all var(--transition-base)'
+                }}>
+                  <BoltIcon style={{ width: '2rem', height: '2rem', color: 'var(--color-text-muted)' }} />
+                  <span style={{ fontWeight: 'var(--font-semibold)' }}>No</span>
+                </button>
+              </div>
+
+              <div style={{
+                background: 'var(--color-accent-primary-bg)',
+                padding: 'var(--spacing-md)',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--color-accent-primary)',
+                textAlign: 'center'
+              }}>
+                <p style={{
+                  fontSize: '0.9375rem',
+                  color: 'var(--color-accent-primary)',
+                  fontWeight: 'var(--font-medium)',
+                  margin: 0
+                }}>
+                  💡 This is just a preview. Click below to start your full assessment!
                 </p>
               </div>
-            )}
-          </div>
+            </div>
 
-          {/* CTA below video */}
-          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-            <button className="start-button" onClick={onStart}>
-              Start Your Free Assessment
-            </button>
+            {/* Feature Highlights */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: 'var(--spacing-md)',
+              marginBottom: 'var(--spacing-lg)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+                <CheckCircleIcon style={{ width: '1.5rem', height: '1.5rem', color: 'var(--color-success)' }} />
+                <span style={{ fontSize: '0.9375rem' }}>36 comprehensive questions</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+                <ChartBarIcon style={{ width: '1.5rem', height: '1.5rem', color: 'var(--color-success)' }} />
+                <span style={{ fontSize: '0.9375rem' }}>Instant compliance scoring</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+                <DocumentTextIcon style={{ width: '1.5rem', height: '1.5rem', color: 'var(--color-success)' }} />
+                <span style={{ fontSize: '0.9375rem' }}>Detailed gap analysis</span>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div style={{ textAlign: 'center' }}>
+              <button className="start-button" onClick={onStart} style={{ fontSize: '1.125rem' }}>
+                <RocketLaunchIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                Start Your Free Assessment
+              </button>
+            </div>
           </div>
         </div>
       </section>
