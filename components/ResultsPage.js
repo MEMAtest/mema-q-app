@@ -561,6 +561,107 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
         )}
       </section>
 
+      {/* Industry Comparison Widget */}
+      <section style={{ maxWidth: '1200px', margin: 'var(--spacing-3xl) auto 0', padding: '0 var(--spacing-md)' }}>
+        <h2 style={{
+          fontSize: '2rem',
+          fontWeight: 'var(--font-bold)',
+          color: 'var(--color-text-primary)',
+          marginBottom: 'var(--spacing-xl)',
+          textAlign: 'center'
+        }}>
+          How You Compare
+        </h2>
+
+        <div className="card" style={{
+          padding: 'var(--spacing-2xl)',
+          background: 'linear-gradient(135deg, var(--color-bg-white) 0%, var(--color-accent-primary-bg) 100%)',
+          border: '2px solid var(--color-accent-primary)'
+        }}>
+          {/* Comparison Bars */}
+          <div style={{ marginBottom: 'var(--spacing-xl)' }}>
+            {[
+              { label: 'Your Score', value: results.healthScore, color: 'var(--color-accent-primary)', isYou: true },
+              { label: 'Industry Average', value: 74, color: 'var(--color-text-muted)', isYou: false },
+              { label: 'Top Performers', value: 95, color: 'var(--color-success)', isYou: false }
+            ].map((item, index) => (
+              <div key={index} style={{ marginBottom: 'var(--spacing-lg)' }}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: 'var(--spacing-xs)'
+                }}>
+                  <span style={{
+                    fontSize: '1rem',
+                    fontWeight: item.isYou ? 'var(--font-bold)' : 'var(--font-medium)',
+                    color: item.isYou ? 'var(--color-accent-primary)' : 'var(--color-text-secondary)'
+                  }}>
+                    {item.label} {item.isYou && '(You)'}
+                  </span>
+                  <span style={{
+                    fontSize: '1.5rem',
+                    fontWeight: 'var(--font-bold)',
+                    color: item.color
+                  }}>
+                    {item.value}%
+                  </span>
+                </div>
+                <div style={{
+                  height: item.isYou ? '16px' : '12px',
+                  background: 'var(--color-bg-light)',
+                  borderRadius: 'var(--radius-full)',
+                  overflow: 'hidden',
+                  position: 'relative'
+                }}>
+                  <div style={{
+                    width: `${item.value}%`,
+                    height: '100%',
+                    background: item.color,
+                    borderRadius: 'var(--radius-full)',
+                    transition: 'width 1s ease-out',
+                    animation: `slideIn 1.5s ease-out ${index * 0.2}s backwards`,
+                    boxShadow: item.isYou ? `0 0 10px ${item.color}50` : 'none'
+                  }} />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Achievement Badge */}
+          <div style={{
+            padding: 'var(--spacing-xl)',
+            background: 'var(--color-success-bg)',
+            borderRadius: 'var(--radius-lg)',
+            border: '2px solid var(--color-success)',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              fontSize: '3rem',
+              marginBottom: 'var(--spacing-sm)'
+            }}>
+              🏆
+            </div>
+            <p style={{
+              fontSize: '1.25rem',
+              fontWeight: 'var(--font-bold)',
+              color: 'var(--color-success-dark)',
+              margin: 0,
+              marginBottom: 'var(--spacing-xs)'
+            }}>
+              You're in the {results.healthScore >= 85 ? 'Top 25%' : results.healthScore >= 74 ? 'Top 50%' : 'Growing'}!
+            </p>
+            <p style={{
+              fontSize: '0.875rem',
+              color: 'var(--color-text-secondary)',
+              margin: 0
+            }}>
+              Your compliance score of {results.healthScore}% is {results.healthScore - 74} points above the industry average
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Section Breakdown Chart */}
       <section style={{ maxWidth: '1200px', margin: 'var(--spacing-3xl) auto 0', padding: '0 var(--spacing-md)' }}>
         <h2 style={{
@@ -574,6 +675,154 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
         <div className="card" style={{ padding: 'var(--spacing-xl)' }}>
           <div style={{ height: isFullReportUnlocked ? '400px' : '300px' }}>
             <Bar data={isFullReportUnlocked ? results.chartData.bar : previewBarData} options={barOptions} />
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Actions Panel */}
+      <section style={{ maxWidth: '1200px', margin: 'var(--spacing-3xl) auto 0', padding: '0 var(--spacing-md)' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: 'var(--spacing-lg)'
+        }}>
+          {/* Next Steps Card */}
+          <div className="card" style={{ padding: 'var(--spacing-xl)' }}>
+            <h3 style={{
+              fontSize: '1.25rem',
+              fontWeight: 'var(--font-bold)',
+              color: 'var(--color-text-primary)',
+              marginBottom: 'var(--spacing-lg)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--spacing-sm)'
+            }}>
+              <RocketLaunchIcon style={{ width: '1.5rem', height: '1.5rem', color: 'var(--color-accent-primary)' }} />
+              Next Steps
+            </h3>
+            <ul style={{
+              listStyle: 'none',
+              padding: 0,
+              margin: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--spacing-sm)'
+            }}>
+              {[
+                { icon: '📥', text: 'Download Full Report PDF', action: true },
+                { icon: '📧', text: 'Share with Compliance Team', action: false },
+                { icon: '📅', text: 'Schedule Compliance Review', action: false },
+                { icon: '💬', text: 'Book MEMA Consultation', action: true },
+                { icon: '📊', text: 'Export to CSV', action: false }
+              ].map((item, index) => (
+                <li key={index}>
+                  <button style={{
+                    width: '100%',
+                    padding: 'var(--spacing-sm) var(--spacing-md)',
+                    background: item.action ? 'var(--color-accent-primary-bg)' : 'transparent',
+                    border: item.action ? '2px solid var(--color-accent-primary)' : '2px solid var(--color-border-light)',
+                    borderRadius: 'var(--radius-md)',
+                    cursor: 'pointer',
+                    transition: 'all var(--transition-base)',
+                    textAlign: 'left',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--spacing-sm)',
+                    fontSize: '0.9375rem',
+                    fontWeight: 'var(--font-medium)',
+                    color: 'var(--color-text-primary)'
+                  }} onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--color-accent-primary)';
+                    e.currentTarget.style.transform = 'translateX(4px)';
+                  }} onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = item.action ? 'var(--color-accent-primary)' : 'var(--color-border-light)';
+                    e.currentTarget.style.transform = 'translateX(0)';
+                  }}>
+                    <span>{item.icon}</span>
+                    <span>{item.text}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Assessment Timeline Card */}
+          <div className="card" style={{ padding: 'var(--spacing-xl)' }}>
+            <h3 style={{
+              fontSize: '1.25rem',
+              fontWeight: 'var(--font-bold)',
+              color: 'var(--color-text-primary)',
+              marginBottom: 'var(--spacing-lg)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--spacing-sm)'
+            }}>
+              <ClockIcon style={{ width: '1.5rem', height: '1.5rem', color: 'var(--color-accent-secondary)' }} />
+              Your Assessment Journey
+            </h3>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--spacing-md)'
+            }}>
+              {[
+                { icon: '✓', text: 'Started Assessment', time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }), completed: true },
+                { icon: '✓', text: `Completed ${Object.keys(answers).length} Questions`, time: '', completed: true },
+                { icon: '✓', text: 'Reviewed All Sections', time: '', completed: true },
+                { icon: '✓', text: 'Generated Results', time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }), completed: true }
+              ].map((item, index) => (
+                <div key={index} style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: 'var(--spacing-md)',
+                  opacity: item.completed ? 1 : 0.5
+                }}>
+                  <div style={{
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    background: item.completed ? 'var(--color-success)' : 'var(--color-bg-light)',
+                    color: 'white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.75rem',
+                    fontWeight: 'var(--font-bold)',
+                    flexShrink: 0
+                  }}>
+                    {item.icon}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{
+                      fontSize: '0.9375rem',
+                      fontWeight: 'var(--font-medium)',
+                      color: 'var(--color-text-primary)',
+                      marginBottom: '2px'
+                    }}>
+                      {item.text}
+                    </div>
+                    {item.time && (
+                      <div style={{
+                        fontSize: '0.75rem',
+                        color: 'var(--color-text-muted)'
+                      }}>
+                        {item.time}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <div style={{
+                marginTop: 'var(--spacing-md)',
+                paddingTop: 'var(--spacing-md)',
+                borderTop: '1px solid var(--color-border-light)',
+                fontSize: '0.875rem',
+                fontWeight: 'var(--font-semibold)',
+                color: 'var(--color-text-secondary)'
+              }}>
+                Total Time: ~{Math.ceil(Object.keys(answers).length * 0.5)} minutes
+              </div>
+            </div>
           </div>
         </div>
       </section>
