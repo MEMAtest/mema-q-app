@@ -79,44 +79,120 @@ const WelcomeScreen = ({ onStart }) => {
               </div>
             </div>
 
-            {/* Right: Hero Visual */}
+            {/* Right: Hero Visual - Interactive Compliance Dashboard */}
             <div className="hero-visual">
               <div style={{
                 position: 'relative',
                 width: '100%',
                 maxWidth: '500px',
                 height: '400px',
-                background: 'linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 123, 255, 0.05) 100%)',
+                background: 'var(--color-bg-dark-alt)',
                 borderRadius: 'var(--radius-xl)',
                 boxShadow: 'var(--shadow-2xl)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '1px solid rgba(0, 123, 255, 0.3)'
+                padding: 'var(--spacing-lg)',
+                border: '2px solid var(--color-accent-primary)',
+                overflow: 'hidden'
               }}>
-                {/* Placeholder for 3D Visual - Replace with actual 3D render */}
+                {/* Header Badge */}
                 <div style={{
-                  textAlign: 'center',
-                  padding: '2rem'
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--spacing-sm)',
+                  marginBottom: 'var(--spacing-lg)',
+                  padding: 'var(--spacing-sm) var(--spacing-md)',
+                  background: 'rgba(0, 123, 255, 0.15)',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--color-accent-primary)',
+                  width: 'fit-content'
                 }}>
-                  <SparklesIcon style={{
-                    width: '80px',
-                    height: '80px',
-                    color: 'var(--color-accent-primary)',
-                    margin: '0 auto 1rem',
+                  <ShieldCheckIcon style={{ width: '1.25rem', height: '1.25rem', color: 'var(--color-accent-primary)' }} />
+                  <span style={{ color: 'var(--color-text-white)', fontSize: '0.875rem', fontWeight: 'var(--font-semibold)' }}>
+                    Live Compliance Dashboard
+                  </span>
+                </div>
+
+                {/* Compliance Score Gauge */}
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  borderRadius: 'var(--radius-lg)',
+                  padding: 'var(--spacing-md)',
+                  marginBottom: 'var(--spacing-md)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--spacing-sm)' }}>
+                    <span style={{ color: 'var(--color-text-light)', fontSize: '0.875rem' }}>Compliance Score</span>
+                    <CheckCircleIcon style={{ width: '1rem', height: '1rem', color: 'var(--color-success)' }} />
+                  </div>
+                  <div style={{ fontSize: '2.5rem', fontWeight: 'var(--font-black)', color: 'var(--color-success)', marginBottom: 'var(--spacing-xs)' }}>
+                    92%
+                  </div>
+                  <div style={{
+                    height: '8px',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    borderRadius: 'var(--radius-full)',
+                    overflow: 'hidden'
+                  }}>
+                    <div style={{
+                      width: '92%',
+                      height: '100%',
+                      background: 'linear-gradient(90deg, var(--color-success) 0%, var(--color-accent-primary) 100%)',
+                      borderRadius: 'var(--radius-full)',
+                      animation: 'slideIn 1.5s ease-out'
+                    }} />
+                  </div>
+                </div>
+
+                {/* Stats Grid */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: 'var(--spacing-sm)',
+                  marginBottom: 'var(--spacing-md)'
+                }}>
+                  {[
+                    { icon: ClipboardDocumentCheckIcon, label: 'Assessed', value: '36/36' },
+                    { icon: ChartBarIcon, label: 'Compliant', value: '33/36' },
+                    { icon: DocumentTextIcon, label: 'Reports', value: '12' },
+                    { icon: RocketLaunchIcon, label: 'Time Saved', value: '24h' }
+                  ].map((stat, index) => (
+                    <div key={index} style={{
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      borderRadius: 'var(--radius-md)',
+                      padding: 'var(--spacing-sm)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      animation: `fadeInUp 0.6s ease-out ${index * 0.1}s backwards`
+                    }}>
+                      <stat.icon style={{ width: '1.5rem', height: '1.5rem', color: 'var(--color-accent-primary)', marginBottom: 'var(--spacing-xs)' }} />
+                      <div style={{ fontSize: '1.25rem', fontWeight: 'var(--font-bold)', color: 'var(--color-text-white)' }}>
+                        {stat.value}
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--color-text-light)' }}>
+                        {stat.label}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Status Badge */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--spacing-sm)',
+                  padding: 'var(--spacing-sm) var(--spacing-md)',
+                  background: 'rgba(16, 185, 129, 0.15)',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--color-success)'
+                }}>
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: 'var(--color-success)',
                     animation: 'pulse 2s ease-in-out infinite'
                   }} />
-                  <div style={{
-                    background: 'var(--color-bg-dark-alt)',
-                    border: '2px solid var(--color-accent-primary)',
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: 'var(--radius-md)',
-                    color: 'var(--color-text-white)',
-                    fontWeight: 'var(--font-semibold)',
-                    fontSize: '1rem'
-                  }}>
-                    Real-time Regulatory Insight
-                  </div>
+                  <span style={{ color: 'var(--color-success)', fontSize: '0.875rem', fontWeight: 'var(--font-semibold)' }}>
+                    Real-time Assessment Active
+                  </span>
                 </div>
               </div>
             </div>

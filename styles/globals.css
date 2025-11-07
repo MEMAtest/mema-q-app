@@ -1284,6 +1284,26 @@ a:hover {
     to { transform: rotate(360deg); }
 }
 
+@keyframes slideIn {
+    from {
+        width: 0;
+    }
+    to {
+        width: 92%;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* -- Sidebar Panel (Enhanced for "Why this is important") -- */
 .sidebar-panel {
     background-color: var(--color-bg-light);
