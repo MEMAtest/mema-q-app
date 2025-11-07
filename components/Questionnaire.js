@@ -122,7 +122,7 @@ const Questionnaire = ({
                     marginBottom: 'var(--spacing-sm)',
                     lineHeight: 1.4
                   }}>
-                    {question.id}. {question.questionText}
+                    {progressData ? `${progressData.currentQuestionIndex} of ${progressData.totalQuestions}` : question.id}. {question.questionText}
                   </h4>
                   <p className="question-ref" style={{
                     fontSize: '0.875rem',

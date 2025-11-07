@@ -163,7 +163,7 @@ const WelcomeScreen = ({ onStart }) => {
                 marginBottom: 'var(--spacing-lg)',
                 lineHeight: 1.6
               }}>
-                1.1. Is the communication an "invitation or inducement" to engage in investment activity?
+                1 of 36. Is the communication an "invitation or inducement" to engage in investment activity?
               </p>
               <p style={{
                 fontSize: '0.875rem',
