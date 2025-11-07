@@ -277,6 +277,11 @@ export default function Home() {
             isLastQuestion={currentSection === questions.length - 1 && currentQuestion === questions[currentSection].items.length - 1}
             currentAnswer={answers[questions[currentSection].items[currentQuestion].id]}
             progressData={progressData}
+            sections={sectionsForStepper}
+            currentSectionId={activeSectionId}
+            completedSections={Object.keys(completedSections)}
+            onStepClick={handleStepClick}
+            currentSectionIndex={currentSection}
           />
         ) : appState === 'questionnaire' ? (
           <div className="app-container text-center">Loading questions...</div>
