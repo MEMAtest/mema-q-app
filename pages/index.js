@@ -5,6 +5,7 @@ import WelcomeScreen from '../components/WelcomeScreen';
 import Questionnaire from '../components/Questionnaire';
 import ResultsPage from '../components/ResultsPage';
 import Stepper from '../components/Stepper';
+import Breadcrumb from '../components/Breadcrumb';
 
 // Re-using the icon map from our previous discussion
 import {
@@ -43,6 +44,13 @@ export default function Home() {
   }, []);
 
   const handleStart = () => setAppState('questionnaire');
+
+  const handleNavigateHome = () => {
+    setAppState('welcome');
+    // Optional: Reset to first question/section if you want to restart
+    // setCurrentSection(0);
+    // setCurrentQuestion(0);
+  };
 
   // --- LOGIC FIX: Update completed sections when moving ---
   const updateCompletedSections = (sectionIndex) => {
@@ -276,6 +284,14 @@ export default function Home() {
             )}
         </div>
       </header>
+
+      {/* Breadcrumb Navigation */}
+      <Breadcrumb
+        appState={appState}
+        currentSectionName={progressData?.currentSectionName}
+        onNavigateHome={handleNavigateHome}
+        hasProgress={Object.keys(answers).length > 0}
+      />
 
       <main id="main-content" role="main">
         {appState === 'questionnaire' && questions.length > 0 && (

@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react';
-import { InformationCircleIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import {
+  InformationCircleIcon,
+  DocumentTextIcon,
+  CheckCircleIcon,
+  XCircleIcon
+} from '@heroicons/react/24/outline';
 import ProgressBar from './ProgressBar';
 import QuestionnaireLeftSidebar from './QuestionnaireLeftSidebar';
 
@@ -75,12 +80,110 @@ const Questionnaire = ({
     const selectedValue = currentAnswer?.answer;
 
     if (type === 'yesno') {
-      return ['Yes', 'No'].map((option) => (
-        <label key={option} className="radio-label" data-checked={selectedValue === option}>
-          <input type="radio" name={question.id} value={option} checked={selectedValue === option} onChange={handleOptionChange}/>
-          <span>{option}</span>
-        </label>
-      ));
+      return (
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: 'var(--spacing-lg)',
+          marginTop: 'var(--spacing-md)'
+        }}>
+          {[
+            { value: 'Yes', icon: CheckCircleIcon, color: 'var(--color-success)', label: 'Compliant' },
+            { value: 'No', icon: XCircleIcon, color: 'var(--color-danger)', label: 'Issue' }
+          ].map(({ value, icon: Icon, color, label }) => {
+            const isSelected = selectedValue === value;
+            return (
+              <button
+                key={value}
+                type="button"
+                onClick={() => {
+                  onAnswer(question.id, {
+                    answer: value,
+                    notes: currentAnswer?.notes || ''
+                  });
+                }}
+                style={{
+                  position: 'relative',
+                  padding: 'var(--spacing-xl)',
+                  background: isSelected ? 'var(--color-bg-white)' : 'var(--color-bg-white)',
+                  border: isSelected ? `3px solid ${color}` : '2px solid var(--color-border-light)',
+                  borderRadius: 'var(--radius-lg)',
+                  cursor: 'pointer',
+                  transition: 'all var(--transition-base)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: 'var(--spacing-md)',
+                  boxShadow: isSelected ? `0 10px 30px ${color}40` : 'var(--shadow-sm)',
+                  transform: isSelected ? 'translateY(-2px)' : 'translateY(0)',
+                  minHeight: '180px',
+                  justifyContent: 'center'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSelected) {
+                    e.currentTarget.style.borderColor = color;
+                    e.currentTarget.style.boxShadow = `0 5px 15px ${color}20`;
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSelected) {
+                    e.currentTarget.style.borderColor = 'var(--color-border-light)';
+                    e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }
+                }}
+                aria-label={`Select ${value}`}
+                aria-pressed={isSelected}
+              >
+                <Icon style={{
+                  width: '4rem',
+                  height: '4rem',
+                  color: color,
+                  strokeWidth: 2
+                }} />
+                <div style={{
+                  fontSize: '1.5rem',
+                  fontWeight: 'var(--font-bold)',
+                  color: 'var(--color-text-primary)'
+                }}>
+                  {value}
+                </div>
+                <div style={{
+                  fontSize: '0.875rem',
+                  fontWeight: 'var(--font-medium)',
+                  color: 'var(--color-text-muted)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--spacing-xs)'
+                }}>
+                  {value === 'Yes' ? '✓' : '⚠️'} {label}
+                </div>
+
+                {isSelected && (
+                  <div style={{
+                    position: 'absolute',
+                    top: 'var(--spacing-sm)',
+                    right: 'var(--spacing-sm)',
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    background: color,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontSize: '0.75rem',
+                    fontWeight: 'var(--font-bold)'
+                  }}>
+                    ✓
+                  </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      );
     }
 
     if (type === 'dropdown') {

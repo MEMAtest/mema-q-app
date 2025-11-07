@@ -1322,6 +1322,15 @@ a:hover {
         display: none !important;
     }
 
+    /* Breadcrumb Mobile */
+    .breadcrumb-nav ol {
+        display: none !important;
+    }
+
+    .breadcrumb-mobile-compact {
+        display: block !important;
+    }
+
     /* Questionnaire Mobile Sidebar */
     .questionnaire-sidebar-desktop {
         display: none !important;
