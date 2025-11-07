@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { ClockIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 
-const ProgressBar = ({
+const ProgressBar = memo(({
   currentQuestionIndex,
   totalQuestions,
   answeredCount,
@@ -131,6 +131,8 @@ const ProgressBar = ({
       </div>
     </div>
   );
-};
+});
+
+ProgressBar.displayName = 'ProgressBar';
 
 export default ProgressBar;

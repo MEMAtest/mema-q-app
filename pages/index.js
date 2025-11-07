@@ -231,6 +231,12 @@ export default function Home() {
       <Head>
         <title>FinProms - FCA Financial Promotions Compliance by MEMA Consultants</title>
         <meta name="description" content="Navigate FCA PERG 8.4 compliance with confidence. FinProms provides intelligent regulatory guidance and automated assessment for financial promotions." />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {/* Preconnect to Google Fonts for faster loading */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* DNS prefetch for potential API calls */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
       </Head>
 
       {/* Skip to main content link for accessibility */}

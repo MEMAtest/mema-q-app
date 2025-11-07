@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import {
   CheckCircleIcon,
   ClipboardDocumentCheckIcon,
@@ -20,7 +20,7 @@ const iconMap = {
   '6': ArchiveBoxIcon,
 };
 
-const QuestionnaireLeftSidebar = ({
+const QuestionnaireLeftSidebar = memo(({
   sections,
   currentSectionId,
   completedSections,
@@ -268,6 +268,8 @@ const QuestionnaireLeftSidebar = ({
       )}
     </>
   );
-};
+});
+
+QuestionnaireLeftSidebar.displayName = 'QuestionnaireLeftSidebar';
 
 export default QuestionnaireLeftSidebar;
