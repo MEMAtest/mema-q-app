@@ -14,6 +14,7 @@ import {
   RocketLaunchIcon,
   ClockIcon
 } from '@heroicons/react/24/outline';
+import { generateCompliancePDF } from '../utils/pdfGenerator';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
@@ -129,6 +130,15 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handlePdfDownload = () => {
+    try {
+      generateCompliancePDF(results, questions, answers);
+    } catch (error) {
+      console.error('PDF generation failed:', error);
+      alert('Failed to generate PDF. Please try again.');
+    }
   };
 
   const doughnutOptions = {
@@ -709,35 +719,40 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
               gap: 'var(--spacing-sm)'
             }}>
               {[
-                { icon: '📥', text: 'Download Full Report PDF', action: true },
-                { icon: '📧', text: 'Share with Compliance Team', action: false },
-                { icon: '📅', text: 'Schedule Compliance Review', action: false },
-                { icon: '💬', text: 'Book MEMA Consultation', action: true },
-                { icon: '📊', text: 'Export to CSV', action: false }
+                { icon: '📥', text: 'Download Full Report PDF', action: true, onClick: handlePdfDownload },
+                { icon: '📧', text: 'Share with Compliance Team', action: false, onClick: null },
+                { icon: '📅', text: 'Schedule Compliance Review', action: false, onClick: null },
+                { icon: '💬', text: 'Book MEMA Consultation', action: true, onClick: null },
+                { icon: '📊', text: 'Export to CSV', action: false, onClick: handleCsvExport }
               ].map((item, index) => (
                 <li key={index}>
-                  <button style={{
-                    width: '100%',
-                    padding: 'var(--spacing-sm) var(--spacing-md)',
-                    background: item.action ? 'var(--color-accent-primary-bg)' : 'transparent',
-                    border: item.action ? '2px solid var(--color-accent-primary)' : '2px solid var(--color-border-light)',
-                    borderRadius: 'var(--radius-md)',
-                    cursor: 'pointer',
-                    transition: 'all var(--transition-base)',
-                    textAlign: 'left',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 'var(--spacing-sm)',
-                    fontSize: '0.9375rem',
-                    fontWeight: 'var(--font-medium)',
-                    color: 'var(--color-text-primary)'
-                  }} onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--color-accent-primary)';
-                    e.currentTarget.style.transform = 'translateX(4px)';
-                  }} onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = item.action ? 'var(--color-accent-primary)' : 'var(--color-border-light)';
-                    e.currentTarget.style.transform = 'translateX(0)';
-                  }}>
+                  <button
+                    onClick={item.onClick}
+                    style={{
+                      width: '100%',
+                      padding: 'var(--spacing-sm) var(--spacing-md)',
+                      background: item.action ? 'var(--color-accent-primary-bg)' : 'transparent',
+                      border: item.action ? '2px solid var(--color-accent-primary)' : '2px solid var(--color-border-light)',
+                      borderRadius: 'var(--radius-md)',
+                      cursor: 'pointer',
+                      transition: 'all var(--transition-base)',
+                      textAlign: 'left',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 'var(--spacing-sm)',
+                      fontSize: '0.9375rem',
+                      fontWeight: 'var(--font-medium)',
+                      color: 'var(--color-text-primary)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = 'var(--color-accent-primary)';
+                      e.currentTarget.style.transform = 'translateX(4px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = item.action ? 'var(--color-accent-primary)' : 'var(--color-border-light)';
+                      e.currentTarget.style.transform = 'translateX(0)';
+                    }}
+                  >
                     <span>{item.icon}</span>
                     <span>{item.text}</span>
                   </button>
@@ -895,19 +910,56 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
                 Download your full assessment report, including all questions, justifications,
                 and regulatory references, optimized for audit review.
               </p>
-              <button
-                onClick={handleCsvExport}
-                className="start-button"
-                style={{
-                  background: 'var(--color-success)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 'var(--spacing-sm)'
-                }}
-              >
-                <ArrowDownTrayIcon style={{ width: '1.5rem', height: '1.5rem' }} />
-                Download Full Report as CSV
-              </button>
+
+              {/* Download Buttons */}
+              <div style={{
+                display: 'flex',
+                gap: 'var(--spacing-md)',
+                justifyContent: 'center',
+                flexWrap: 'wrap'
+              }}>
+                <button
+                  onClick={handlePdfDownload}
+                  className="start-button"
+                  style={{
+                    background: 'var(--color-success)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 'var(--spacing-sm)',
+                    minWidth: '220px',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <ArrowDownTrayIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                  Download PDF Report
+                </button>
+
+                <button
+                  onClick={handleCsvExport}
+                  className="start-button"
+                  style={{
+                    background: 'var(--color-accent-secondary)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 'var(--spacing-sm)',
+                    minWidth: '220px',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <ArrowDownTrayIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                  Download CSV Data
+                </button>
+              </div>
+
+              <p style={{
+                fontSize: '0.875rem',
+                color: 'var(--color-text-muted)',
+                marginTop: 'var(--spacing-lg)',
+                marginBottom: 0
+              }}>
+                📄 PDF includes executive summary, detailed analysis, and recommendations<br />
+                📊 CSV provides raw data for further analysis
+              </p>
             </div>
           </section>
         </>
