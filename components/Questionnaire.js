@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import {
   InformationCircleIcon,
-  DocumentTextIcon,
-  CheckCircleIcon,
-  XCircleIcon
+  DocumentTextIcon
 } from '@heroicons/react/24/outline';
+import {
+  ComplianceShieldIcon,
+  WarningBadgeIcon
+} from './CustomIcons';
 import ProgressBar from './ProgressBar';
 import QuestionnaireLeftSidebar from './QuestionnaireLeftSidebar';
 
@@ -83,15 +85,35 @@ const Questionnaire = ({
       return (
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: 'var(--spacing-lg)',
-          marginTop: 'var(--spacing-md)'
+          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+          gap: 'var(--spacing-xl)',
+          marginTop: 'var(--spacing-lg)'
         }}>
           {[
-            { value: 'Yes', icon: CheckCircleIcon, color: 'var(--color-success)', label: 'Compliant' },
-            { value: 'No', icon: XCircleIcon, color: 'var(--color-danger)', label: 'Issue' }
-          ].map(({ value, icon: Icon, color, label }) => {
+            {
+              value: 'Yes',
+              Icon: ComplianceShieldIcon,
+              color: 'var(--color-success-500)',
+              colorHover: 'var(--color-success-600)',
+              bgSelected: 'var(--gradient-success)',
+              bgUnselected: '#f0fdf4',
+              label: 'Compliant',
+              emoji: '✓'
+            },
+            {
+              value: 'No',
+              Icon: WarningBadgeIcon,
+              color: 'var(--color-warning-500)',
+              colorHover: 'var(--color-warning-600)',
+              bgSelected: 'var(--gradient-warning)',
+              bgUnselected: '#fffbeb',
+              label: 'Issue',
+              emoji: '⚠️'
+            }
+          ].map(({ value, Icon, color, colorHover, bgSelected, bgUnselected, label, emoji }) => {
             const isSelected = selectedValue === value;
+            const isYes = value === 'Yes';
+
             return (
               <button
                 key={value}
@@ -102,79 +124,95 @@ const Questionnaire = ({
                     notes: currentAnswer?.notes || ''
                   });
                 }}
+                className={`answer-card ${isSelected ? 'selected' : ''}`}
                 style={{
                   position: 'relative',
-                  padding: 'var(--spacing-xl)',
-                  background: isSelected ? 'var(--color-bg-white)' : 'var(--color-bg-white)',
-                  border: isSelected ? `3px solid ${color}` : '2px solid var(--color-border-light)',
+                  padding: '2rem 1.5rem',
+                  background: isSelected ? bgSelected : bgUnselected,
+                  border: `5px solid ${isSelected ? color : 'var(--color-border-light)'}`,
                   borderRadius: 'var(--radius-lg)',
                   cursor: 'pointer',
-                  transition: 'all var(--transition-base)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   gap: 'var(--spacing-md)',
-                  boxShadow: isSelected ? `0 10px 30px ${color}40` : 'var(--shadow-sm)',
-                  transform: isSelected ? 'translateY(-2px)' : 'translateY(0)',
+                  boxShadow: isSelected
+                    ? (isYes ? 'var(--shadow-success-selected)' : 'var(--shadow-warning-selected)')
+                    : 'var(--shadow-md)',
+                  transform: isSelected ? 'translateY(-4px)' : 'translateY(0)',
                   minHeight: '180px',
                   justifyContent: 'center'
                 }}
                 onMouseEnter={(e) => {
                   if (!isSelected) {
-                    e.currentTarget.style.borderColor = color;
-                    e.currentTarget.style.boxShadow = `0 5px 15px ${color}20`;
-                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.borderColor = colorHover;
+                    e.currentTarget.style.boxShadow = isYes
+                      ? 'var(--shadow-success-hover)'
+                      : 'var(--shadow-warning-hover)';
+                    e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isSelected) {
                     e.currentTarget.style.borderColor = 'var(--color-border-light)';
-                    e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
+                    e.currentTarget.style.boxShadow = 'var(--shadow-md)';
                     e.currentTarget.style.transform = 'translateY(0)';
                   }
                 }}
                 aria-label={`Select ${value}`}
                 aria-pressed={isSelected}
               >
-                <Icon style={{
-                  width: '4rem',
-                  height: '4rem',
-                  color: color,
-                  strokeWidth: 2
-                }} />
+                {/* Custom regulatory icon */}
+                <div
+                  className="answer-card-icon"
+                  style={{
+                    animation: isSelected ? 'checkmarkPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)' : 'none'
+                  }}
+                >
+                  <Icon size={48} color={isSelected ? 'white' : color} />
+                </div>
+
+                {/* Answer text */}
                 <div style={{
-                  fontSize: '1.5rem',
-                  fontWeight: 'var(--font-bold)',
-                  color: 'var(--color-text-primary)'
+                  fontSize: '2rem',
+                  fontWeight: '800',
+                  color: isSelected ? 'white' : 'var(--color-text-primary)',
+                  letterSpacing: '-0.02em'
                 }}>
                   {value}
                 </div>
+
+                {/* Label with emoji */}
                 <div style={{
-                  fontSize: '0.875rem',
-                  fontWeight: 'var(--font-medium)',
-                  color: 'var(--color-text-muted)',
+                  fontSize: '0.9375rem',
+                  fontWeight: '600',
+                  color: isSelected ? 'rgba(255, 255, 255, 0.95)' : 'var(--color-text-muted)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: 'var(--spacing-xs)'
                 }}>
-                  {value === 'Yes' ? '✓' : '⚠️'} {label}
+                  <span style={{ fontSize: '1.125rem' }}>{emoji}</span> {label}
                 </div>
 
+                {/* Selection checkmark badge */}
                 {isSelected && (
                   <div style={{
                     position: 'absolute',
-                    top: 'var(--spacing-sm)',
-                    right: 'var(--spacing-sm)',
-                    width: '24px',
-                    height: '24px',
+                    top: '12px',
+                    right: '12px',
+                    width: '32px',
+                    height: '32px',
                     borderRadius: '50%',
-                    background: color,
+                    background: 'white',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: 'white',
-                    fontSize: '0.75rem',
-                    fontWeight: 'var(--font-bold)'
+                    color: color,
+                    fontSize: '1.125rem',
+                    fontWeight: 'var(--font-bold)',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+                    animation: 'checkmarkPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)'
                   }}>
                     ✓
                   </div>
