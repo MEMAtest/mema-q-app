@@ -5,7 +5,8 @@ import {
 } from '@heroicons/react/24/outline';
 import {
   ComplianceShieldIcon,
-  WarningBadgeIcon
+  WarningBadgeIcon,
+  RegulatoryLightbulbIcon
 } from './CustomIcons';
 import ProgressBar from './ProgressBar';
 import QuestionnaireLeftSidebar from './QuestionnaireLeftSidebar';
@@ -309,29 +310,70 @@ const Questionnaire = ({
               <>
                 {/* Question Card */}
                 <div className="question-card">
-                  {/* Question Header */}
+                  {/* Question Header - BOLD TYPOGRAPHY */}
                   <div style={{ marginBottom: 'var(--spacing-lg)' }}>
-                    <h4 className="question-text" style={{
-                      fontSize: '1.5rem',
-                      fontWeight: 'var(--font-semibold)',
-                      color: 'var(--color-text-primary)',
-                      marginBottom: 'var(--spacing-sm)',
-                      lineHeight: 1.4
-                    }}>
-                      {progressData ? `${progressData.currentQuestionIndex} of ${progressData.totalQuestions}` : question.id}. {question.questionText}
-                    </h4>
-                    <p className="question-ref" style={{
-                      fontSize: '0.875rem',
-                      color: 'var(--color-accent-primary)',
-                      fontWeight: 'var(--font-medium)',
+                    {/* BOLD Question Number Badge with Gradient */}
+                    <div style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: 'var(--spacing-xs)',
-                      cursor: 'pointer'
+                      gap: 'var(--spacing-sm)',
+                      marginBottom: 'var(--spacing-md)'
                     }}>
-                      <InformationCircleIcon style={{ width: '1rem', height: '1rem' }} />
-                      Reference: {question.questionRef}
-                    </p>
+                      <span style={{
+                        background: 'var(--gradient-purple)',
+                        color: 'white',
+                        fontSize: '0.875rem',
+                        fontWeight: 'var(--font-black)',
+                        padding: '0.5rem 1rem',
+                        borderRadius: 'var(--radius-full)',
+                        boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        border: '2px solid #7c3aed'
+                      }}>
+                        Question {progressData ? `${progressData.currentQuestionIndex} of ${progressData.totalQuestions}` : question.id}
+                      </span>
+
+                      {/* BOLD Reference Pill */}
+                      <span className="question-ref" style={{
+                        background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                        color: 'var(--color-accent-700)',
+                        fontSize: '0.8rem',
+                        fontWeight: 'var(--font-bold)',
+                        padding: '0.5rem 1rem',
+                        borderRadius: 'var(--radius-full)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 'var(--spacing-xs)',
+                        border: '2px solid var(--color-accent-600)',
+                        boxShadow: '0 2px 8px rgba(37, 99, 235, 0.15)',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s var(--ease-smooth)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.25)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(37, 99, 235, 0.15)';
+                      }}>
+                        <InformationCircleIcon style={{ width: '1rem', height: '1rem' }} />
+                        {question.questionRef}
+                      </span>
+                    </div>
+
+                    {/* BOLDER Question Text - 2rem, weight 800 */}
+                    <h4 className="question-text" style={{
+                      fontSize: '2rem',
+                      fontWeight: '800',
+                      color: 'var(--color-text-primary)',
+                      marginBottom: 'var(--spacing-sm)',
+                      lineHeight: 1.3,
+                      letterSpacing: '-0.02em'
+                    }}>
+                      {question.questionText}
+                    </h4>
                   </div>
 
                   {/* Answer Options */}
@@ -382,30 +424,72 @@ const Questionnaire = ({
                   </div>
                 </div>
 
-                {/* "Why this is important" Panel - Below Question Card */}
-                <div className="sidebar-panel" style={{ marginTop: 'var(--spacing-xl)' }}>
-                  <h4>
-                    <InformationCircleIcon />
-                    Why this is important
-                  </h4>
-                  <p>{question.explanation}</p>
+                {/* "Why this is important" Panel - BOLD VERSION */}
+                <div className="info-panel-bold" style={{
+                  marginTop: 'var(--spacing-xl)',
+                  borderRadius: 'var(--radius-lg)',
+                  overflow: 'hidden',
+                  border: '2px solid var(--color-accent-600)',
+                  boxShadow: 'var(--shadow-elevated)'
+                }}>
+                  {/* BOLD Blue Gradient Header */}
+                  <div className="info-panel-header-bold" style={{
+                    background: 'var(--gradient-accent)',
+                    padding: 'var(--spacing-lg)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--spacing-md)'
+                  }}>
+                    <RegulatoryLightbulbIcon size={32} color="white" />
+                    <h4 className="info-panel-title-bold" style={{
+                      margin: 0,
+                      fontSize: '1.25rem',
+                      fontWeight: 'var(--font-black)',
+                      color: 'white',
+                      textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
+                    }}>
+                      Why this is important
+                    </h4>
+                  </div>
 
-                  {/* Additional Context */}
-                  <div style={{
-                    marginTop: 'var(--spacing-lg)',
-                    padding: 'var(--spacing-md)',
-                    background: 'var(--color-accent-primary-bg)',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1px solid var(--color-accent-primary)'
+                  {/* Content with Bold Border */}
+                  <div className="info-panel-content-bold" style={{
+                    padding: 'var(--spacing-lg)',
+                    background: 'white',
+                    borderLeft: '4px solid var(--color-accent-600)'
                   }}>
                     <p style={{
-                      fontSize: '0.875rem',
-                      color: 'var(--color-accent-primary)',
-                      fontWeight: 'var(--font-medium)',
+                      fontSize: '1rem',
+                      lineHeight: '1.6',
+                      color: 'var(--color-text-primary)',
                       margin: 0
                     }}>
-                      💡 Tip: Your response will help assess compliance with FCA PERG guidance
+                      {question.explanation}
                     </p>
+
+                    {/* BOLD Compliance Tip Box with Green Gradient */}
+                    <div className="compliance-tip-box" style={{
+                      marginTop: 'var(--spacing-lg)',
+                      padding: 'var(--spacing-md)',
+                      background: 'var(--gradient-success)',
+                      borderRadius: 'var(--radius-md)',
+                      border: '2px solid var(--color-success-600)',
+                      boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)'
+                    }}>
+                      <p className="compliance-tip-text" style={{
+                        fontSize: '0.875rem',
+                        color: 'white',
+                        fontWeight: 'var(--font-semibold)',
+                        margin: 0,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 'var(--spacing-sm)',
+                        textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
+                      }}>
+                        <span style={{ fontSize: '1.25rem' }}>💡</span>
+                        <span>Your response will help assess compliance with FCA PERG guidance</span>
+                      </p>
+                    </div>
                   </div>
                 </div>
 
