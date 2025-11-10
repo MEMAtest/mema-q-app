@@ -271,36 +271,38 @@ a:hover {
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-sm);
-    background-color: var(--color-accent-primary);
-    color: var(--color-text-white);
+    background: var(--gradient-teal-green);
+    color: white;
     padding: 1rem 2rem;
     border-radius: var(--radius-md);
     font-weight: var(--font-bold);
     font-size: 1rem;
     transition: all var(--transition-base);
-    box-shadow: var(--shadow-accent-primary);
-    border: none;
+    box-shadow: var(--shadow-teal-glow);
+    border: 2px solid var(--accent-teal);
     cursor: pointer;
     margin: 0 auto;
 }
 
 .start-button:hover {
-    background-color: var(--color-accent-primary-hover);
+    background: var(--gradient-green-teal);
     transform: translateY(-3px);
-    box-shadow: var(--shadow-xl);
+    box-shadow: var(--shadow-teal-glow-strong);
+    border-color: var(--accent-teal-light);
 }
 
 .start-button:active {
     transform: translateY(-1px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-teal-glow);
 }
 
 .start-button:disabled {
-    background-color: var(--color-border);
-    color: var(--color-text-light);
+    background: var(--bg-card-medium);
+    color: var(--text-muted);
+    border-color: var(--border-subtle);
     cursor: not-allowed;
     transform: none;
-    box-shadow: var(--shadow-sm);
+    box-shadow: none;
     opacity: 0.6;
 }
 
@@ -771,50 +773,54 @@ a:hover {
     box-shadow: var(--shadow-xl);
 }
 
-/* Ghost Button Variant */
+/* Ghost Button Variant (Dark Theme) */
 .btn-ghost {
     background-color: transparent;
-    color: var(--color-text-primary);
-    border: 2px solid var(--color-accent-primary);
+    color: var(--text-primary);
+    border: 2px solid var(--accent-teal);
     padding: 0.75rem 1.5rem;
     border-radius: var(--radius-md);
     font-weight: var(--font-semibold);
-    font-family: var(--font-primary);
+    font-family: var(--font-body);
     transition: all var(--transition-base);
     cursor: pointer;
 }
 
 .btn-ghost:hover {
-    background-color: var(--color-accent-primary-bg);
-    border-color: var(--color-accent-primary-hover);
+    background: rgba(20, 184, 166, 0.15);
+    border-color: var(--accent-teal-light);
+    box-shadow: var(--shadow-teal-glow);
 }
 
 /* Ghost Button on Dark Background */
 .btn-ghost-dark {
     background-color: transparent;
-    color: var(--color-text-white);
-    border: 2px solid var(--color-text-white);
+    color: var(--text-primary);
+    border: 2px solid var(--accent-teal);
     padding: 0.75rem 1.5rem;
     border-radius: var(--radius-md);
     font-weight: var(--font-semibold);
-    font-family: var(--font-primary);
+    font-family: var(--font-body);
     transition: all var(--transition-base);
     cursor: pointer;
 }
 
 .btn-ghost-dark:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: var(--color-accent-primary);
-    color: var(--color-accent-primary);
+    background: rgba(20, 184, 166, 0.15);
+    border-color: var(--accent-teal-light);
+    box-shadow: var(--shadow-teal-glow);
 }
 
 /* ========================================
    8. NEW DESIGN SYSTEM COMPONENTS
    ======================================== */
 
-/* -- Pop-Out Card Styles -- */
+/* -- Pop-Out Card Styles (Dark Theme) -- */
 .card {
-    background-color: var(--color-bg-white);
+    background: var(--bg-card-darker);
+    backdropFilter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-medium);
     border-radius: var(--radius-lg);
     padding: var(--spacing-xl);
     box-shadow: var(--shadow-lg);
@@ -824,6 +830,7 @@ a:hover {
 .card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-xl);
+    border-color: var(--accent-teal);
 }
 
 .card-sm {
@@ -950,7 +957,10 @@ a:hover {
 }
 
 .feature-card {
-    background-color: var(--color-bg-white);
+    background: var(--bg-card-dark);
+    backdropFilter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-medium);
     border-radius: var(--radius-lg);
     padding: var(--spacing-xl);
     box-shadow: var(--shadow-lg);
@@ -960,7 +970,8 @@ a:hover {
 
 .feature-card:hover {
     transform: translateY(-6px);
-    box-shadow: var(--shadow-2xl);
+    box-shadow: var(--shadow-teal-glow);
+    border-color: var(--accent-teal);
 }
 
 .feature-card-icon {
@@ -970,9 +981,10 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-accent-primary-bg);
-    border-radius: var(--radius-lg);
-    color: var(--color-accent-primary);
+    background: rgba(20, 184, 166, 0.15);
+    border: 1px solid var(--accent-teal);
+    borderRadius: var(--radius-lg);
+    color: var(--accent-teal-light);
 }
 
 .feature-card-icon svg {
@@ -984,15 +996,16 @@ a:hover {
     font-size: 1.5rem;
     font-weight: var(--font-semibold);
     margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
 }
 
 .feature-card p {
     font-size: 1rem;
-    color: var(--color-text-secondary);
+    color: var(--text-secondary);
     line-height: 1.6;
 }
 
-/* -- Benefit List with Icons -- */
+/* -- Benefit List with Icons (Dark Theme) -- */
 .benefits-list {
     list-style: none;
     padding: 0;
@@ -1005,12 +1018,13 @@ a:hover {
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-lg);
     font-size: 1.125rem;
+    color: var(--text-primary);
 }
 
 .benefits-list .icon {
     width: 24px;
     height: 24px;
-    color: var(--color-accent-primary);
+    color: var(--accent-teal-light);
     flex-shrink: 0;
     margin-top: 2px;
 }
@@ -1147,9 +1161,12 @@ a:hover {
     color: var(--color-warning);
 }
 
-/* -- Testimonial Card -- */
+/* -- Testimonial Card (Dark Theme) -- */
 .testimonial-card {
-    background-color: var(--color-bg-white);
+    background: var(--bg-card-darker);
+    backdropFilter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-medium);
     border-radius: var(--radius-lg);
     padding: var(--spacing-2xl);
     box-shadow: var(--shadow-xl);
@@ -1161,7 +1178,7 @@ a:hover {
     line-height: 1.6;
     font-style: italic;
     margin-bottom: var(--spacing-lg);
-    color: var(--color-text-secondary);
+    color: var(--text-secondary);
 }
 
 .testimonial-author {
@@ -1175,6 +1192,7 @@ a:hover {
     height: 60px;
     border-radius: var(--radius-full);
     overflow: hidden;
+    border: 2px solid var(--accent-teal);
 }
 
 .testimonial-avatar img {
@@ -1187,11 +1205,12 @@ a:hover {
     font-size: 1.125rem;
     font-weight: var(--font-semibold);
     margin-bottom: 0.25rem;
+    color: var(--text-primary);
 }
 
 .testimonial-info p {
     font-size: 0.875rem;
-    color: var(--color-text-muted);
+    color: var(--text-muted);
     margin: 0;
 }
 
@@ -1268,22 +1287,23 @@ a:hover {
     font-weight: var(--font-medium);
 }
 
-/* -- CTA Section -- */
+/* -- CTA Section (Dark Theme) -- */
 .cta-section {
     text-align: center;
     padding: var(--spacing-3xl) var(--spacing-xl);
-    background-color: var(--color-bg-light);
+    background: var(--bg-card-darker);
 }
 
 .cta-section h2 {
     font-size: 2.5rem;
     font-weight: var(--font-black);
     margin-bottom: var(--spacing-lg);
+    color: var(--text-primary);
 }
 
 .cta-section p {
     font-size: 1.25rem;
-    color: var(--color-text-secondary);
+    color: var(--text-secondary);
     margin-bottom: var(--spacing-xl);
     max-width: 700px;
     margin-left: auto;
@@ -1297,14 +1317,17 @@ a:hover {
     flex-wrap: wrap;
 }
 
-/* -- Header/Navigation -- */
+/* -- Header/Navigation (Dark Theme) -- */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: var(--spacing-lg) var(--spacing-xl);
-    background-color: var(--color-bg-white);
-    box-shadow: var(--shadow-sm);
+    background: var(--bg-card-darker);
+    backdropFilter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    border-bottom: 1px solid var(--border-medium);
+    box-shadow: var(--shadow-md);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -1328,7 +1351,7 @@ a:hover {
 }
 
 .header-nav a {
-    color: var(--color-text-secondary);
+    color: var(--text-secondary);
     text-decoration: none;
     font-weight: var(--font-medium);
     font-size: 1rem;
@@ -1336,7 +1359,7 @@ a:hover {
 }
 
 .header-nav a:hover {
-    color: var(--color-accent-primary);
+    color: var(--accent-teal-light);
     text-decoration: none;
 }
 
