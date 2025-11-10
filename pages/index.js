@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import Image from 'next/image';
 import WelcomeScreen from '../components/WelcomeScreen';
 import Questionnaire from '../components/Questionnaire';
 import ResultsPage from '../components/ResultsPage';
 import Stepper from '../components/Stepper';
+import Breadcrumb from '../components/Breadcrumb';
+import ProgressBar from '../components/ProgressBar';
 
 // Re-using the icon map from our previous discussion
 import {
@@ -190,23 +191,70 @@ export default function Home() {
   // Determine current section ID for active step
   const activeSectionId = appState === 'results' ? 'results' : questions[currentSection]?.id;
 
+  // Breadcrumb items configuration
+  const getBreadcrumbItems = () => {
+    const items = [
+      {
+        label: 'Home',
+        icon: 'home',
+        href: '#',
+        onClick: () => setAppState('welcome')
+      }
+    ];
+
+    if (appState === 'questionnaire' && questions.length > 0) {
+      items.push({
+        label: 'Assessment',
+        href: '#',
+        onClick: () => {} // Current page
+      });
+      items.push({
+        label: questions[currentSection]?.title || 'Section',
+      });
+    } else if (appState === 'results') {
+      items.push({
+        label: 'Assessment',
+        href: '#',
+        onClick: () => setAppState('questionnaire')
+      });
+      items.push({
+        label: 'Results',
+      });
+    }
+
+    return items;
+  };
+
+  // Calculate progress metrics
+  const getTotalQuestions = () => {
+    return questions.reduce((sum, section) => sum + section.items.length, 0);
+  };
+
+  const getCurrentQuestionNumber = () => {
+    let count = 0;
+    for (let i = 0; i < currentSection; i++) {
+      count += questions[i].items.length;
+    }
+    return count + currentQuestion + 1;
+  };
+
+  const getAnsweredCount = () => {
+    return Object.keys(answers).filter(key => answers[key]?.answer).length;
+  };
+
+  const getCompletedSectionsCount = () => {
+    return Object.keys(completedSections).length;
+  };
+
   return (
     <div className="min-h-screen bg-slate-100 font-sans">
       <Head>
-        <title>MEMA Financial Promotions App</title>
+        <title>FinProms - FCA Financial Promotions Compliance Assessment</title>
+        <meta name="description" content="Professional FCA PERG 8 financial promotions compliance assessment tool by MEMA Consultants" />
       </Head>
 
       <header className="bg-white text-slate-800 p-4 shadow-md sticky top-0 z-50">
-        <div className="container mx-auto flex justify-between items-center">
-            <div className="flex items-center">
-                <Image
-                    src="/mema-logo.png"
-                    alt="MEMA Consultants Logo"
-                    width={160}
-                    height={40}
-                    className="object-contain"
-                />
-            </div>
+        <div className="container mx-auto flex justify-end items-center">
             {appState === 'questionnaire' && (
                 <button onClick={handleShowResults} className="start-button" style={{margin: '0'}}>
                     View Results
@@ -216,6 +264,29 @@ export default function Home() {
       </header>
 
       <main>
+        {/* Breadcrumb Navigation */}
+        {appState !== 'welcome' && (
+          <div className="container mx-auto px-4 mt-4">
+            <Breadcrumb items={getBreadcrumbItems()} />
+          </div>
+        )}
+
+        {/* Progress Bar */}
+        {appState === 'questionnaire' && questions.length > 0 && (
+          <div className="container mx-auto px-4 mt-2">
+            <ProgressBar
+              currentQuestion={getCurrentQuestionNumber()}
+              totalQuestions={getTotalQuestions()}
+              answeredQuestions={getAnsweredCount()}
+              sections={{
+                completed: getCompletedSectionsCount(),
+                total: questions.length
+              }}
+            />
+          </div>
+        )}
+
+        {/* Stepper */}
         {appState === 'questionnaire' && questions.length > 0 && (
           <div className="container mx-auto px-4 mt-6">
              <Stepper

@@ -1313,3 +1313,31 @@ a:hover {
     line-height: 1.7;
     color: var(--color-text-secondary);
 }
+
+/* -- Answer Option Preview Styles (WelcomeScreen Interactive Demo) -- */
+.answer-option-preview {
+    flex: 1;
+    padding: var(--spacing-lg);
+    border: 2px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-white);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.answer-option-preview:hover {
+    border-color: var(--color-accent-primary);
+    background-color: var(--color-accent-primary-bg);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.answer-option-preview svg {
+    width: 32px;
+    height: 32px;
+    color: var(--color-accent-primary);
+}

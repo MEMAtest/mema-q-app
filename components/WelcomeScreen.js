@@ -1,5 +1,5 @@
 // components/WelcomeScreen.js
-import React, { useState } from 'react';
+import React from 'react';
 import {
   PlayCircleIcon,
   CheckCircleIcon,
@@ -16,14 +16,12 @@ import {
 } from '@heroicons/react/24/outline';
 
 const WelcomeScreen = ({ onStart }) => {
-  const [videoPlaying, setVideoPlaying] = useState(false);
-
   return (
     <>
       {/* Header Navigation */}
       <header className="header">
         <div className="header-logo">
-          <img src="/mema-logo-new.svg" alt="MEMA Connect" style={{ color: 'var(--color-text-primary)' }} />
+          <img src="/mema-logo-new.svg" alt="FinProms by MEMA Consultants" style={{ color: 'var(--color-text-primary)' }} />
         </div>
         <nav className="header-nav">
           <a href="#how-it-works">How It Works</a>
@@ -48,7 +46,7 @@ const WelcomeScreen = ({ onStart }) => {
             <div className="hero-text">
               <h1>Future-Proofing Compliance. Built for Tomorrow's Finance.</h1>
               <p>
-                MEMA Connect delivers the advanced regulatory guidance and automated solutions
+                FinProms delivers the advanced regulatory guidance and automated solutions
                 financial institutions need to thrive in an ever-evolving landscape.
               </p>
 
@@ -126,70 +124,140 @@ const WelcomeScreen = ({ onStart }) => {
         </div>
       </section>
 
-      {/* Mini-Demo Section */}
+      {/* Interactive Preview Section */}
       <section id="demo-section" className="video-section section-light">
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h2 style={{ textAlign: 'center', fontSize: '2.5rem', fontWeight: 'var(--font-black)', marginBottom: '1rem' }}>
             See FinProms in Action
           </h2>
           <p style={{ textAlign: 'center', fontSize: '1.25rem', color: 'var(--color-text-secondary)', marginBottom: '3rem', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto' }}>
-            Witness how easy it is to navigate complex regulations and generate instant compliance clarity.
+            Experience how easy it is to navigate complex regulations and generate instant compliance clarity.
           </p>
 
-          {/* Video Container */}
-          <div className="video-container">
-            {!videoPlaying ? (
+          {/* Interactive Sample Question Preview */}
+          <div style={{
+            maxWidth: '800px',
+            margin: '0 auto',
+            background: 'var(--color-bg-white)',
+            borderRadius: 'var(--radius-xl)',
+            padding: 'var(--spacing-2xl)',
+            boxShadow: 'var(--shadow-2xl)',
+            border: '1px solid var(--color-border-light)'
+          }}>
+            <div style={{ marginBottom: 'var(--spacing-xl)' }}>
               <div style={{
-                position: 'relative',
-                minHeight: '500px',
-                background: 'linear-gradient(135deg, var(--color-bg-dark) 0%, var(--color-bg-dark-alt) 100%)',
-                display: 'flex',
+                display: 'inline-flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer'
-              }} onClick={() => setVideoPlaying(true)}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{
-                    width: '100px',
-                    height: '100px',
-                    background: 'var(--color-accent-primary)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 1rem',
-                    boxShadow: 'var(--shadow-accent-primary)',
-                    transition: 'all var(--transition-base)'
-                  }} className="play-button-hover">
-                    <PlayCircleIcon style={{ width: '60px', height: '60px', color: 'white' }} />
-                  </div>
-                  <p style={{ color: 'white', fontSize: '1.125rem', fontWeight: 'var(--font-medium)' }}>
-                    Click to Play Demo
-                  </p>
+                gap: 'var(--spacing-sm)',
+                background: 'var(--color-accent-primary-bg)',
+                color: 'var(--color-accent-primary)',
+                padding: '0.5rem 1rem',
+                borderRadius: 'var(--radius-full)',
+                fontSize: '0.875rem',
+                fontWeight: 'var(--font-semibold)',
+                marginBottom: 'var(--spacing-md)'
+              }}>
+                <InformationCircleIcon style={{ width: '1.25rem', height: '1.25rem' }} />
+                Sample Question Preview
+              </div>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 'var(--font-semibold)', marginBottom: 'var(--spacing-md)', color: 'var(--color-text-primary)' }}>
+                1.1. Is the communication an "invitation or inducement" to engage in an activity?
+              </h3>
+              <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: 'var(--spacing-lg)' }}>
+                Reference: PERG 8.4
+              </p>
+
+              <div style={{ display: 'flex', gap: 'var(--spacing-md)', marginBottom: 'var(--spacing-xl)' }}>
+                <div style={{
+                  flex: 1,
+                  padding: 'var(--spacing-lg)',
+                  border: '2px solid var(--color-border)',
+                  borderRadius: 'var(--radius-md)',
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  transition: 'all var(--transition-base)',
+                  background: 'var(--color-bg-white)'
+                }} className="answer-option-preview">
+                  <CheckCircleIcon style={{ width: '2rem', height: '2rem', margin: '0 auto var(--spacing-sm)', color: 'var(--color-success)' }} />
+                  <strong style={{ fontSize: '1rem' }}>Yes</strong>
+                </div>
+                <div style={{
+                  flex: 1,
+                  padding: 'var(--spacing-lg)',
+                  border: '2px solid var(--color-border)',
+                  borderRadius: 'var(--radius-md)',
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  transition: 'all var(--transition-base)',
+                  background: 'var(--color-bg-white)'
+                }} className="answer-option-preview">
+                  <ClipboardDocumentCheckIcon style={{ width: '2rem', height: '2rem', margin: '0 auto var(--spacing-sm)', color: 'var(--color-text-muted)' }} />
+                  <strong style={{ fontSize: '1rem' }}>No</strong>
                 </div>
               </div>
-            ) : (
+
               <div style={{
-                minHeight: '500px',
-                background: 'var(--color-bg-dark)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '2rem'
+                background: 'var(--color-accent-primary-bg)',
+                border: '1px solid var(--color-accent-primary)',
+                borderLeft: '4px solid var(--color-accent-primary)',
+                padding: 'var(--spacing-lg)',
+                borderRadius: 'var(--radius-md)',
+                marginBottom: 'var(--spacing-lg)'
               }}>
-                {/* Placeholder for actual video - Replace with iframe/video element */}
-                <p style={{ color: 'white', fontSize: '1.125rem', textAlign: 'center' }}>
-                  [Video Player Placeholder - Add YouTube/Vimeo embed or video file here]
-                  <br /><br />
-                  <span style={{ fontSize: '0.9rem', opacity: 0.7 }}>
-                    This will show a 60-90 second walkthrough of the assessment experience
-                  </span>
+                <div style={{ display: 'flex', gap: 'var(--spacing-sm)', marginBottom: 'var(--spacing-sm)' }}>
+                  <LightBulbIcon style={{ width: '1.25rem', height: '1.25rem', color: 'var(--color-accent-primary)', flexShrink: 0 }} />
+                  <strong style={{ color: 'var(--color-accent-primary)' }}>Why this is important</strong>
+                </div>
+                <p style={{ fontSize: '0.9rem', lineHeight: 1.6, margin: 0, color: 'var(--color-text-secondary)' }}>
+                  A financial promotion must invite or encourage someone to engage in a financial activity.
+                  Purely factual information, without any persuasive element, might not be considered an invitation or inducement. (PERG 8.4.2 - 8.4.4)
                 </p>
               </div>
-            )}
+            </div>
+
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--spacing-md)',
+              alignItems: 'center'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--spacing-sm)',
+                color: 'var(--color-success)',
+                fontSize: '0.9rem',
+                fontWeight: 'var(--font-medium)'
+              }}>
+                <CheckCircleIcon style={{ width: '1.25rem', height: '1.25rem' }} />
+                36 comprehensive questions
+              </div>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--spacing-sm)',
+                color: 'var(--color-success)',
+                fontSize: '0.9rem',
+                fontWeight: 'var(--font-medium)'
+              }}>
+                <ChartBarIcon style={{ width: '1.25rem', height: '1.25rem' }} />
+                Instant compliance scoring
+              </div>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--spacing-sm)',
+                color: 'var(--color-success)',
+                fontSize: '0.9rem',
+                fontWeight: 'var(--font-medium)'
+              }}>
+                <DocumentTextIcon style={{ width: '1.25rem', height: '1.25rem' }} />
+                Detailed gap analysis
+              </div>
+            </div>
           </div>
 
-          {/* CTA below video */}
+          {/* CTA below preview */}
           <div style={{ textAlign: 'center', marginTop: '2rem' }}>
             <button className="start-button" onClick={onStart}>
               Start Your Free Assessment
@@ -293,16 +361,6 @@ const WelcomeScreen = ({ onStart }) => {
                 Navigate complex regulatory requirements with our intelligent question-based system
                 that adapts to your responses and provides contextual guidance at every step.
               </p>
-              <a href="#" style={{
-                color: 'var(--color-accent-primary)',
-                fontWeight: 'var(--font-medium)',
-                fontSize: '0.9rem',
-                textDecoration: 'none',
-                display: 'inline-block',
-                marginTop: '1rem'
-              }}>
-                Learn More →
-              </a>
             </div>
 
             {/* Feature Card 2: Automated Documentation */}
@@ -315,16 +373,6 @@ const WelcomeScreen = ({ onStart }) => {
                 Generate comprehensive, audit-ready reports automatically. Every response is captured,
                 timestamped, and formatted for regulatory review.
               </p>
-              <a href="#" style={{
-                color: 'var(--color-accent-primary)',
-                fontWeight: 'var(--font-medium)',
-                fontSize: '0.9rem',
-                textDecoration: 'none',
-                display: 'inline-block',
-                marginTop: '1rem'
-              }}>
-                Learn More →
-              </a>
             </div>
 
             {/* Feature Card 3: Dynamic Reporting */}
@@ -337,16 +385,6 @@ const WelcomeScreen = ({ onStart }) => {
                 Visualize your compliance posture with interactive dashboards. Track trends,
                 identify gaps, and demonstrate progress to stakeholders with clarity.
               </p>
-              <a href="#" style={{
-                color: 'var(--color-accent-primary)',
-                fontWeight: 'var(--font-medium)',
-                fontSize: '0.9rem',
-                textDecoration: 'none',
-                display: 'inline-block',
-                marginTop: '1rem'
-              }}>
-                Learn More →
-              </a>
             </div>
           </div>
         </div>
@@ -363,8 +401,9 @@ const WelcomeScreen = ({ onStart }) => {
             {/* Left: Testimonial */}
             <div className="testimonial-card">
               <div className="testimonial-quote">
-                "MEMA Connect transformed how we approach financial promotions compliance.
-                What used to take weeks now takes hours, with greater accuracy and confidence."
+                "FinProms provides a structured, systematic approach to navigating FCA financial promotions
+                regulations. The tool brings clarity to complex requirements and helps maintain consistent
+                compliance standards."
               </div>
               <div className="testimonial-author">
                 <div className="testimonial-avatar">
@@ -379,30 +418,30 @@ const WelcomeScreen = ({ onStart }) => {
                     fontSize: '1.5rem',
                     fontWeight: 'var(--font-bold)'
                   }}>
-                    JD
+                    MC
                   </div>
                 </div>
                 <div className="testimonial-info">
-                  <h5>Jane Doe</h5>
-                  <p>Head of Compliance, Kindsight Financial</p>
+                  <h5>Compliance Professional</h5>
+                  <p>UK Financial Services Firm</p>
                 </div>
               </div>
             </div>
 
-            {/* Right: Metrics */}
+            {/* Right: Key Features */}
             <div>
               <div className="metrics-grid">
                 <div className="metric-card">
-                  <div className="metric-value">70%</div>
-                  <div className="metric-label">Faster Assessments</div>
+                  <div className="metric-value">36</div>
+                  <div className="metric-label">PERG 8 Questions</div>
                 </div>
                 <div className="metric-card">
-                  <div className="metric-value">99%</div>
-                  <div className="metric-label">Audit Readiness</div>
+                  <div className="metric-value">6</div>
+                  <div className="metric-label">Core Sections</div>
                 </div>
                 <div className="metric-card">
-                  <div className="metric-value">50+</div>
-                  <div className="metric-label">Firms Trust Us</div>
+                  <div className="metric-value">100%</div>
+                  <div className="metric-label">FCA Aligned</div>
                 </div>
               </div>
             </div>
