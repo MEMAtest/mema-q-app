@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'next-i18next';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
 import {
@@ -8,18 +9,23 @@ import {
   DocumentTextIcon,
   ArrowDownTrayIcon,
   ChartBarIcon,
-  ClipboardDocumentCheckIcon
+  ClipboardDocumentCheckIcon,
+  PrinterIcon,
+  EnvelopeIcon,
 } from '@heroicons/react/24/outline';
+import { exportResultsToPDF } from '../lib/exportPdf';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
 export default function ResultsPage({ results, onGoBack, questions, answers }) {
+  const { t } = useTranslation('common');
   const [isFullReportUnlocked, setIsFullReportUnlocked] = useState(false);
   const [leadName, setLeadName] = useState('');
   const [leadEmail, setLeadEmail] = useState('');
   const [leadPhone, setLeadPhone] = useState('');
   const [leadFirm, setLeadFirm] = useState('');
   const [formState, setFormState] = useState({ status: 'idle', message: '' });
+  const [emailSending, setEmailSending] = useState(false);
 
   if (!results) {
     return (
@@ -101,6 +107,51 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
     document.body.removeChild(link);
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleEmailResults = async () => {
+    if (!leadEmail) {
+      alert('Please enter your email address to receive the report.');
+      return;
+    }
+
+    setEmailSending(true);
+    try {
+      const response = await fetch('/api/send-results', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: leadEmail,
+          firm: leadFirm,
+          results,
+          questions,
+          answers,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to send email');
+      }
+
+      alert('Results sent successfully to your email!');
+    } catch (error) {
+      console.error('Failed to send email results:', error);
+      alert(error.message || 'Failed to send email. Please try again.');
+    } finally {
+      setEmailSending(false);
+    }
+  };
+
+  const handlePdfExport = () => {
+    exportResultsToPDF(results, questions, answers, {
+      firm: leadFirm,
+      email: leadEmail,
+    });
+  };
+
   const doughnutOptions = {
       responsive: true, maintainAspectRatio: false, cutout: '70%',
       plugins: { legend: { display: false } }
@@ -137,7 +188,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
             color: 'var(--color-text-primary)',
             marginBottom: 'var(--spacing-md)'
           }}>
-            Your Compliance Assessment Results
+            {t('results.title')}
           </h1>
           <p style={{
             fontSize: '1.125rem',
@@ -147,7 +198,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
             marginLeft: 'auto',
             marginRight: 'auto'
           }}>
-            Comprehensive insights and actionable recommendations from your FinProms assessment
+            {t('results.subtitle')}
           </p>
 
           {/* Compliance Score Gauge */}
@@ -378,29 +429,78 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
                 color: 'var(--color-text-primary)',
                 marginBottom: 'var(--spacing-md)'
               }}>
-                Generate Your Audit-Ready Report
+                {t('results.downloadCardTitle')}
               </h2>
               <p style={{
                 fontSize: '1.125rem',
                 color: 'var(--color-text-secondary)',
                 marginBottom: 'var(--spacing-xl)'
               }}>
-                Download your full assessment report, including all questions, justifications,
-                and regulatory references, optimized for audit review.
+                {t('results.downloadCardCopy')}
               </p>
-              <button
-                onClick={handleCsvExport}
-                className="start-button"
-                style={{
-                  background: 'var(--color-success)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 'var(--spacing-sm)'
-                }}
-              >
-                <ArrowDownTrayIcon style={{ width: '1.5rem', height: '1.5rem' }} />
-                Download Full Report as CSV
-              </button>
+              <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+                gap: 'var(--spacing-md)'
+              }}>
+                <button
+                  onClick={handleCsvExport}
+                  className="start-button"
+                  style={{
+                    background: 'var(--color-success)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 'var(--spacing-sm)'
+                  }}
+                >
+                  <ArrowDownTrayIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                  {t('buttons.downloadCsv')}
+                </button>
+
+                <button
+                  onClick={handlePdfExport}
+                  className="start-button"
+                  style={{
+                    background: 'var(--color-accent-secondary)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 'var(--spacing-sm)'
+                  }}
+                >
+                  <DocumentTextIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                  {t('buttons.downloadPdf')}
+                </button>
+
+                <button
+                  onClick={handlePrint}
+                  className="start-button"
+                  style={{
+                    background: 'var(--color-accent-primary)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 'var(--spacing-sm)'
+                  }}
+                >
+                  <PrinterIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                  {t('buttons.printReport')}
+                </button>
+
+                <button
+                  onClick={handleEmailResults}
+                  className="start-button"
+                  disabled={emailSending}
+                  style={{
+                    background: 'var(--color-warning)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 'var(--spacing-sm)'
+                  }}
+                >
+                  <EnvelopeIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                  {emailSending ? 'Sending...' : t('buttons.emailResults')}
+                </button>
+              </div>
             </div>
           </section>
         </>
@@ -552,7 +652,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
                     justifyContent: 'center'
                   }}
                 >
-                  {formState.status === 'loading' ? 'Submitting...' : '🔓 Unlock Full Report'}
+                  {formState.status === 'loading' ? 'Submitting...' : `🔓 ${t('buttons.unlockReport')}`}
                 </button>
               </form>
 

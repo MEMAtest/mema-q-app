@@ -32,15 +32,20 @@ model UserResponse {
   answer      Json     // Flexible to store "Yes", an array of selections, or a dropdown value
   notes       String?
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Relation to the question it answers
   question    Question @relation(fields: [questionId], references: [id])
   questionId  String
+
+  @@unique([sessionId, questionId])
+  @@index([sessionId])
 }
 
 // Stores the contact details from the final form
 model Lead {
   id        String   @id @default(cuid())
+  name      String?
   email     String
   phone     String
   firm      String?  // --- ADDED THIS LINE ---

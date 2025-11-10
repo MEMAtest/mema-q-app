@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import WelcomeScreen from '../components/WelcomeScreen';
-import Questionnaire from '../components/Questionnaire';
-import ResultsPage from '../components/ResultsPage';
 import Stepper from '../components/Stepper';
 import Breadcrumb from '../components/Breadcrumb';
 import ProgressBar from '../components/ProgressBar';
+import ThemeToggle from '../components/ThemeToggle';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 // Re-using the icon map from our previous discussion
 import {
@@ -18,8 +21,26 @@ import {
   ChartPieIcon,
 } from '@heroicons/react/24/outline';
 
+const Questionnaire = dynamic(() => import('../components/Questionnaire'), {
+  loading: () => <div className="app-container text-center">Loading assessment...</div>,
+});
+
+const ResultsPage = dynamic(() => import('../components/ResultsPage'), {
+  ssr: false,
+  loading: () => <div className="app-container text-center">Preparing results...</div>,
+});
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+    },
+  };
+}
+
 
 export default function Home() {
+  const { t } = useTranslation('common');
   const [appState, setAppState] = useState('welcome');
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
@@ -28,6 +49,8 @@ export default function Home() {
   const [analysisResult, setAnalysisResult] = useState(null);
   // --- ADDED: State to track completed sections for the Stepper ---
   const [completedSections, setCompletedSections] = useState({});
+  const [sessionId, setSessionId] = useState('');
+  const [progressLoaded, setProgressLoaded] = useState(false);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -42,6 +65,63 @@ export default function Home() {
     };
     fetchQuestions();
   }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    let storedSession = window.localStorage.getItem('mema-session-id');
+    if (!storedSession) {
+      if (window.crypto?.randomUUID) {
+        storedSession = window.crypto.randomUUID();
+      } else {
+        storedSession = `session-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      }
+      window.localStorage.setItem('mema-session-id', storedSession);
+    }
+    setSessionId(storedSession);
+  }, []);
+
+  useEffect(() => {
+    const loadProgress = async () => {
+      if (!sessionId || questions.length === 0 || progressLoaded) return;
+      try {
+        const response = await fetch(`/api/load-progress?sessionId=${sessionId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.answers) {
+            setAnswers(data.answers);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load progress:', error);
+      } finally {
+        setProgressLoaded(true);
+      }
+    };
+
+    loadProgress();
+  }, [sessionId, questions, progressLoaded]);
+
+  useEffect(() => {
+    if (!sessionId || !progressLoaded) return;
+    const timeout = setTimeout(async () => {
+      try {
+        await fetch('/api/save-progress', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sessionId,
+            currentSection,
+            currentQuestion,
+            answers,
+          }),
+        });
+      } catch (error) {
+        console.error('Failed to save progress:', error);
+      }
+    }, 750);
+
+    return () => clearTimeout(timeout);
+  }, [answers, sessionId, currentSection, currentQuestion, progressLoaded]);
 
   const handleStart = () => setAppState('questionnaire');
 
@@ -249,15 +329,19 @@ export default function Home() {
   return (
     <div className="min-h-screen font-sans">
       <Head>
-        <title>FinProms - FCA Financial Promotions Compliance Assessment</title>
+        <title>MEMA Consultants - FCA Financial Promotions Compliance Assessment</title>
         <meta name="description" content="Professional FCA PERG 8 financial promotions compliance assessment tool by MEMA Consultants" />
       </Head>
 
       <header className="glass-panel sticky top-0 z-50" style={{margin: '1rem 0', borderRadius: '12px'}}>
-        <div className="container mx-auto px-4 py-3 flex justify-end items-center">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center gap-4">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <LanguageSwitcher />
+              <ThemeToggle />
+            </div>
             {appState === 'questionnaire' && (
                 <button onClick={handleShowResults} className="btn-primary-dark">
-                    View Results
+                    {t('buttons.viewResults')}
                 </button>
             )}
         </div>

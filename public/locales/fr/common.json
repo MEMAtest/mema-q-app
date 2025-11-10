@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "howItWorks": "Fonctionnement",
+    "features": "Fonctionnalités",
+    "about": "À propos"
+  },
+  "buttons": {
+    "login": "Connexion",
+    "startAssessment": "Commencer l'évaluation",
+    "watchDemo": "Voir la démo",
+    "viewResults": "Voir les résultats",
+    "downloadCsv": "Télécharger le CSV",
+    "downloadPdf": "Télécharger le PDF",
+    "printReport": "Imprimer le rapport",
+    "emailResults": "Envoyer par e-mail",
+    "unlockReport": "Déverrouiller le rapport complet",
+    "refresh": "Rafraîchir",
+    "logout": "Se déconnecter",
+    "signIn": "Se connecter"
+  },
+  "hero": {
+    "title": "Anticiper la conformité. Conçu pour la finance de demain.",
+    "subtitle": "FinProms fournit les conseils réglementaires avancés et les solutions automatisées dont les institutions financières ont besoin pour prospérer dans un paysage en constante évolution.",
+    "previewHeading": "Découvrez FinProms en action",
+    "previewCopy": "Découvrez comme il est simple de naviguer dans des réglementations complexes et d'obtenir instantanément une clarté sur la conformité.",
+    "sampleTag": "Question exemple",
+    "sampleQuestion": "1.1. La communication constitue-t-elle une \"invitation ou incitation\" à réaliser une activité ?",
+    "sampleReference": "Référence : PERG 8.4"
+  },
+  "results": {
+    "title": "Vos résultats d'évaluation de conformité",
+    "subtitle": "Des informations complètes et des recommandations exploitables issues de votre évaluation FinProms",
+    "downloadCardTitle": "Générez votre rapport prêt pour l'audit",
+    "downloadCardCopy": "Téléchargez l'intégralité de votre rapport, incluant toutes les questions, justifications et références réglementaires, optimisé pour les audits."
+  },
+  "cta": {
+    "title": "Entamez votre parcours vers la certitude réglementaire",
+    "body": "Faites le premier pas vers une conformité simplifiée et une confiance absolue. Lancez-vous dès aujourd'hui."
+  },
+  "admin": {
+    "loginTitle": "Connexion administrateur",
+    "enterKey": "Saisissez la clé API administrateur",
+    "dashboardTitle": "Tableau de bord administrateur",
+    "recentLeads": "Leads récents",
+    "noLeads": "Aucun lead trouvé."
+  },
+  "language": {
+    "label": "Langue"
+  }
+}

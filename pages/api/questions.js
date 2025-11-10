@@ -1,45 +1,46 @@
 // pages/api/questions.js
-
 import prisma from '../../lib/prisma';
 
+let cachedQuestions = null;
+let cacheTime = null;
+const CACHE_DURATION = 5 * 60 * 1000;
+
 export default async function handler(req, res) {
-  if (req.method === 'GET') {
-    try {
-      const flatQuestions = await prisma.question.findMany({
-        orderBy: {
-          id: 'asc',
-        },
-      });
-
-      // Group the flat list of questions into a nested structure by section
-      const groupedBySection = flatQuestions.reduce((acc, question) => {
-        // Find the section in our accumulator array
-        let section = acc.find(s => s.id === question.sectionId);
-        
-        // If the section isn't in our array yet, create it
-        if (!section) {
-          section = {
-            id: question.sectionId,
-            sectionTitle: question.sectionTitle,
-            items: [] // Start with an empty array for its questions
-          };
-          acc.push(section);
-        }
-
-        // Add the current question to that section's 'items' array
-        section.items.push(question);
-        
-        return acc;
-      }, []);
-
-      res.status(200).json(groupedBySection);
-
-    } catch (error) {
-      console.error("Error fetching and grouping questions:", error);
-      res.status(500).json({ message: 'Internal Server Error: Could not fetch questions.' });
-    }
-  } else {
+  if (req.method !== 'GET') {
     res.setHeader('Allow', ['GET']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+    return res.status(405).json({ success: false, message: `Method ${req.method} Not Allowed` });
+  }
+
+  try {
+    if (cachedQuestions && cacheTime && Date.now() - cacheTime < CACHE_DURATION) {
+      return res.status(200).json(cachedQuestions);
+    }
+
+    const flatQuestions = await prisma.question.findMany({
+      orderBy: { id: 'asc' },
+    });
+
+    const groupedBySection = flatQuestions.reduce((acc, question) => {
+      let section = acc.find((s) => s.id === question.sectionId);
+      if (!section) {
+        section = {
+          id: question.sectionId,
+          sectionTitle: question.sectionTitle,
+          title: question.sectionTitle,
+          items: [],
+        };
+        acc.push(section);
+      }
+      section.items.push(question);
+      return acc;
+    }, []);
+
+    cachedQuestions = groupedBySection;
+    cacheTime = Date.now();
+
+    res.status(200).json(groupedBySection);
+  } catch (error) {
+    console.error('Error fetching and grouping questions:', error);
+    res.status(500).json({ success: false, message: 'Internal Server Error: Could not fetch questions.' });
   }
 }

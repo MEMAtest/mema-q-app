@@ -82,6 +82,50 @@
   background: transparent;
 }
 
+/* Chart.js Dark Theme Overrides */
+.mema-dark-theme .chart-container {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+
+/* Form inputs dark theme */
+.mema-dark-theme input,
+.mema-dark-theme textarea,
+.mema-dark-theme select {
+  background: var(--glass-bg-lighter);
+  border-color: var(--glass-border);
+  color: var(--text-primary-dark);
+}
+
+.mema-dark-theme input:focus,
+.mema-dark-theme textarea:focus,
+.mema-dark-theme select:focus {
+  border-color: var(--accent-teal);
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+}
+
+/* Question + answer cards */
+.mema-dark-theme .question-card {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  color: var(--text-primary-dark);
+}
+
+.mema-dark-theme .answer-card-large,
+.mema-dark-theme .multiselect-option {
+  background: var(--glass-bg-lighter) !important;
+  border-color: var(--glass-border) !important;
+  color: var(--text-primary-dark);
+}
+
+.mema-dark-theme .answer-card-large[data-selected="true"],
+.mema-dark-theme .multiselect-option[data-selected="true"] {
+  background: var(--gradient-teal-green) !important;
+  border-color: var(--accent-teal) !important;
+  box-shadow: var(--shadow-glow-teal) !important;
+  color: #fff !important;
+}
+
 /* ==================== GLASS MORPHISM COMPONENTS ==================== */
 
 .glass-card {

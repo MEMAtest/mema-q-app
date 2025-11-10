@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "howItWorks": "Funktionsweise",
+    "features": "Funktionen",
+    "about": "Über uns"
+  },
+  "buttons": {
+    "login": "Anmelden",
+    "startAssessment": "Fragebogen starten",
+    "watchDemo": "Demo ansehen",
+    "viewResults": "Ergebnisse anzeigen",
+    "downloadCsv": "CSV herunterladen",
+    "downloadPdf": "PDF herunterladen",
+    "printReport": "Bericht drucken",
+    "emailResults": "Per E-Mail senden",
+    "unlockReport": "Vollständigen Bericht freischalten",
+    "refresh": "Aktualisieren",
+    "logout": "Abmelden",
+    "signIn": "Einloggen"
+  },
+  "hero": {
+    "title": "Compliance zukunftssicher machen. Für die Finanzwelt von morgen.",
+    "subtitle": "FinProms liefert moderne Regulierungshinweise und automatisierte Workflows, damit Finanzunternehmen in einem dynamischen Umfeld bestehen.",
+    "previewHeading": "FinProms in Aktion",
+    "previewCopy": "Sehen Sie, wie einfach sich komplexe Vorschriften navigieren und sofortige Compliance-Insights erzeugen lassen.",
+    "sampleTag": "Beispielfrage",
+    "sampleQuestion": "1.1. Stellt die Kommunikation eine \"Einladung oder Veranlassung\" zur Teilnahme an einer Tätigkeit dar?",
+    "sampleReference": "Referenz: PERG 8.4"
+  },
+  "results": {
+    "title": "Ihre Ergebnisse der Compliance-Bewertung",
+    "subtitle": "Umfassende Erkenntnisse und umsetzbare Empfehlungen aus Ihrer FinProms-Analyse",
+    "downloadCardTitle": "Auditfertigen Bericht erstellen",
+    "downloadCardCopy": "Laden Sie den vollständigen Bericht mit allen Fragen, Begründungen und regulatorischen Verweisen für Ihre Unterlagen herunter."
+  },
+  "cta": {
+    "title": "Starten Sie Ihren Weg zur regulatorischen Sicherheit",
+    "body": "Machen Sie den ersten Schritt zu schlanken Compliance-Prozessen und voller Sicherheit. Beginnen Sie noch heute."
+  },
+  "admin": {
+    "loginTitle": "Administrator-Login",
+    "enterKey": "Admin-API-Schlüssel eingeben",
+    "dashboardTitle": "Admin-Dashboard",
+    "recentLeads": "Neueste Leads",
+    "noLeads": "Keine Leads vorhanden."
+  },
+  "language": {
+    "label": "Sprache"
+  }
+}

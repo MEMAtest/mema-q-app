@@ -1,5 +1,7 @@
 // components/WelcomeScreen.js
 import React from 'react';
+import Image from 'next/image';
+import { useTranslation } from 'next-i18next';
 import {
   PlayCircleIcon,
   CheckCircleIcon,
@@ -7,7 +9,6 @@ import {
   ChartBarIcon,
   ClipboardDocumentCheckIcon,
   LightBulbIcon,
-  SparklesIcon,
   ShieldCheckIcon,
   ArrowPathIcon,
   DocumentTextIcon,
@@ -16,24 +17,32 @@ import {
 } from '@heroicons/react/24/outline';
 
 const WelcomeScreen = ({ onStart }) => {
+  const { t } = useTranslation('common');
   return (
     <>
       {/* Header Navigation */}
       <header className="header">
         <div className="header-logo">
-          <img src="/mema-logo-new.svg" alt="FinProms by MEMA Consultants" style={{ color: 'var(--color-text-primary)' }} />
+          <Image
+            src="/mema-logo.png"
+            alt="MEMA Consultants"
+            width={180}
+            height={48}
+            priority
+            style={{ height: 'auto', width: 'auto' }}
+          />
         </div>
         <nav className="header-nav">
-          <a href="#how-it-works">How It Works</a>
-          <a href="#features">Features</a>
-          <a href="#about">About</a>
+          <a href="#how-it-works">{t('nav.howItWorks')}</a>
+          <a href="#features">{t('nav.features')}</a>
+          <a href="#about">{t('nav.about')}</a>
         </nav>
         <div className="header-actions">
           <button className="btn-ghost" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
-            Login
+            {t('buttons.login')}
           </button>
           <button className="start-button" onClick={onStart} style={{ padding: '0.75rem 1.5rem', fontSize: '0.9rem' }}>
-            Start Assessment
+            {t('buttons.startAssessment')}
           </button>
         </div>
       </header>
@@ -44,11 +53,8 @@ const WelcomeScreen = ({ onStart }) => {
           <div className="hero-grid">
             {/* Left: Text Column */}
             <div className="hero-text">
-              <h1>Future-Proofing Compliance. Built for Tomorrow's Finance.</h1>
-              <p>
-                FinProms delivers the advanced regulatory guidance and automated solutions
-                financial institutions need to thrive in an ever-evolving landscape.
-              </p>
+              <h1>{t('hero.title')}</h1>
+              <p>{t('hero.subtitle')}</p>
 
               {/* Key Benefits */}
               <ul className="benefits-list" style={{ marginTop: '2rem' }}>
@@ -70,55 +76,21 @@ const WelcomeScreen = ({ onStart }) => {
               <div className="cta-buttons" style={{ marginTop: '2rem', justifyContent: 'flex-start' }}>
                 <button className="start-button" onClick={onStart}>
                   <PlayCircleIcon style={{ width: '1.5rem', height: '1.5rem' }} />
-                  Start Assessment
-                </button>
-                <button className="btn-ghost-dark" onClick={() => document.getElementById('demo-section').scrollIntoView({ behavior: 'smooth' })}>
-                  <PlayCircleIcon style={{ width: '1.25rem', height: '1.25rem' }} />
-                  Watch Demo
+                  {t('buttons.startAssessment')}
                 </button>
               </div>
             </div>
 
             {/* Right: Hero Visual */}
             <div className="hero-visual">
-              <div style={{
-                position: 'relative',
-                width: '100%',
-                maxWidth: '500px',
-                height: '400px',
-                background: 'linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 123, 255, 0.05) 100%)',
-                borderRadius: 'var(--radius-xl)',
-                boxShadow: 'var(--shadow-2xl)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '1px solid rgba(0, 123, 255, 0.3)'
-              }}>
-                {/* Placeholder for 3D Visual - Replace with actual 3D render */}
-                <div style={{
-                  textAlign: 'center',
-                  padding: '2rem'
-                }}>
-                  <SparklesIcon style={{
-                    width: '80px',
-                    height: '80px',
-                    color: 'var(--color-accent-primary)',
-                    margin: '0 auto 1rem',
-                    animation: 'pulse 2s ease-in-out infinite'
-                  }} />
-                  <div style={{
-                    background: 'var(--color-bg-dark-alt)',
-                    border: '2px solid var(--color-accent-primary)',
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: 'var(--radius-md)',
-                    color: 'var(--color-text-white)',
-                    fontWeight: 'var(--font-semibold)',
-                    fontSize: '1rem'
-                  }}>
-                    Real-time Regulatory Insight
-                  </div>
-                </div>
+              <div className="hero-labyrinth">
+                <div className="labyrinth-rings" />
+                <div className="labyrinth-path" />
+                <div className="labyrinth-node" />
               </div>
+              <p className="labyrinth-caption">
+                Navigate the MEMA regulatory labyrinth with confidence.
+              </p>
             </div>
           </div>
         </div>
@@ -128,10 +100,10 @@ const WelcomeScreen = ({ onStart }) => {
       <section id="demo-section" className="video-section section-light">
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h2 style={{ textAlign: 'center', fontSize: '2.5rem', fontWeight: 'var(--font-black)', marginBottom: '1rem' }}>
-            See FinProms in Action
+            {t('hero.previewHeading')}
           </h2>
           <p style={{ textAlign: 'center', fontSize: '1.25rem', color: 'var(--color-text-secondary)', marginBottom: '3rem', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto' }}>
-            Experience how easy it is to navigate complex regulations and generate instant compliance clarity.
+            {t('hero.previewCopy')}
           </p>
 
           {/* Interactive Sample Question Preview */}
@@ -145,27 +117,27 @@ const WelcomeScreen = ({ onStart }) => {
             border: '1px solid var(--color-border-light)'
           }}>
             <div style={{ marginBottom: 'var(--spacing-xl)' }}>
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 'var(--spacing-sm)',
-                background: 'var(--color-accent-primary-bg)',
-                color: 'var(--color-accent-primary)',
-                padding: '0.5rem 1rem',
-                borderRadius: 'var(--radius-full)',
-                fontSize: '0.875rem',
-                fontWeight: 'var(--font-semibold)',
-                marginBottom: 'var(--spacing-md)'
-              }}>
-                <InformationCircleIcon style={{ width: '1.25rem', height: '1.25rem' }} />
-                Sample Question Preview
-              </div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 'var(--font-semibold)', marginBottom: 'var(--spacing-md)', color: 'var(--color-text-primary)' }}>
-                1.1. Is the communication an "invitation or inducement" to engage in an activity?
-              </h3>
-              <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: 'var(--spacing-lg)' }}>
-                Reference: PERG 8.4
-              </p>
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 'var(--spacing-sm)',
+                  background: 'var(--color-accent-primary-bg)',
+                  color: 'var(--color-accent-primary)',
+                  padding: '0.5rem 1rem',
+                  borderRadius: 'var(--radius-full)',
+                  fontSize: '0.875rem',
+                  fontWeight: 'var(--font-semibold)',
+                  marginBottom: 'var(--spacing-md)'
+                }}>
+                  <InformationCircleIcon style={{ width: '1.25rem', height: '1.25rem' }} />
+                  {t('hero.sampleTag')}
+                </div>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: 'var(--font-semibold)', marginBottom: 'var(--spacing-md)', color: 'var(--color-text-primary)' }}>
+                  {t('hero.sampleQuestion')}
+                </h3>
+                <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: 'var(--spacing-lg)' }}>
+                  {t('hero.sampleReference')}
+                </p>
 
               <div style={{ display: 'flex', gap: 'var(--spacing-md)', marginBottom: 'var(--spacing-xl)' }}>
                 <div style={{
@@ -451,14 +423,11 @@ const WelcomeScreen = ({ onStart }) => {
 
       {/* Final CTA Section */}
       <section id="about" className="cta-section">
-        <h2>Begin Your Journey to Regulatory Certainty</h2>
-        <p>
-          Take the first step towards streamlined compliance and unwavering confidence.
-          Get started today.
-        </p>
+        <h2>{t('cta.title')}</h2>
+        <p>{t('cta.body')}</p>
         <button className="start-button" onClick={onStart}>
           <RocketLaunchIcon style={{ width: '1.5rem', height: '1.5rem' }} />
-          Start Assessment
+          {t('buttons.startAssessment')}
         </button>
       </section>
 

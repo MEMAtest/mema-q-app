@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "howItWorks": "How It Works",
+    "features": "Features",
+    "about": "About"
+  },
+  "buttons": {
+    "login": "Login",
+    "startAssessment": "Start Assessment",
+    "watchDemo": "Watch Demo",
+    "viewResults": "View Results",
+    "downloadCsv": "Download CSV",
+    "downloadPdf": "Download PDF",
+    "printReport": "Print Report",
+    "emailResults": "Email Results",
+    "unlockReport": "Unlock Full Report",
+    "refresh": "Refresh",
+    "logout": "Log Out",
+    "signIn": "Sign In"
+  },
+  "hero": {
+    "title": "Future-Proofing Compliance. Built for Tomorrow's Finance.",
+    "subtitle": "FinProms delivers the advanced regulatory guidance and automated solutions financial institutions need to thrive in an ever-evolving landscape.",
+    "previewHeading": "See FinProms in Action",
+    "previewCopy": "Experience how easy it is to navigate complex regulations and generate instant compliance clarity.",
+    "sampleTag": "Sample Question Preview",
+    "sampleQuestion": "1.1. Is the communication an \"invitation or inducement\" to engage in an activity?",
+    "sampleReference": "Reference: PERG 8.4"
+  },
+  "results": {
+    "title": "Your Compliance Assessment Results",
+    "subtitle": "Comprehensive insights and actionable recommendations from your FinProms assessment",
+    "downloadCardTitle": "Generate Your Audit-Ready Report",
+    "downloadCardCopy": "Download your full assessment report, including all questions, justifications, and regulatory references, optimized for audit review."
+  },
+  "cta": {
+    "title": "Begin Your Journey to Regulatory Certainty",
+    "body": "Take the first step towards streamlined compliance and unwavering confidence. Get started today."
+  },
+  "admin": {
+    "loginTitle": "Admin Login",
+    "enterKey": "Enter admin API key",
+    "dashboardTitle": "Admin Dashboard",
+    "recentLeads": "Recent Leads",
+    "noLeads": "No leads found."
+  },
+  "language": {
+    "label": "Language"
+  }
+}
