@@ -25,24 +25,27 @@ const ProgressBar = memo(({
 
   return (
     <div style={{
-      background: 'var(--color-bg-white)',
-      borderBottom: '2px solid var(--color-border-light)',
+      background: 'var(--bg-card-darker)',
+      backdropFilter: 'var(--glass-blur) var(--glass-saturate)',
+      WebkitBackdropFilter: 'var(--glass-blur) var(--glass-saturate)',
+      borderBottom: '2px solid var(--border-medium)',
       padding: 'var(--spacing-xl) var(--spacing-md)',
-      boxShadow: 'var(--shadow-md)',
+      boxShadow: 'var(--shadow-lg)',
       position: 'sticky',
       top: '0',
       zIndex: 40
     }}>
       <div className="content-wrapper">
-        {/* BOLD Progress Bar Visual */}
+        {/* Dark Glass Progress Bar Container */}
         <div style={{
-          background: 'linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%)',
-          border: '2px solid #d1fae5',
+          background: 'rgba(20, 184, 166, 0.1)',
+          border: '2px solid var(--accent-teal)',
           borderRadius: 'var(--radius-lg)',
           padding: 'var(--spacing-lg)',
-          marginBottom: 'var(--spacing-lg)'
+          marginBottom: 'var(--spacing-lg)',
+          boxShadow: 'var(--shadow-teal-glow)'
         }}>
-          {/* Section Label */}
+          {/* Section Label - Dark Theme */}
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -50,27 +53,27 @@ const ProgressBar = memo(({
             marginBottom: 'var(--spacing-sm)',
             fontSize: '0.875rem',
             fontWeight: 'var(--font-semibold)',
-            color: 'var(--color-text-primary)'
+            color: 'var(--text-primary)'
           }}>
             <span>Section {currentSectionNumber} of {totalSections}: {currentSectionName}</span>
             <span style={{
               fontSize: '1.25rem',
               fontWeight: 'var(--font-black)',
-              color: 'var(--color-success-600)'
+              color: 'var(--accent-teal-light)'
             }}>
               {percentComplete}%
             </span>
           </div>
 
-          {/* Bold Progress Bar */}
+          {/* Dark Theme Progress Bar */}
           <div style={{
             width: '100%',
             height: '12px',
-            background: '#e5e7eb',
+            background: 'rgba(0, 0, 0, 0.3)',
             borderRadius: 'var(--radius-full)',
             overflow: 'hidden',
             position: 'relative',
-            boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)'
+            boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.4)'
           }}>
             {/* Shimmer effect layer */}
             <div style={{

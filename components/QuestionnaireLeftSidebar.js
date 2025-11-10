@@ -35,10 +35,10 @@ const QuestionnaireLeftSidebar = memo(({
       <h3 style={{
         fontSize: '1.125rem',
         fontWeight: 'var(--font-bold)',
-        color: 'var(--color-text-primary)',
+        color: 'var(--text-primary)',
         marginBottom: 'var(--spacing-lg)',
         paddingBottom: 'var(--spacing-md)',
-        borderBottom: '2px solid var(--color-border-light)'
+        borderBottom: '2px solid var(--accent-teal)'
       }}>
         Assessment Sections
       </h3>
@@ -70,8 +70,8 @@ const QuestionnaireLeftSidebar = memo(({
                 style={{
                   padding: 'var(--spacing-md)',
                   borderRadius: 'var(--radius-md)',
-                  background: isActive ? 'var(--color-accent-primary-bg)' : 'transparent',
-                  border: isActive ? '2px solid var(--color-accent-primary)' : '2px solid transparent',
+                  background: isActive ? 'rgba(20, 184, 166, 0.15)' : 'transparent',
+                  border: isActive ? '2px solid var(--accent-teal)' : '2px solid transparent',
                   cursor: isClickable ? 'pointer' : 'not-allowed',
                   opacity: isClickable ? 1 : 0.5,
                   transition: 'all var(--transition-base)',
@@ -81,8 +81,8 @@ const QuestionnaireLeftSidebar = memo(({
                 }}
                 onMouseEnter={(e) => {
                   if (isClickable && !isActive) {
-                    e.currentTarget.style.background = 'var(--color-bg-light)';
-                    e.currentTarget.style.borderColor = 'var(--color-border-light)';
+                    e.currentTarget.style.background = 'rgba(20, 184, 166, 0.08)';
+                    e.currentTarget.style.borderColor = 'var(--border-medium)';
                   }
                 }}
                 onMouseLeave={(e) => {
@@ -92,50 +92,51 @@ const QuestionnaireLeftSidebar = memo(({
                   }
                 }}
               >
-                {/* Icon */}
+                {/* Icon - Dark Theme */}
                 <div style={{
                   width: '40px',
                   height: '40px',
                   borderRadius: 'var(--radius-md)',
                   background: isActive
-                    ? 'var(--color-accent-primary)'
+                    ? 'var(--gradient-teal-green)'
                     : isCompleted
-                      ? 'var(--color-success)'
-                      : 'var(--color-bg-light)',
+                      ? 'var(--gradient-green-teal)'
+                      : 'var(--bg-card-medium)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   flexShrink: 0,
-                  transition: 'all var(--transition-base)'
+                  transition: 'all var(--transition-base)',
+                  boxShadow: isActive ? 'var(--shadow-teal-glow)' : isCompleted ? 'var(--shadow-green-glow)' : 'none'
                 }}>
                   {isCompleted ? (
                     <CheckCircleIcon style={{
                       width: '24px',
                       height: '24px',
-                      color: 'var(--color-bg-white)'
+                      color: 'white'
                     }} />
                   ) : IconComponent ? (
                     <IconComponent style={{
                       width: '24px',
                       height: '24px',
-                      color: isActive ? 'var(--color-bg-white)' : 'var(--color-accent-primary)'
+                      color: isActive ? 'white' : 'var(--accent-teal)'
                     }} />
                   ) : (
                     <span style={{
                       fontWeight: 'var(--font-bold)',
-                      color: isActive ? 'var(--color-bg-white)' : 'var(--color-accent-primary)'
+                      color: isActive ? 'white' : 'var(--accent-teal)'
                     }}>
                       {index + 1}
                     </span>
                   )}
                 </div>
 
-                {/* Section Info */}
+                {/* Section Info - Dark Theme */}
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{
                     fontSize: '0.75rem',
                     fontWeight: 'var(--font-medium)',
-                    color: 'var(--color-text-muted)',
+                    color: 'var(--text-muted)',
                     marginBottom: '2px'
                   }}>
                     Section {index + 1}
@@ -143,7 +144,7 @@ const QuestionnaireLeftSidebar = memo(({
                   <div style={{
                     fontSize: '0.875rem',
                     fontWeight: isActive ? 'var(--font-semibold)' : 'var(--font-medium)',
-                    color: isActive ? 'var(--color-accent-primary)' : 'var(--color-text-primary)',
+                    color: isActive ? 'var(--accent-teal-light)' : 'var(--text-primary)',
                     lineHeight: 1.3,
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
@@ -160,18 +161,19 @@ const QuestionnaireLeftSidebar = memo(({
         </ul>
       </nav>
 
-      {/* Helper Text */}
+      {/* Helper Text - Dark Theme */}
       <div style={{
         marginTop: 'var(--spacing-xl)',
         padding: 'var(--spacing-md)',
-        background: 'var(--color-accent-primary-bg)',
+        background: 'rgba(20, 184, 166, 0.1)',
+        border: '1px solid var(--border-medium)',
         borderRadius: 'var(--radius-md)',
         fontSize: '0.75rem',
-        color: 'var(--color-text-secondary)',
+        color: 'var(--text-secondary)',
         lineHeight: 1.5
       }}>
         <p style={{ margin: 0 }}>
-          💡 <strong>Tip:</strong> Complete sections to unlock navigation to later sections.
+          💡 <strong style={{ color: 'var(--accent-teal-light)' }}>Tip:</strong> Complete sections to unlock navigation to later sections.
         </p>
       </div>
     </>
@@ -191,10 +193,10 @@ const QuestionnaireLeftSidebar = memo(({
           width: '56px',
           height: '56px',
           borderRadius: '50%',
-          background: 'var(--color-accent-primary)',
+          background: 'var(--gradient-teal-green)',
           color: 'white',
-          border: 'none',
-          boxShadow: 'var(--shadow-xl)',
+          border: '2px solid var(--accent-teal)',
+          boxShadow: 'var(--shadow-teal-glow-strong)',
           cursor: 'pointer',
           zIndex: 1000,
           alignItems: 'center',
@@ -209,14 +211,16 @@ const QuestionnaireLeftSidebar = memo(({
         )}
       </button>
 
-      {/* Desktop Sidebar */}
+      {/* Desktop Sidebar - Dark Glass */}
       <aside className="questionnaire-sidebar-desktop" style={{
         position: 'sticky',
         top: '80px',
         height: 'calc(100vh - 100px)',
         overflowY: 'auto',
-        background: 'var(--color-bg-white)',
-        borderRight: '2px solid var(--color-border-light)',
+        background: 'var(--bg-card-dark)',
+        backdropFilter: 'var(--glass-blur)',
+        WebkitBackdropFilter: 'var(--glass-blur)',
+        borderRight: '2px solid var(--border-medium)',
         padding: 'var(--spacing-xl) var(--spacing-lg)',
         width: '280px',
         flexShrink: 0
@@ -243,7 +247,7 @@ const QuestionnaireLeftSidebar = memo(({
             className="questionnaire-mobile-backdrop"
           />
 
-          {/* Mobile Sidebar */}
+          {/* Mobile Sidebar - Dark Glass */}
           <aside
             className="questionnaire-sidebar-mobile"
             style={{
@@ -254,7 +258,9 @@ const QuestionnaireLeftSidebar = memo(({
               bottom: 0,
               width: '85%',
               maxWidth: '320px',
-              background: 'var(--color-bg-white)',
+              background: 'var(--bg-card-darker)',
+              backdropFilter: 'var(--glass-blur)',
+              WebkitBackdropFilter: 'var(--glass-blur)',
               boxShadow: 'var(--shadow-2xl)',
               zIndex: 1001,
               overflowY: 'auto',

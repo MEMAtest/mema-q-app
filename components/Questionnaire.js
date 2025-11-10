@@ -258,8 +258,8 @@ const Questionnaire = ({
 
   return (
     <div style={{
-      minHeight: '100vh',
-      background: 'var(--color-bg-light)'
+      minHeight: '100vh'
+      // Dark gradient background from mema-theme.css applied globally via body
     }}>
       {/* Screen reader announcement for question changes */}
       <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
@@ -381,7 +381,7 @@ const Questionnaire = ({
                     {renderAnswerOptions()}
                   </div>
 
-                  {/* Notes Area */}
+                  {/* Notes Area - Dark Theme */}
                   <div className="notes-area">
                     <label htmlFor="notes" style={{
                       display: 'flex',
@@ -389,10 +389,10 @@ const Questionnaire = ({
                       gap: 'var(--spacing-xs)',
                       fontSize: '1rem',
                       fontWeight: 'var(--font-semibold)',
-                      color: 'var(--color-text-primary)',
+                      color: 'var(--text-primary)',
                       marginBottom: 'var(--spacing-sm)'
                     }}>
-                      <DocumentTextIcon style={{ width: '1.25rem', height: '1.25rem' }} />
+                      <DocumentTextIcon style={{ width: '1.25rem', height: '1.25rem', color: 'var(--accent-teal)' }} />
                       Your Justification (Optional):
                     </label>
                     <textarea
@@ -404,41 +404,46 @@ const Questionnaire = ({
                       style={{
                         width: '100%',
                         padding: 'var(--spacing-md)',
-                        border: '2px solid var(--color-border-light)',
+                        background: 'var(--bg-card-light)',
+                        border: '2px solid var(--border-medium)',
                         borderRadius: 'var(--radius-md)',
+                        color: 'var(--text-primary)',
                         fontSize: '1rem',
-                        fontFamily: 'var(--font-primary)',
+                        fontFamily: 'var(--font-body)',
                         transition: 'all var(--transition-base)',
                         resize: 'vertical',
                         minHeight: '100px'
                       }}
                       onFocus={(e) => {
-                        e.target.style.borderColor = 'var(--color-accent-primary)';
-                        e.target.style.boxShadow = '0 0 0 3px var(--color-accent-primary-bg)';
+                        e.target.style.borderColor = 'var(--accent-teal)';
+                        e.target.style.boxShadow = '0 0 0 3px rgba(20, 184, 166, 0.15)';
+                        e.target.style.background = 'var(--bg-card-dark)';
                       }}
                       onBlur={(e) => {
-                        e.target.style.borderColor = 'var(--color-border-light)';
+                        e.target.style.borderColor = 'var(--border-medium)';
                         e.target.style.boxShadow = 'none';
+                        e.target.style.background = 'var(--bg-card-light)';
                       }}
                     />
                   </div>
                 </div>
 
-                {/* "Why this is important" Panel - BOLD VERSION */}
+                {/* "Why this is important" Panel - DARK GLASS VERSION */}
                 <div className="info-panel-bold" style={{
                   marginTop: 'var(--spacing-xl)',
                   borderRadius: 'var(--radius-lg)',
                   overflow: 'hidden',
-                  border: '2px solid var(--color-accent-600)',
-                  boxShadow: 'var(--shadow-elevated)'
+                  border: '2px solid var(--accent-teal)',
+                  boxShadow: 'var(--shadow-teal-glow)'
                 }}>
-                  {/* BOLD Blue Gradient Header */}
+                  {/* Teal Gradient Header with Glow */}
                   <div className="info-panel-header-bold" style={{
-                    background: 'var(--gradient-accent)',
+                    background: 'var(--gradient-teal-green)',
                     padding: 'var(--spacing-lg)',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 'var(--spacing-md)'
+                    gap: 'var(--spacing-md)',
+                    boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.1)'
                   }}>
                     <RegulatoryLightbulbIcon size={32} color="white" />
                     <h4 className="info-panel-title-bold" style={{
@@ -446,45 +451,47 @@ const Questionnaire = ({
                       fontSize: '1.25rem',
                       fontWeight: 'var(--font-black)',
                       color: 'white',
-                      textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
+                      textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
                     }}>
                       Why this is important
                     </h4>
                   </div>
 
-                  {/* Content with Bold Border */}
+                  {/* Content with Dark Glass & Teal Border */}
                   <div className="info-panel-content-bold" style={{
                     padding: 'var(--spacing-lg)',
-                    background: 'white',
-                    borderLeft: '4px solid var(--color-accent-600)'
+                    background: 'var(--bg-card-darker)',
+                    backdropFilter: 'var(--glass-blur)',
+                    WebkitBackdropFilter: 'var(--glass-blur)',
+                    borderLeft: '4px solid var(--accent-teal)',
+                    border: '1px solid var(--border-medium)'
                   }}>
                     <p style={{
                       fontSize: '1rem',
                       lineHeight: '1.6',
-                      color: 'var(--color-text-primary)',
+                      color: 'var(--text-secondary)',
                       margin: 0
                     }}>
                       {question.explanation}
                     </p>
 
-                    {/* BOLD Compliance Tip Box with Green Gradient */}
+                    {/* Dark Theme Compliance Tip Box with Green Glow */}
                     <div className="compliance-tip-box" style={{
                       marginTop: 'var(--spacing-lg)',
                       padding: 'var(--spacing-md)',
-                      background: 'var(--gradient-success)',
+                      background: 'rgba(16, 185, 129, 0.15)',
                       borderRadius: 'var(--radius-md)',
-                      border: '2px solid var(--color-success-600)',
-                      boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)'
+                      border: '2px solid var(--accent-green)',
+                      boxShadow: 'var(--shadow-green-glow)'
                     }}>
                       <p className="compliance-tip-text" style={{
                         fontSize: '0.875rem',
-                        color: 'white',
+                        color: 'var(--accent-green-light)',
                         fontWeight: 'var(--font-semibold)',
                         margin: 0,
                         display: 'flex',
                         alignItems: 'center',
-                        gap: 'var(--spacing-sm)',
-                        textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
+                        gap: 'var(--spacing-sm)'
                       }}>
                         <span style={{ fontSize: '1.25rem' }}>💡</span>
                         <span>Your response will help assess compliance with FCA PERG guidance</span>

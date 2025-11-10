@@ -58,12 +58,18 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        background: 'var(--color-bg-light)'
+        justifyContent: 'center'
       }}>
-        <div className="card" style={{ textAlign: 'center', padding: 'var(--spacing-2xl)' }}>
+        <div className="card" style={{
+          textAlign: 'center',
+          padding: 'var(--spacing-2xl)',
+          background: 'var(--bg-card-darker)',
+          backdropFilter: 'var(--glass-blur)',
+          WebkitBackdropFilter: 'var(--glass-blur)',
+          border: '1px solid var(--border-medium)'
+        }}>
           <div className="loading-spinner" style={{ margin: '0 auto' }}></div>
-          <p style={{ marginTop: 'var(--spacing-md)', color: 'var(--color-text-muted)' }}>Calculating results...</p>
+          <p style={{ marginTop: 'var(--spacing-md)', color: 'var(--text-secondary)' }}>Calculating results...</p>
         </div>
       </div>
     );

@@ -619,52 +619,56 @@ a:hover {
 }
 
 .navigation-buttons button {
-    background-color: var(--color-accent-primary);
-    color: var(--color-text-white);
+    background: var(--gradient-teal-green);
+    color: white;
     padding: 0.875rem 2rem;
     border-radius: var(--radius-md);
     font-weight: var(--font-bold);
-    font-family: var(--font-primary);
+    font-family: var(--font-body);
     font-size: 1rem;
     transition: all var(--transition-base);
     box-shadow: var(--shadow-md);
-    border: none;
+    border: 2px solid var(--accent-teal);
     cursor: pointer;
     min-width: 140px;
 }
 
 .navigation-buttons button:hover {
-    background-color: var(--color-accent-primary-hover);
+    background: var(--gradient-green-teal);
     transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-teal-glow-strong);
+    border-color: var(--accent-teal-light);
 }
 
 .navigation-buttons button:active {
     transform: translateY(0);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
 }
 
 .navigation-buttons button:disabled {
-    background-color: var(--color-border);
-    color: var(--color-text-light);
+    background: var(--bg-card-medium);
+    color: var(--text-muted);
+    border-color: var(--border-subtle);
     cursor: not-allowed;
     transform: none;
-    box-shadow: var(--shadow-sm);
+    box-shadow: none;
     opacity: 0.5;
 }
 
-/* Previous Button (Ghost Style) */
+/* Previous Button (Dark Glass Style) */
 .navigation-buttons button.btn-previous {
-    background-color: transparent;
-    color: var(--color-text-primary);
-    border: 2px solid var(--color-accent-primary);
+    background: transparent;
+    color: var(--text-primary);
+    border: 2px solid var(--accent-teal);
     box-shadow: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .navigation-buttons button.btn-previous:hover {
-    background-color: var(--color-accent-primary-bg);
-    border-color: var(--color-accent-primary-hover);
-    box-shadow: var(--shadow-sm);
+    background: rgba(20, 184, 166, 0.15);
+    border-color: var(--accent-teal-light);
+    box-shadow: var(--shadow-teal-glow);
 }
 
 /* -- 6. Results Page -- */
@@ -713,14 +717,16 @@ a:hover {
     background-color: var(--color-success-dark);
 }
 
-/* -- 7. Custom Button Variants -- */
+/* -- 7. Custom Button Variants (Dark Theme) -- */
 .btn-finish {
-    background-color: var(--color-success);
+    background: var(--gradient-green-emerald) !important;
+    border-color: var(--accent-green) !important;
 }
 
 .btn-finish:hover {
-    background-color: var(--color-success-dark);
-    box-shadow: var(--shadow-lg);
+    background: var(--gradient-green-teal) !important;
+    box-shadow: var(--shadow-green-glow-strong) !important;
+    border-color: var(--accent-green-light) !important;
 }
 
 .btn-back {
@@ -1890,26 +1896,29 @@ select:focus-visible {
 /* ============================================ */
 
 .info-panel-bold {
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    box-shadow: var(--shadow-elevated);
+    box-shadow: var(--shadow-teal-glow);
     margin-bottom: var(--spacing-lg);
+    border: 2px solid var(--accent-teal);
 }
 
 .info-panel-header-bold {
-    background: var(--gradient-accent);
+    background: var(--gradient-teal-green);
     padding: 1.25rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    transition: all 0.3s var(--ease-smooth);
+    transition: all var(--transition-base);
     border: none;
     width: 100%;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .info-panel-header-bold:hover {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    background: var(--gradient-green-teal);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .info-panel-title-bold {
@@ -1919,38 +1928,40 @@ select:focus-visible {
     color: white;
     font-size: 1.25rem;
     font-weight: 700;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .info-panel-content-bold {
-    background: white;
+    background: var(--bg-card-darker);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     padding: 1.5rem;
-    border-left: 3px solid var(--color-accent-500);
-    border-right: 1px solid var(--color-border-light);
-    border-bottom: 1px solid var(--color-border-light);
+    border-left: 4px solid var(--accent-teal);
+    border: 1px solid var(--border-medium);
 }
 
 .compliance-tip-box {
-    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-    border: 3px solid var(--color-success-500);
-    border-radius: 8px;
+    background: rgba(16, 185, 129, 0.15);
+    border: 2px solid var(--accent-green);
+    border-radius: var(--radius-md);
     padding: 1rem;
     margin-top: 1rem;
     display: flex;
     gap: var(--spacing-sm);
     align-items: flex-start;
+    box-shadow: var(--shadow-green-glow);
 }
 
 .compliance-tip-heading {
     font-size: 0.875rem;
     font-weight: 700;
-    color: #065f46;
+    color: var(--accent-green-light);
     margin-bottom: 0.25rem;
 }
 
 .compliance-tip-text {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: #047857;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--accent-green-light);
     line-height: 1.6;
 }

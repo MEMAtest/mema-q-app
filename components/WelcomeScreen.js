@@ -210,32 +210,38 @@ const WelcomeScreen = ({ onStart }) => {
             Experience how easy it is to navigate complex regulations and generate instant compliance clarity.
           </p>
 
-          {/* Interactive Preview Panel */}
+          {/* Interactive Preview Panel - Dark Glass */}
           <div className="card" style={{
             maxWidth: '900px',
             margin: '0 auto var(--spacing-2xl)',
             padding: 'var(--spacing-2xl)',
-            background: 'linear-gradient(135deg, var(--color-bg-white) 0%, var(--color-bg-light) 100%)',
-            border: '2px solid var(--color-accent-primary)'
+            background: 'var(--bg-card-darker)',
+            backdropFilter: 'var(--glass-blur)',
+            WebkitBackdropFilter: 'var(--glass-blur)',
+            border: '2px solid var(--accent-teal)',
+            boxShadow: 'var(--shadow-teal-glow)'
           }}>
             <div style={{
-              background: 'var(--color-bg-white)',
+              background: 'var(--bg-card-dark)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
               borderRadius: 'var(--radius-lg)',
               padding: 'var(--spacing-xl)',
               boxShadow: 'var(--shadow-md)',
-              marginBottom: 'var(--spacing-xl)'
+              marginBottom: 'var(--spacing-xl)',
+              border: '1px solid var(--border-medium)'
             }}>
               <h3 style={{
                 fontSize: '1.25rem',
                 fontWeight: 'var(--font-semibold)',
-                color: 'var(--color-text-primary)',
+                color: 'var(--text-primary)',
                 marginBottom: 'var(--spacing-md)'
               }}>
                 Sample Question
               </h3>
               <p style={{
                 fontSize: '1rem',
-                color: 'var(--color-text-secondary)',
+                color: 'var(--text-secondary)',
                 marginBottom: 'var(--spacing-lg)',
                 lineHeight: 1.6
               }}>
@@ -243,7 +249,7 @@ const WelcomeScreen = ({ onStart }) => {
               </p>
               <p style={{
                 fontSize: '0.875rem',
-                color: 'var(--color-accent-primary)',
+                color: 'var(--accent-teal)',
                 marginBottom: 'var(--spacing-lg)'
               }}>
                 📋 Reference: PERG 8.4
@@ -262,13 +268,14 @@ const WelcomeScreen = ({ onStart }) => {
                   alignItems: 'center',
                   gap: '0.5rem',
                   padding: '1rem',
-                  border: '2px solid var(--color-border)',
+                  border: '2px solid var(--accent-green)',
                   borderRadius: 'var(--radius-md)',
-                  background: 'white',
+                  background: 'var(--bg-card-light)',
+                  color: 'var(--text-primary)',
                   cursor: 'pointer',
                   transition: 'all var(--transition-base)'
                 }}>
-                  <CheckCircleIcon style={{ width: '2rem', height: '2rem', color: 'var(--color-success)' }} />
+                  <CheckCircleIcon style={{ width: '2rem', height: '2rem', color: 'var(--accent-green)' }} />
                   <span style={{ fontWeight: 'var(--font-semibold)' }}>Yes</span>
                 </button>
                 <button className="answer-card" style={{
@@ -278,27 +285,28 @@ const WelcomeScreen = ({ onStart }) => {
                   alignItems: 'center',
                   gap: '0.5rem',
                   padding: '1rem',
-                  border: '2px solid var(--color-border)',
+                  border: '2px solid var(--border-medium)',
                   borderRadius: 'var(--radius-md)',
-                  background: 'white',
+                  background: 'var(--bg-card-light)',
+                  color: 'var(--text-primary)',
                   cursor: 'pointer',
                   transition: 'all var(--transition-base)'
                 }}>
-                  <BoltIcon style={{ width: '2rem', height: '2rem', color: 'var(--color-text-muted)' }} />
+                  <BoltIcon style={{ width: '2rem', height: '2rem', color: 'var(--text-muted)' }} />
                   <span style={{ fontWeight: 'var(--font-semibold)' }}>No</span>
                 </button>
               </div>
 
               <div style={{
-                background: 'var(--color-accent-primary-bg)',
+                background: 'rgba(20, 184, 166, 0.15)',
                 padding: 'var(--spacing-md)',
                 borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--color-accent-primary)',
+                border: '1px solid var(--accent-teal)',
                 textAlign: 'center'
               }}>
                 <p style={{
                   fontSize: '0.9375rem',
-                  color: 'var(--color-accent-primary)',
+                  color: 'var(--accent-teal-light)',
                   fontWeight: 'var(--font-medium)',
                   margin: 0
                 }}>
