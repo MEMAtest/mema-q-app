@@ -98,7 +98,7 @@ const Questionnaire = ({
                   borderRadius: 'var(--radius-lg)',
                   background: isSelected
                     ? (isYes ? 'var(--color-success-bg)' : 'var(--color-danger-bg)')
-                    : 'var(--color-bg-white)',
+                    : 'var(--color-panel-soft)',
                   cursor: 'pointer',
                   transition: 'all var(--transition-base)',
                   display: 'flex',
@@ -165,7 +165,7 @@ const Questionnaire = ({
               fontSize: '1rem',
               border: '2px solid var(--color-border)',
               borderRadius: 'var(--radius-md)',
-              background: 'var(--color-bg-white)',
+              background: 'var(--color-panel-soft)',
               cursor: 'pointer',
               transition: 'all var(--transition-base)'
             }}
@@ -199,7 +199,7 @@ const Questionnaire = ({
                   padding: 'var(--spacing-md)',
                   border: `2px solid ${isSelected ? 'var(--color-accent-primary)' : 'var(--color-border-light)'}`,
                   borderRadius: 'var(--radius-md)',
-                  background: isSelected ? 'var(--color-accent-primary-bg)' : 'var(--color-bg-white)',
+                  background: isSelected ? 'var(--color-accent-primary-bg)' : 'var(--color-panel-soft)',
                   cursor: 'pointer',
                   transition: 'all var(--transition-base)',
                   display: 'flex',
@@ -261,7 +261,7 @@ const Questionnaire = ({
           <div>
             {question ? (
               <div className="question-card" style={{
-                background: 'var(--color-bg-white)',
+                background: 'var(--color-panel-soft)',
                 borderRadius: 'var(--radius-xl)',
                 padding: 'var(--spacing-2xl)',
                 boxShadow: 'var(--shadow-xl)',
@@ -312,7 +312,7 @@ const Questionnaire = ({
                 <div style={{
                   marginTop: 'var(--spacing-xl)',
                   padding: 'var(--spacing-lg)',
-                  background: 'var(--color-bg-light)',
+                  background: 'var(--color-panel-soft)',
                   borderRadius: 'var(--radius-lg)',
                   border: '1px solid var(--color-border-light)'
                 }}>
@@ -344,7 +344,7 @@ const Questionnaire = ({
                       transition: 'all var(--transition-base)',
                       resize: 'vertical',
                       minHeight: '100px',
-                      background: 'var(--color-bg-white)'
+                      background: 'var(--color-panel-soft)'
                     }}
                     onFocus={(e) => {
                       e.target.style.borderColor = 'var(--color-accent-primary)';
@@ -406,7 +406,7 @@ const Questionnaire = ({
           <div style={{ position: 'sticky', top: '100px' }}>
             {question && (
               <div style={{
-                background: 'var(--color-bg-white)',
+                background: 'var(--color-panel-soft)',
                 borderRadius: 'var(--radius-xl)',
                 boxShadow: 'var(--shadow-lg)',
                 border: '1px solid var(--color-border-light)',

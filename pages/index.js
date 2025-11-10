@@ -258,6 +258,20 @@ export default function Home() {
       title: section.title
   }));
 
+  const progressSectionMeta = questions.map((section, index) => {
+    const title = section.title || section.sectionTitle || `Section ${index + 1}`;
+    let status = 'pending';
+    if (completedSections[section.id]) {
+      status = 'complete';
+    } else if (
+      (appState === 'results' && index === questions.length - 1) ||
+      (appState !== 'results' && index === currentSection)
+    ) {
+      status = 'active';
+    }
+    return { id: section.id, title, status };
+  });
+
   const iconMap = {
       '1': ExclamationTriangleIcon,
       '2': ClipboardDocumentCheckIcon,
@@ -366,6 +380,7 @@ export default function Home() {
                 completed: getCompletedSectionsCount(),
                 total: questions.length
               }}
+              sectionMeta={progressSectionMeta}
             />
           </div>
         )}

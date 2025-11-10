@@ -24,7 +24,7 @@ const WelcomeScreen = ({ onStart }) => {
       <header className="header">
         <div className="header-logo">
           <Image
-            src="/mema-logo.png"
+            src="/mema-logo-green.svg"
             alt="MEMA Consultants"
             width={180}
             height={48}
@@ -38,9 +38,6 @@ const WelcomeScreen = ({ onStart }) => {
           <a href="#about">{t('nav.about')}</a>
         </nav>
         <div className="header-actions">
-          <button className="btn-ghost" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
-            {t('buttons.login')}
-          </button>
           <button className="start-button" onClick={onStart} style={{ padding: '0.75rem 1.5rem', fontSize: '0.9rem' }}>
             {t('buttons.startAssessment')}
           </button>

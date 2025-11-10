@@ -6,7 +6,13 @@ import {
   ClockIcon
 } from '@heroicons/react/24/outline';
 
-const ProgressBar = ({ currentQuestion, totalQuestions, answeredQuestions, sections }) => {
+const ProgressBar = ({
+  currentQuestion,
+  totalQuestions,
+  answeredQuestions,
+  sections,
+  sectionMeta = [],
+}) => {
   const progress = totalQuestions > 0 ? (currentQuestion / totalQuestions) * 100 : 0;
   const answeredProgress = totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0;
 
@@ -16,11 +22,15 @@ const ProgressBar = ({ currentQuestion, totalQuestions, answeredQuestions, secti
 
   return (
     <div style={{
-      background: 'var(--color-bg-white)',
-      borderRadius: 'var(--radius-lg)',
+      position: 'sticky',
+      top: '5.5rem',
+      zIndex: 30,
+      background: 'var(--color-panel-soft)',
+      borderRadius: 'var(--radius-xl)',
       padding: 'var(--spacing-lg)',
-      boxShadow: 'var(--shadow-sm)',
-      border: '1px solid var(--color-border-light)'
+      boxShadow: 'var(--shadow-md)',
+      border: '1px solid var(--color-border-light)',
+      backdropFilter: 'blur(18px)'
     }}>
       {/* Progress Bar */}
       <div style={{ marginBottom: 'var(--spacing-md)' }}>
@@ -50,7 +60,7 @@ const ProgressBar = ({ currentQuestion, totalQuestions, answeredQuestions, secti
         <div style={{
           width: '100%',
           height: '8px',
-          background: 'var(--color-bg-light)',
+          background: 'rgba(255, 255, 255, 0.08)',
           borderRadius: 'var(--radius-full)',
           overflow: 'hidden',
           position: 'relative'
@@ -58,7 +68,7 @@ const ProgressBar = ({ currentQuestion, totalQuestions, answeredQuestions, secti
           <div style={{
             width: `${progress}%`,
             height: '100%',
-            background: 'linear-gradient(90deg, var(--color-accent-primary) 0%, var(--color-accent-primary-light) 100%)',
+            background: 'linear-gradient(90deg, var(--color-accent-primary) 0%, var(--color-accent-secondary) 100%)',
             borderRadius: 'var(--radius-full)',
             transition: 'width var(--transition-slow)'
           }} />
@@ -201,12 +211,43 @@ const ProgressBar = ({ currentQuestion, totalQuestions, answeredQuestions, secti
         </div>
       </div>
 
+      {sectionMeta.length > 0 && (
+        <div style={{ marginTop: 'var(--spacing-xl)' }}>
+          <p style={{
+            fontSize: '0.75rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+            color: 'var(--color-text-muted)',
+            marginBottom: 'var(--spacing-sm)',
+            fontWeight: 'var(--font-semibold)'
+          }}>
+            Sections Overview
+          </p>
+          <ul className="progress-section-list">
+            {sectionMeta.map((section, index) => (
+              <li
+                key={section.id || index}
+                data-status={section.status || 'pending'}
+              >
+                <span>
+                  <strong style={{ color: 'var(--color-text-primary)' }}>
+                    Section {index + 1}:
+                  </strong>{' '}
+                  {section.title}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* Add responsive styles */}
       <style jsx>{`
         .progress-metric {
           padding: var(--spacing-sm);
           border-radius: var(--radius-md);
-          background: var(--color-bg-light);
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
           transition: all var(--transition-base);
         }
 
@@ -214,6 +255,35 @@ const ProgressBar = ({ currentQuestion, totalQuestions, answeredQuestions, secti
           background: var(--color-accent-primary-bg);
           transform: translateY(-2px);
           box-shadow: var(--shadow-sm);
+        }
+
+        .progress-section-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+        }
+
+        .progress-section-list li {
+          padding: 0.4rem 0.5rem;
+          border-radius: var(--radius-md);
+          font-size: 0.85rem;
+          color: var(--color-text-secondary);
+          border-left: 3px solid transparent;
+          transition: all var(--transition-base);
+        }
+
+        .progress-section-list li[data-status='active'] {
+          background: rgba(127, 90, 240, 0.18);
+          border-left-color: var(--color-accent-secondary);
+          color: var(--color-text-white);
+        }
+
+        .progress-section-list li[data-status='complete'] {
+          color: var(--color-accent-primary);
+          border-left-color: var(--color-accent-primary);
         }
 
         @media (max-width: 768px) {
