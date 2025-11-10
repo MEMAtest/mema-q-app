@@ -247,16 +247,16 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 font-sans">
+    <div className="min-h-screen font-sans">
       <Head>
         <title>FinProms - FCA Financial Promotions Compliance Assessment</title>
         <meta name="description" content="Professional FCA PERG 8 financial promotions compliance assessment tool by MEMA Consultants" />
       </Head>
 
-      <header className="bg-white text-slate-800 p-4 shadow-md sticky top-0 z-50">
-        <div className="container mx-auto flex justify-end items-center">
+      <header className="glass-panel sticky top-0 z-50" style={{margin: '1rem 0', borderRadius: '12px'}}>
+        <div className="container mx-auto px-4 py-3 flex justify-end items-center">
             {appState === 'questionnaire' && (
-                <button onClick={handleShowResults} className="start-button" style={{margin: '0'}}>
+                <button onClick={handleShowResults} className="btn-primary-dark">
                     View Results
                 </button>
             )}
