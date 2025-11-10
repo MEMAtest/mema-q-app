@@ -1,5 +1,8 @@
-/* Import Google Fonts - Outfit & Inter */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+/* Import Google Fonts - Playfair Display & Inter for MEMA Dark Theme */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Import MEMA Dark Theme */
+@import './mema-theme.css';
 
 /* Tailwind base styles */
 @tailwind base;
@@ -174,27 +177,16 @@
 }
 
 body {
-    font-family: var(--font-primary);
-    background: var(--gradient-page-bg);
-    color: var(--color-text-secondary);
+    font-family: var(--font-body);
+    background: var(--bg-main-gradient);
+    background-attachment: fixed;
+    color: var(--text-primary);
     font-weight: var(--font-regular);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     position: relative;
-}
-
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: radial-gradient(circle at 1px 1px, rgba(59, 130, 246, 0.03) 1px, transparent 0);
-    background-size: 20px 20px;
-    pointer-events: none;
-    z-index: 0;
+    min-height: 100vh;
 }
 
 /* Typography Hierarchy */
@@ -838,13 +830,15 @@ a:hover {
     box-shadow: var(--shadow-xl);
 }
 
-/* Question Card (Enhanced Pop-Out) */
+/* Question Card (Dark Glass Morphism) */
 .question-card {
-    background-color: var(--color-bg-white);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-xl);
+    background: var(--bg-card-dark);
+    backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-2xl);
     box-shadow: var(--shadow-xl);
-    border: 1px solid var(--color-border-light);
+    border: 1px solid var(--border-subtle);
     margin-bottom: var(--spacing-xl);
 }
 

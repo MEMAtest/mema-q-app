@@ -1,0 +1,369 @@
+/* =====================================================
+   MEMA COMPLIANCE STUDIO - DARK THEME
+   Premium "Concierge Experience" Design System
+   ===================================================== */
+
+:root {
+  /* ==================== FONTS ==================== */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* ==================== BACKGROUND GRADIENTS ==================== */
+  --bg-gradient-start: #0f766e;      /* Teal */
+  --bg-gradient-teal-dark: #115e59;  /* Darker teal */
+  --bg-gradient-mid: #1e3a8a;        /* Navy blue */
+  --bg-gradient-indigo: #3730a3;     /* Indigo */
+  --bg-gradient-end: #5b21b6;        /* Purple */
+
+  /* Main background gradient */
+  --bg-main-gradient: linear-gradient(
+    135deg,
+    #0f766e 0%,
+    #115e59 25%,
+    #1e3a8a 60%,
+    #3730a3 85%,
+    #5b21b6 100%
+  );
+
+  /* Alternative mesh gradient for complex backgrounds */
+  --bg-mesh-gradient:
+    radial-gradient(at 0% 0%, rgba(15, 118, 110, 0.8) 0%, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(30, 58, 138, 0.8) 0%, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(91, 33, 182, 0.8) 0%, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(17, 94, 89, 0.8) 0%, transparent 50%),
+    #0f172a;
+
+  /* ==================== CARD BACKGROUNDS ==================== */
+  --bg-card-dark: rgba(15, 23, 42, 0.7);      /* Dark with transparency */
+  --bg-card-darker: rgba(15, 23, 42, 0.9);    /* Darker for emphasis */
+  --bg-card-medium: rgba(15, 23, 42, 0.6);    /* Medium transparency */
+  --bg-card-light: rgba(15, 23, 42, 0.5);     /* Light for subtle cards */
+  --bg-card-subtle: rgba(15, 23, 42, 0.4);    /* Very subtle */
+  --bg-card-glass: rgba(15, 23, 42, 0.3);     /* Glass effect */
+
+  /* ==================== ACCENT COLORS ==================== */
+  --accent-teal: #14b8a6;
+  --accent-teal-dark: #0d9488;
+  --accent-teal-light: #2dd4bf;
+
+  --accent-green: #10b981;
+  --accent-green-dark: #059669;
+  --accent-green-light: #34d399;
+
+  --accent-purple: #a855f7;
+  --accent-purple-dark: #9333ea;
+  --accent-purple-light: #c084fc;
+
+  --accent-gold: #fbbf24;
+  --accent-gold-dark: #f59e0b;
+  --accent-gold-light: #fcd34d;
+
+  /* ==================== TEXT COLORS ==================== */
+  --text-primary: #f8fafc;         /* Almost white */
+  --text-secondary: #cbd5e1;       /* Light gray */
+  --text-muted: #94a3b8;           /* Muted gray */
+  --text-dark: #1e293b;            /* Dark for light backgrounds */
+
+  /* ==================== BORDER COLORS ==================== */
+  --border-subtle: rgba(148, 163, 184, 0.1);
+  --border-medium: rgba(148, 163, 184, 0.2);
+  --border-strong: rgba(148, 163, 184, 0.3);
+  --border-glow: rgba(20, 184, 166, 0.3);
+  --border-glow-strong: rgba(20, 184, 166, 0.5);
+
+  /* ==================== GRADIENT DEFINITIONS ==================== */
+  --gradient-teal-green: linear-gradient(135deg, #14b8a6 0%, #10b981 100%);
+  --gradient-green-teal: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+  --gradient-green-emerald: linear-gradient(135deg, #10b981 0%, #14b8a6 50%, #6ee7b7 100%);
+  --gradient-teal-dark: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%);
+  --gradient-gold-amber: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  --gradient-purple-indigo: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+
+  /* ==================== GLASS MORPHISM ==================== */
+  --glass-bg: rgba(15, 23, 42, 0.6);
+  --glass-border: rgba(148, 163, 184, 0.1);
+  --glass-blur: blur(20px);
+  --glass-saturate: saturate(180%);
+
+  /* ==================== SHADOWS ==================== */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.4);
+  --shadow-2xl: 0 30px 60px rgba(0, 0, 0, 0.5);
+
+  /* Colored shadows */
+  --shadow-teal-glow: 0 0 20px rgba(20, 184, 166, 0.3), 0 0 40px rgba(20, 184, 166, 0.1);
+  --shadow-teal-glow-strong: 0 0 30px rgba(20, 184, 166, 0.4), 0 10px 20px rgba(0, 0, 0, 0.3);
+  --shadow-green-glow: 0 0 20px rgba(16, 185, 129, 0.3), 0 0 40px rgba(16, 185, 129, 0.1);
+  --shadow-green-glow-strong: 0 0 30px rgba(16, 185, 129, 0.4), 0 10px 20px rgba(0, 0, 0, 0.3);
+  --shadow-gold-glow: 0 0 20px rgba(251, 191, 36, 0.3), 0 0 40px rgba(251, 191, 36, 0.1);
+  --shadow-gold-glow-strong: 0 0 30px rgba(251, 191, 36, 0.4), 0 10px 20px rgba(0, 0, 0, 0.3);
+
+  /* ==================== SPACING ==================== */
+  --spacing-xs: 0.25rem;    /* 4px */
+  --spacing-sm: 0.5rem;     /* 8px */
+  --spacing-md: 1rem;       /* 16px */
+  --spacing-lg: 1.5rem;     /* 24px */
+  --spacing-xl: 2rem;       /* 32px */
+  --spacing-2xl: 3rem;      /* 48px */
+  --spacing-3xl: 4rem;      /* 64px */
+
+  /* ==================== BORDER RADIUS ==================== */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ==================== TRANSITIONS ==================== */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ==================== Z-INDEX SCALE ==================== */
+  --z-base: 1;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-modal: 1200;
+  --z-tooltip: 1300;
+}
+
+/* ==================== GLASS MORPHISM UTILITIES ==================== */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-card-darker {
+  background: var(--bg-card-dark);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-card-subtle {
+  background: var(--bg-card-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-subtle);
+}
+
+/* ==================== GLOW EFFECTS ==================== */
+.glow-teal {
+  box-shadow: var(--shadow-teal-glow);
+}
+
+.glow-teal-strong {
+  box-shadow: var(--shadow-teal-glow-strong);
+}
+
+.glow-green {
+  box-shadow: var(--shadow-green-glow);
+}
+
+.glow-green-strong {
+  box-shadow: var(--shadow-green-glow-strong);
+}
+
+.glow-gold {
+  box-shadow: var(--shadow-gold-glow);
+}
+
+.glow-gold-strong {
+  box-shadow: var(--shadow-gold-glow-strong);
+}
+
+/* ==================== GRADIENT TEXT ==================== */
+.gradient-text {
+  background: var(--gradient-teal-green);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-green {
+  background: var(--gradient-green-teal);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(20, 184, 166, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(20, 184, 166, 0.6);
+  }
+}
+
+@keyframes pulse-glow-green {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+  }
+}
+
+@keyframes shimmer-dark {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+.animate-pulse-glow-green {
+  animation: pulse-glow-green 2s infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer-dark 2s infinite linear;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out;
+}
+
+/* ==================== TYPOGRAPHY SCALE ==================== */
+.text-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.text-display-bold {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.text-body {
+  font-family: var(--font-body);
+}
+
+/* ==================== BUTTON STYLES ==================== */
+.btn-primary {
+  background: var(--gradient-green-teal);
+  color: white;
+  border: none;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-family: var(--font-body);
+  transition: var(--transition-base);
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  box-shadow: var(--shadow-green-glow-strong);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid var(--border-strong);
+  color: var(--text-primary);
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-family: var(--font-body);
+  transition: var(--transition-base);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--accent-teal);
+}
+
+/* ==================== CARD HOVER EFFECTS ==================== */
+.card-hover {
+  transition: var(--transition-base);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-teal);
+  box-shadow: 0 8px 24px rgba(20, 184, 166, 0.2);
+}
+
+/* ==================== DARK THEME OVERRIDES ==================== */
+body {
+  background: var(--bg-main-gradient);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+}
+
+/* Ensure all text is readable on dark background */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+}
+
+p {
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--accent-teal);
+}
+
+a:hover {
+  color: var(--accent-teal-light);
+}
+
+/* Input fields dark theme */
+input, textarea, select {
+  background: var(--bg-card-light);
+  border: 2px solid var(--border-medium);
+  color: var(--text-primary);
+  border-radius: var(--radius-md);
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent-teal);
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+  background: var(--bg-card-dark);
+  outline: none;
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted);
+}

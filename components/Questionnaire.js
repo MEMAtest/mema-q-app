@@ -94,24 +94,22 @@ const Questionnaire = ({
             {
               value: 'Yes',
               Icon: ComplianceShieldIcon,
-              color: 'var(--color-success-500)',
-              colorHover: 'var(--color-success-600)',
-              bgSelected: 'var(--gradient-success)',
-              bgUnselected: '#f0fdf4',
+              color: 'var(--accent-green)',
+              bgSelected: 'var(--gradient-green-teal)',
+              bgUnselected: 'var(--bg-card-light)',
               label: 'Compliant',
               emoji: '✓'
             },
             {
               value: 'No',
               Icon: WarningBadgeIcon,
-              color: 'var(--color-warning-500)',
-              colorHover: 'var(--color-warning-600)',
-              bgSelected: 'var(--gradient-warning)',
-              bgUnselected: '#fffbeb',
+              color: 'var(--accent-gold)',
+              bgSelected: 'var(--gradient-gold-amber)',
+              bgUnselected: 'var(--bg-card-light)',
               label: 'Issue',
               emoji: '⚠️'
             }
-          ].map(({ value, Icon, color, colorHover, bgSelected, bgUnselected, label, emoji }) => {
+          ].map(({ value, Icon, color, bgSelected, bgUnselected, label, emoji }) => {
             const isSelected = selectedValue === value;
             const isYes = value === 'Yes';
 
@@ -130,35 +128,37 @@ const Questionnaire = ({
                   position: 'relative',
                   padding: '2rem 1.5rem',
                   background: isSelected ? bgSelected : bgUnselected,
-                  border: `5px solid ${isSelected ? color : 'var(--color-border-light)'}`,
+                  backdropFilter: !isSelected ? 'var(--glass-blur)' : 'none',
+                  WebkitBackdropFilter: !isSelected ? 'var(--glass-blur)' : 'none',
+                  border: `3px solid ${isSelected ? color : 'var(--border-medium)'}`,
                   borderRadius: 'var(--radius-lg)',
                   cursor: 'pointer',
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  transition: 'var(--transition-base)',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   gap: 'var(--spacing-md)',
                   boxShadow: isSelected
-                    ? (isYes ? 'var(--shadow-success-selected)' : 'var(--shadow-warning-selected)')
+                    ? (isYes ? 'var(--shadow-green-glow-strong)' : 'var(--shadow-gold-glow-strong)')
                     : 'var(--shadow-md)',
                   transform: isSelected ? 'translateY(-4px)' : 'translateY(0)',
-                  minHeight: '180px',
+                  minHeight: '140px',
                   justifyContent: 'center'
                 }}
                 onMouseEnter={(e) => {
                   if (!isSelected) {
-                    e.currentTarget.style.borderColor = colorHover;
-                    e.currentTarget.style.boxShadow = isYes
-                      ? 'var(--shadow-success-hover)'
-                      : 'var(--shadow-warning-hover)';
-                    e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)';
+                    e.currentTarget.style.borderColor = 'var(--accent-teal)';
+                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(20, 184, 166, 0.2)';
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.background = 'var(--bg-card-dark)';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isSelected) {
-                    e.currentTarget.style.borderColor = 'var(--color-border-light)';
+                    e.currentTarget.style.borderColor = 'var(--border-medium)';
                     e.currentTarget.style.boxShadow = 'var(--shadow-md)';
                     e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.background = 'var(--bg-card-light)';
                   }
                 }}
                 aria-label={`Select ${value}`}
@@ -176,9 +176,9 @@ const Questionnaire = ({
 
                 {/* Answer text */}
                 <div style={{
-                  fontSize: '2rem',
-                  fontWeight: '800',
-                  color: isSelected ? 'white' : 'var(--color-text-primary)',
+                  fontSize: '1.5rem',
+                  fontWeight: '700',
+                  color: isSelected ? 'white' : 'var(--text-primary)',
                   letterSpacing: '-0.02em'
                 }}>
                   {value}
@@ -188,7 +188,7 @@ const Questionnaire = ({
                 <div style={{
                   fontSize: '0.9375rem',
                   fontWeight: '600',
-                  color: isSelected ? 'rgba(255, 255, 255, 0.95)' : 'var(--color-text-muted)',
+                  color: isSelected ? 'rgba(255, 255, 255, 0.95)' : 'var(--text-secondary)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: 'var(--spacing-xs)'
@@ -320,57 +320,57 @@ const Questionnaire = ({
                       marginBottom: 'var(--spacing-md)'
                     }}>
                       <span style={{
-                        background: 'var(--gradient-purple)',
+                        background: 'var(--gradient-teal-green)',
                         color: 'white',
                         fontSize: '0.875rem',
-                        fontWeight: 'var(--font-black)',
+                        fontWeight: '600',
                         padding: '0.5rem 1rem',
                         borderRadius: 'var(--radius-full)',
-                        boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
+                        boxShadow: 'var(--shadow-teal-glow)',
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em',
-                        border: '2px solid #7c3aed'
+                        border: '1px solid rgba(255, 255, 255, 0.2)'
                       }}>
                         Question {progressData ? `${progressData.currentQuestionIndex} of ${progressData.totalQuestions}` : question.id}
                       </span>
 
-                      {/* BOLD Reference Pill */}
+                      {/* Dark Theme Reference Pill */}
                       <span className="question-ref" style={{
-                        background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
-                        color: 'var(--color-accent-700)',
-                        fontSize: '0.8rem',
-                        fontWeight: 'var(--font-bold)',
-                        padding: '0.5rem 1rem',
-                        borderRadius: 'var(--radius-full)',
+                        background: 'rgba(20, 184, 166, 0.1)',
+                        color: 'var(--accent-teal)',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        padding: '0.375rem 0.75rem',
+                        borderRadius: 'var(--radius-sm)',
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: 'var(--spacing-xs)',
-                        border: '2px solid var(--color-accent-600)',
-                        boxShadow: '0 2px 8px rgba(37, 99, 235, 0.15)',
+                        border: '1px solid rgba(20, 184, 166, 0.2)',
                         cursor: 'pointer',
-                        transition: 'all 0.2s var(--ease-smooth)'
+                        transition: 'var(--transition-base)'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.25)';
+                        e.currentTarget.style.background = 'rgba(20, 184, 166, 0.15)';
+                        e.currentTarget.style.borderColor = 'var(--accent-teal)';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(37, 99, 235, 0.15)';
+                        e.currentTarget.style.background = 'rgba(20, 184, 166, 0.1)';
+                        e.currentTarget.style.borderColor = 'rgba(20, 184, 166, 0.2)';
                       }}>
                         <InformationCircleIcon style={{ width: '1rem', height: '1rem' }} />
                         {question.questionRef}
                       </span>
                     </div>
 
-                    {/* BOLDER Question Text - 2rem, weight 800 */}
+                    {/* Dark Theme Question Text - Elegant Display Font */}
                     <h4 className="question-text" style={{
-                      fontSize: '2rem',
-                      fontWeight: '800',
-                      color: 'var(--color-text-primary)',
+                      fontSize: '1.75rem',
+                      fontWeight: '700',
+                      color: 'var(--text-primary)',
                       marginBottom: 'var(--spacing-sm)',
                       lineHeight: 1.3,
-                      letterSpacing: '-0.02em'
+                      letterSpacing: '-0.02em',
+                      fontFamily: 'var(--font-body)'
                     }}>
                       {question.questionText}
                     </h4>
