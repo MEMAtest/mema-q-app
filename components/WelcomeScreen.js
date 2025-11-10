@@ -23,14 +23,16 @@ const WelcomeScreen = ({ onStart }) => {
       {/* Header Navigation */}
       <header className="header">
         <div className="header-logo">
-          <Image
-            src="/mema-logo-green.svg"
-            alt="MEMA Consultants"
-            width={180}
-            height={48}
-            priority
-            style={{ height: 'auto', width: 'auto' }}
-          />
+          <a href="/" style={{ cursor: 'pointer', display: 'block' }}>
+            <Image
+              src="/mema-logo-green.svg"
+              alt="MEMA Consultants"
+              width={180}
+              height={48}
+              priority
+              style={{ height: 'auto', width: 'auto' }}
+            />
+          </a>
         </div>
         <nav className="header-nav">
           <a href="#how-it-works">{t('nav.howItWorks')}</a>
@@ -246,7 +248,7 @@ const WelcomeScreen = ({ onStart }) => {
           </p>
 
           <div className="hero-grid" style={{ marginTop: '3rem' }}>
-            {/* Left: Abstract Visual */}
+            {/* Left: SMCR Health Preview Card */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
@@ -255,22 +257,95 @@ const WelcomeScreen = ({ onStart }) => {
               <div style={{
                 position: 'relative',
                 width: '100%',
-                maxWidth: '400px',
-                height: '350px',
-                background: 'linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 123, 255, 0.05) 100%)',
+                maxWidth: '480px',
+                background: 'rgba(26, 47, 58, 0.95)',
                 borderRadius: 'var(--radius-xl)',
                 boxShadow: 'var(--shadow-xl)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '1px solid rgba(0, 123, 255, 0.3)'
+                padding: '2rem',
+                border: '1px solid rgba(60, 203, 139, 0.25)'
               }}>
-                <ArrowPathIcon style={{
-                  width: '120px',
-                  height: '120px',
-                  color: 'var(--color-accent-primary)',
-                  animation: 'spin 20s linear infinite'
-                }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                  <div style={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '50%',
+                    background: 'rgba(60, 203, 139, 0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    border: '2px solid rgba(60, 203, 139, 0.4)'
+                  }}>
+                    <span style={{
+                      fontSize: '1.5rem',
+                      fontWeight: 'var(--font-bold)',
+                      color: 'var(--color-accent-primary)'
+                    }}>M</span>
+                  </div>
+                  <div>
+                    <div style={{
+                      fontSize: '0.75rem',
+                      color: 'var(--color-text-light)',
+                      letterSpacing: '0.1em',
+                      marginBottom: '0.25rem'
+                    }}>MEMA INSIGHT</div>
+                    <h3 style={{
+                      fontSize: '1.5rem',
+                      fontWeight: 'var(--font-bold)',
+                      color: 'var(--color-text-primary)',
+                      margin: 0
+                    }}>SMCR Health Preview</h3>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {[
+                    { icon: '✓', title: 'Map prescribed responsibilities', desc: 'Assign 45+ SMCR responsibilities to senior managers' },
+                    { icon: '👤', title: 'Assess SMF fitness & propriety', desc: 'Complete FCA FIT assessments for all SMF individuals' },
+                    { icon: '📄', title: 'Generate board reports & exports', desc: 'Export PDF reports and CSV data for regulatory filing' },
+                    { icon: '◉', title: 'Track compliance status', desc: 'Monitor progress with real-time coverage metrics' }
+                  ].map((item, idx) => (
+                    <div key={idx} style={{
+                      background: 'rgba(42, 68, 80, 0.6)',
+                      borderRadius: 'var(--radius-md)',
+                      padding: '1rem',
+                      display: 'flex',
+                      gap: '0.75rem',
+                      border: '1px solid rgba(255, 255, 255, 0.08)'
+                    }}>
+                      <div style={{
+                        fontSize: '1.25rem',
+                        color: 'var(--color-accent-primary)',
+                        flexShrink: 0
+                      }}>{item.icon}</div>
+                      <div>
+                        <div style={{
+                          fontWeight: 'var(--font-semibold)',
+                          color: 'var(--color-text-primary)',
+                          marginBottom: '0.25rem',
+                          fontSize: '0.95rem'
+                        }}>{item.title}</div>
+                        <div style={{
+                          fontSize: '0.825rem',
+                          color: 'var(--color-text-light)',
+                          lineHeight: 1.4
+                        }}>{item.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <button className="start-button" style={{
+                  width: '100%',
+                  marginTop: '1.5rem',
+                  background: 'var(--color-accent-primary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
+                }}>
+                  Launch SMCR Builder
+                  <span>→</span>
+                </button>
               </div>
             </div>
 
