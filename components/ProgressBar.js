@@ -24,17 +24,21 @@ const ProgressBar = memo(({
   const estimatedMinutes = Math.ceil((remainingQuestions * 30) / 60);
 
   return (
-    <div style={{
-      background: 'var(--bg-card-darker)',
-      backdropFilter: 'var(--glass-blur) var(--glass-saturate)',
-      WebkitBackdropFilter: 'var(--glass-blur) var(--glass-saturate)',
-      borderBottom: '2px solid var(--border-medium)',
-      padding: 'var(--spacing-xl) var(--spacing-md)',
-      boxShadow: 'var(--shadow-lg)',
-      position: 'sticky',
-      top: '0',
-      zIndex: 40
-    }}>
+    <div
+      role="region"
+      aria-label="Assessment progress"
+      style={{
+        background: 'var(--bg-card-darker)',
+        backdropFilter: 'var(--glass-blur) var(--glass-saturate)',
+        WebkitBackdropFilter: 'var(--glass-blur) var(--glass-saturate)',
+        borderBottom: '2px solid var(--border-medium)',
+        padding: 'var(--spacing-xl) var(--spacing-md)',
+        boxShadow: 'var(--shadow-lg)',
+        position: 'sticky',
+        top: '0',
+        zIndex: 40
+      }}
+    >
       <div className="content-wrapper">
         {/* Dark Glass Progress Bar Container */}
         <div style={{
@@ -66,15 +70,22 @@ const ProgressBar = memo(({
           </div>
 
           {/* Dark Theme Progress Bar */}
-          <div style={{
-            width: '100%',
-            height: '12px',
-            background: 'rgba(0, 0, 0, 0.3)',
-            borderRadius: 'var(--radius-full)',
-            overflow: 'hidden',
-            position: 'relative',
-            boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.4)'
-          }}>
+          <div
+            role="progressbar"
+            aria-valuenow={percentComplete}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label={`Assessment progress: ${percentComplete}% complete`}
+            style={{
+              width: '100%',
+              height: '12px',
+              background: 'rgba(0, 0, 0, 0.3)',
+              borderRadius: 'var(--radius-full)',
+              overflow: 'hidden',
+              position: 'relative',
+              boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.4)'
+            }}
+          >
             {/* Shimmer effect layer */}
             <div style={{
               position: 'absolute',
@@ -104,25 +115,33 @@ const ProgressBar = memo(({
         </div>
 
         {/* BOLD Metric Cards */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-          gap: 'var(--spacing-md)'
-        }}>
-          {/* Total Questions Card - Blue */}
-          <div className="metric-card" style={{
-            background: 'var(--gradient-blue)',
-            border: '3px solid var(--color-accent-600)',
-            borderRadius: '12px',
-            padding: '1rem',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '0.5rem',
-            transition: 'all 0.3s var(--ease-smooth)',
-            boxShadow: 'var(--shadow-elevated)',
-            cursor: 'default'
+        <div
+          role="list"
+          aria-label="Assessment metrics"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+            gap: 'var(--spacing-md)'
           }}
+        >
+          {/* Total Questions Card - Blue */}
+          <div
+            role="listitem"
+            aria-label={`Total questions: ${totalQuestions}`}
+            className="metric-card"
+            style={{
+              background: 'var(--gradient-blue)',
+              border: '3px solid var(--color-accent-600)',
+              borderRadius: '12px',
+              padding: '1rem',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.3s var(--ease-smooth)',
+              boxShadow: 'var(--shadow-elevated)',
+              cursor: 'default'
+            }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'translateY(-4px) scale(1.05)';
             e.currentTarget.style.boxShadow = '0 12px 24px rgba(59, 130, 246, 0.4)';
@@ -153,19 +172,23 @@ const ProgressBar = memo(({
           </div>
 
           {/* Answered Card - Green */}
-          <div className="metric-card success" style={{
-            background: 'var(--gradient-success)',
-            border: '3px solid var(--color-success-600)',
-            borderRadius: '12px',
-            padding: '1rem',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '0.5rem',
-            transition: 'all 0.3s var(--ease-smooth)',
-            boxShadow: 'var(--shadow-elevated)',
-            cursor: 'default'
-          }}
+          <div
+            role="listitem"
+            aria-label={`Questions answered: ${currentQuestionIndex} of ${totalQuestions}`}
+            className="metric-card success"
+            style={{
+              background: 'var(--gradient-success)',
+              border: '3px solid var(--color-success-600)',
+              borderRadius: '12px',
+              padding: '1rem',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.3s var(--ease-smooth)',
+              boxShadow: 'var(--shadow-elevated)',
+              cursor: 'default'
+            }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'translateY(-4px) scale(1.05)';
             e.currentTarget.style.boxShadow = '0 12px 24px rgba(16, 185, 129, 0.4)';
@@ -196,19 +219,23 @@ const ProgressBar = memo(({
           </div>
 
           {/* Sections Card - Purple */}
-          <div className="metric-card purple" style={{
-            background: 'var(--gradient-purple)',
-            border: '3px solid #7c3aed',
-            borderRadius: '12px',
-            padding: '1rem',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '0.5rem',
-            transition: 'all 0.3s var(--ease-smooth)',
-            boxShadow: 'var(--shadow-elevated)',
-            cursor: 'default'
-          }}
+          <div
+            role="listitem"
+            aria-label={`Section ${currentSectionNumber} of ${totalSections}`}
+            className="metric-card purple"
+            style={{
+              background: 'var(--gradient-purple)',
+              border: '3px solid #7c3aed',
+              borderRadius: '12px',
+              padding: '1rem',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.3s var(--ease-smooth)',
+              boxShadow: 'var(--shadow-elevated)',
+              cursor: 'default'
+            }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'translateY(-4px) scale(1.05)';
             e.currentTarget.style.boxShadow = '0 12px 24px rgba(139, 92, 246, 0.4)';
@@ -239,19 +266,23 @@ const ProgressBar = memo(({
           </div>
 
           {/* Time Card - Orange */}
-          <div className="metric-card orange" style={{
-            background: 'var(--gradient-orange)',
-            border: '3px solid #ea580c',
-            borderRadius: '12px',
-            padding: '1rem',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '0.5rem',
-            transition: 'all 0.3s var(--ease-smooth)',
-            boxShadow: 'var(--shadow-elevated)',
-            cursor: 'default'
-          }}
+          <div
+            role="listitem"
+            aria-label={`Estimated time remaining: ${estimatedMinutes} minutes`}
+            className="metric-card orange"
+            style={{
+              background: 'var(--gradient-orange)',
+              border: '3px solid #ea580c',
+              borderRadius: '12px',
+              padding: '1rem',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.3s var(--ease-smooth)',
+              boxShadow: 'var(--shadow-elevated)',
+              cursor: 'default'
+            }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'translateY(-4px) scale(1.05)';
             e.currentTarget.style.boxShadow = '0 12px 24px rgba(249, 115, 22, 0.4)';

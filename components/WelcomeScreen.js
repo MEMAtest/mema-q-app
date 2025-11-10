@@ -18,62 +18,73 @@ import {
 const WelcomeScreen = ({ onStart }) => {
   return (
     <>
+      {/* Skip to main content for keyboard users */}
+      <a href="#main-content" className="skip-to-content">
+        Skip to main content
+      </a>
+
       {/* Header Navigation */}
-      <header className="header">
+      <header className="header" role="banner">
         <div className="header-logo">
-          <img src="/mema-logo-new.svg" alt="FinProms" style={{ color: 'var(--color-text-primary)' }} />
+          <img src="/mema-logo-new.svg" alt="FinProms Logo" style={{ color: 'var(--color-text-primary)' }} />
         </div>
-        <nav className="header-nav">
+        <nav className="header-nav" role="navigation" aria-label="Main navigation">
           <a href="#how-it-works">How It Works</a>
           <a href="#features">Features</a>
           <a href="#about">About</a>
         </nav>
         <div className="header-actions">
-          <button className="btn-ghost" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
+          <button className="btn-ghost" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }} aria-label="Login to your account">
             Login
           </button>
-          <button className="start-button" onClick={onStart} style={{ padding: '0.75rem 1.5rem', fontSize: '0.9rem' }}>
+          <button className="start-button" onClick={onStart} style={{ padding: '0.75rem 1.5rem', fontSize: '0.9rem' }} aria-label="Start compliance assessment">
             Start Assessment
           </button>
         </div>
       </header>
 
+      {/* Main content area */}
+      <main id="main-content">
       {/* Hero Section */}
-      <section className="hero-section section-dark">
+      <section className="hero-section section-dark" aria-labelledby="hero-heading">
         <div className="hero-content">
           <div className="hero-grid">
             {/* Left: Text Column */}
             <div className="hero-text">
-              <h1>Future-Proofing Compliance. Built for Tomorrow's Finance.</h1>
+              <h1 id="hero-heading">Future-Proofing Compliance. Built for Tomorrow's Finance.</h1>
               <p>
                 FinProms delivers the advanced regulatory guidance and automated solutions
                 financial institutions need to thrive in an ever-evolving landscape.
               </p>
 
               {/* Key Benefits */}
-              <ul className="benefits-list" style={{ marginTop: '2rem' }}>
+              <ul className="benefits-list" style={{ marginTop: '2rem' }} aria-label="Key benefits">
                 <li>
-                  <LightBulbIcon className="icon" />
+                  <LightBulbIcon className="icon" aria-hidden="true" />
                   <span>Intelligent Regulatory Navigation</span>
                 </li>
                 <li>
-                  <BoltIcon className="icon" />
+                  <BoltIcon className="icon" aria-hidden="true" />
                   <span>Automated Compliance Workflows</span>
                 </li>
                 <li>
-                  <ShieldCheckIcon className="icon" />
+                  <ShieldCheckIcon className="icon" aria-hidden="true" />
                   <span>Unwavering Audit Readiness</span>
                 </li>
               </ul>
 
               {/* CTAs */}
               <div className="cta-buttons" style={{ marginTop: '2rem', justifyContent: 'flex-start' }}>
-                <button className="start-button" onClick={onStart}>
-                  <PlayCircleIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                <button className="start-button" onClick={onStart} aria-label="Start your compliance assessment now">
+                  <PlayCircleIcon style={{ width: '1.5rem', height: '1.5rem' }} aria-hidden="true" />
                   Start Assessment
                 </button>
-                <button className="btn-ghost-dark" onClick={() => document.getElementById('demo-section').scrollIntoView({ behavior: 'smooth' })}>
-                  <PlayCircleIcon style={{ width: '1.25rem', height: '1.25rem' }} />
+                <button
+                  className="btn-ghost-dark"
+                  onClick={() => document.getElementById('demo-section').scrollIntoView({ behavior: 'smooth' })}
+                  aria-label="Watch demonstration video"
+                >
+                  <PlayCircleIcon style={{ width: '1.25rem', height: '1.25rem' }} aria-hidden="true" />
                   Watch Demo
                 </button>
               </div>
@@ -560,17 +571,18 @@ const WelcomeScreen = ({ onStart }) => {
       </section>
 
       {/* Final CTA Section */}
-      <section id="about" className="cta-section">
-        <h2>Begin Your Journey to Regulatory Certainty</h2>
+      <section id="about" className="cta-section" aria-labelledby="cta-heading">
+        <h2 id="cta-heading">Begin Your Journey to Regulatory Certainty</h2>
         <p>
           Take the first step towards streamlined compliance and unwavering confidence.
           Get started today.
         </p>
-        <button className="start-button" onClick={onStart}>
-          <RocketLaunchIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+        <button className="start-button" onClick={onStart} aria-label="Begin your free compliance assessment">
+          <RocketLaunchIcon style={{ width: '1.5rem', height: '1.5rem' }} aria-hidden="true" />
           Start Assessment
         </button>
       </section>
+      </main>
 
       {/* Add hover effect styles inline */}
       <style jsx>{`
