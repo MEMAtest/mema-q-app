@@ -330,6 +330,11 @@ body {
   background-attachment: fixed;
   color: var(--text-primary);
   font-family: var(--font-body);
+  /* Performance optimizations */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Ensure all text is readable on dark background */

@@ -282,6 +282,7 @@ a:hover {
     border: 2px solid var(--accent-teal);
     cursor: pointer;
     margin: 0 auto;
+    will-change: transform, box-shadow;
 }
 
 .start-button:hover {
@@ -289,11 +290,13 @@ a:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow-teal-glow-strong);
     border-color: var(--accent-teal-light);
+    animation: glowTrail 2s ease-in-out infinite;
 }
 
 .start-button:active {
     transform: translateY(-1px);
     box-shadow: var(--shadow-teal-glow);
+    animation: none;
 }
 
 .start-button:disabled {
@@ -825,6 +828,7 @@ a:hover {
     padding: var(--spacing-xl);
     box-shadow: var(--shadow-lg);
     transition: all var(--transition-base);
+    will-change: transform, box-shadow, border-color;
 }
 
 .card:hover {
@@ -966,6 +970,7 @@ a:hover {
     box-shadow: var(--shadow-lg);
     transition: all var(--transition-base);
     text-align: center;
+    will-change: transform, box-shadow, border-color;
 }
 
 .feature-card:hover {
@@ -1717,6 +1722,208 @@ select:focus-visible {
     }
     to {
         width: var(--progress-width);
+    }
+}
+
+/* ============================================ */
+/* PHASE 7: ADVANCED VISUAL EFFECTS */
+/* ============================================ */
+
+/* Gradient text shimmer animation */
+@keyframes gradientShimmer {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Glow trail on hover */
+@keyframes glowTrail {
+    0% {
+        box-shadow: 0 0 10px rgba(20, 184, 166, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 25px rgba(20, 184, 166, 0.6), 0 0 40px rgba(20, 184, 166, 0.3);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(20, 184, 166, 0.3);
+    }
+}
+
+/* Floating animation for elements */
+@keyframes floatSlow {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* Fade in from bottom */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scale pulse animation */
+@keyframes scalePulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* ============================================ */
+/* GRADIENT TEXT UTILITY CLASSES */
+/* ============================================ */
+
+.gradient-text-teal {
+    background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-teal-light) 50%, var(--accent-green) 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShimmer 6s ease infinite;
+    will-change: background-position;
+}
+
+.gradient-text-green {
+    background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-light) 50%, var(--accent-teal) 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShimmer 6s ease infinite;
+    will-change: background-position;
+}
+
+/* ============================================ */
+/* ENHANCED HOVER EFFECTS */
+/* ============================================ */
+
+.hover-glow-teal {
+    transition: all var(--transition-base);
+    will-change: transform, box-shadow;
+}
+
+.hover-glow-teal:hover {
+    animation: glowTrail 2s ease-in-out infinite;
+    transform: translateY(-2px);
+}
+
+.hover-lift {
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    will-change: transform, box-shadow;
+}
+
+.hover-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-teal-glow-strong);
+}
+
+/* ============================================ */
+/* SMOOTH SCROLL BEHAVIOR */
+/* ============================================ */
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* ============================================ */
+/* PHASE 8: PERFORMANCE OPTIMIZATIONS */
+/* ============================================ */
+
+/* Optimize backdrop-filter rendering */
+.card,
+.feature-card,
+.testimonial-card,
+.header {
+    /* Use contain for better rendering performance */
+    contain: layout style paint;
+    /* Force GPU acceleration for transforms */
+    transform: translateZ(0);
+    /* Optimize compositing */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* Optimize progress bar for better performance */
+.metric-card {
+    contain: layout style;
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Optimize animated elements */
+.answer-card-yes,
+.answer-card-no,
+.btn-ghost,
+.btn-ghost-dark,
+.navigation-buttons button {
+    contain: layout;
+    transform: translateZ(0);
+}
+
+/* Remove will-change after animation completes */
+@supports (will-change: transform) {
+    .card:not(:hover),
+    .feature-card:not(:hover),
+    .start-button:not(:hover) {
+        will-change: auto;
+    }
+}
+
+/* Optimize keyframe animations for 60fps */
+@keyframes optimizedFadeIn {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 20px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* Use transform3d for GPU acceleration */
+@keyframes optimizedSlideUp {
+    from {
+        transform: translate3d(0, 30px, 0);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
     }
 }
 
