@@ -25,12 +25,12 @@ const WelcomeScreen = ({ onStart }) => {
         <div className="header-logo">
           <a href="/" style={{ cursor: 'pointer', display: 'block' }}>
             <Image
-              src="/mema-logo.png"
+              src="/mema-logo-green.svg"
               alt="MEMA Consultants"
-              width={60}
-              height={60}
+              width={180}
+              height={48}
               priority
-              style={{ height: 'auto', width: 'auto', borderRadius: '50%' }}
+              style={{ height: 'auto', width: 'auto' }}
             />
           </a>
         </div>
