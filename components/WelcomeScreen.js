@@ -248,7 +248,7 @@ const WelcomeScreen = ({ onStart }) => {
           </p>
 
           <div className="hero-grid" style={{ marginTop: '3rem' }}>
-            {/* Left: SMCR Health Preview Card */}
+            {/* Left: FinProms Assessment Card */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
@@ -258,28 +258,28 @@ const WelcomeScreen = ({ onStart }) => {
                 position: 'relative',
                 width: '100%',
                 maxWidth: '480px',
-                background: 'rgba(26, 47, 58, 0.95)',
+                background: 'rgba(42, 68, 80, 0.88)',
                 borderRadius: 'var(--radius-xl)',
                 boxShadow: 'var(--shadow-xl)',
                 padding: '2rem',
-                border: '1px solid rgba(60, 203, 139, 0.25)'
+                border: '1px solid rgba(60, 203, 139, 0.30)'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
                   <div style={{
                     width: '56px',
                     height: '56px',
                     borderRadius: '50%',
-                    background: 'rgba(60, 203, 139, 0.2)',
+                    background: 'rgba(60, 203, 139, 0.25)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    border: '2px solid rgba(60, 203, 139, 0.4)'
+                    border: '2px solid rgba(60, 203, 139, 0.5)'
                   }}>
                     <span style={{
                       fontSize: '1.5rem',
                       fontWeight: 'var(--font-bold)',
                       color: 'var(--color-accent-primary)'
-                    }}>M</span>
+                    }}>F</span>
                   </div>
                   <div>
                     <div style={{
@@ -287,30 +287,30 @@ const WelcomeScreen = ({ onStart }) => {
                       color: 'var(--color-text-light)',
                       letterSpacing: '0.1em',
                       marginBottom: '0.25rem'
-                    }}>MEMA INSIGHT</div>
+                    }}>MEMA CONNECT</div>
                     <h3 style={{
                       fontSize: '1.5rem',
                       fontWeight: 'var(--font-bold)',
                       color: 'var(--color-text-primary)',
                       margin: 0
-                    }}>SMCR Health Preview</h3>
+                    }}>FinProms Assessment</h3>
                   </div>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   {[
-                    { icon: '✓', title: 'Map prescribed responsibilities', desc: 'Assign 45+ SMCR responsibilities to senior managers' },
-                    { icon: '👤', title: 'Assess SMF fitness & propriety', desc: 'Complete FCA FIT assessments for all SMF individuals' },
-                    { icon: '📄', title: 'Generate board reports & exports', desc: 'Export PDF reports and CSV data for regulatory filing' },
-                    { icon: '◉', title: 'Track compliance status', desc: 'Monitor progress with real-time coverage metrics' }
+                    { icon: '✓', title: '36 comprehensive questions', desc: 'Complete PERG 8 coverage across 6 key sections' },
+                    { icon: '📊', title: 'Instant compliance scoring', desc: 'Real-time health metrics and gap analysis' },
+                    { icon: '📄', title: 'Detailed gap analysis', desc: 'Identify issues with regulatory references' },
+                    { icon: '◉', title: 'Export & share reports', desc: 'Download CSV, PDF, or email results' }
                   ].map((item, idx) => (
                     <div key={idx} style={{
-                      background: 'rgba(42, 68, 80, 0.6)',
+                      background: 'rgba(58, 85, 101, 0.55)',
                       borderRadius: 'var(--radius-md)',
                       padding: '1rem',
                       display: 'flex',
                       gap: '0.75rem',
-                      border: '1px solid rgba(255, 255, 255, 0.08)'
+                      border: '1px solid rgba(255, 255, 255, 0.10)'
                     }}>
                       <div style={{
                         fontSize: '1.25rem',
@@ -334,7 +334,7 @@ const WelcomeScreen = ({ onStart }) => {
                   ))}
                 </div>
 
-                <button className="start-button" style={{
+                <button onClick={onStart} className="start-button" style={{
                   width: '100%',
                   marginTop: '1.5rem',
                   background: 'var(--color-accent-primary)',
@@ -343,7 +343,7 @@ const WelcomeScreen = ({ onStart }) => {
                   justifyContent: 'center',
                   gap: '0.5rem'
                 }}>
-                  Launch SMCR Builder
+                  Start Assessment
                   <span>→</span>
                 </button>
               </div>
@@ -377,11 +377,6 @@ const WelcomeScreen = ({ onStart }) => {
                   <span>Expert-Validated Framework</span>
                 </li>
               </ul>
-
-              <button className="btn-ghost-dark" style={{ marginTop: '1.5rem' }}>
-                <InformationCircleIcon style={{ width: '1.25rem', height: '1.25rem' }} />
-                How Our System Works
-              </button>
             </div>
           </div>
         </div>
