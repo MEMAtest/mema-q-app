@@ -1,5 +1,5 @@
-/* Import Google Fonts - Inter (SMCR Typography) */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+/* Import Google Fonts - SMCR Typography Stack */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 /* Tailwind base styles */
 @tailwind base;
@@ -8,6 +8,9 @@
 
 /* -- MEMA SMCR Palette Variables -- */
 :root {
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
     --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-fallback: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
@@ -18,13 +21,13 @@
     --font-bold: 700;
     --font-black: 900;
 
-    --color-bg-light: #2a4450;
-    --color-bg-white: #3a5560;
-    --color-bg-dark: #2a4450;
-    --color-bg-dark-alt: #456575;
-    --color-panel: rgba(58, 85, 101, 0.75);
-    --color-panel-alt: rgba(42, 68, 80, 0.78);
-    --color-panel-soft: rgba(247, 249, 252, 0.15);
+    --color-bg-light: #4a6470;
+    --color-bg-white: #5a7580;
+    --color-bg-dark: #3a5460;
+    --color-bg-dark-alt: #658595;
+    --color-panel: rgba(90, 125, 145, 0.68);
+    --color-panel-alt: rgba(75, 110, 125, 0.70);
+    --color-panel-soft: rgba(247, 249, 252, 0.20);
 
     --color-accent-primary: #3CCB8B;
     --color-accent-primary-hover: #1FA471;
@@ -59,9 +62,9 @@
     --color-border: rgba(255, 255, 255, 0.25);
     --color-border-dark: rgba(9, 32, 41, 0.7);
 
-    --gradient-hero: linear-gradient(130deg, #1a2f3a 0%, #2a4450 45%, #2d6b5f 100%);
-    --gradient-section: linear-gradient(150deg, rgba(26, 47, 58, 0.90), rgba(42, 68, 80, 0.88));
-    --gradient-card: linear-gradient(150deg, rgba(42, 68, 80, 0.88), rgba(26, 47, 58, 0.85));
+    --gradient-hero: linear-gradient(130deg, #3a5460 0%, #4a6470 45%, #4d8b7f 100%);
+    --gradient-section: linear-gradient(150deg, rgba(58, 85, 101, 0.82), rgba(75, 110, 125, 0.80));
+    --gradient-card: linear-gradient(150deg, rgba(75, 110, 125, 0.78), rgba(58, 85, 101, 0.75));
 
     --shadow-sm: 0 6px 18px rgba(0, 8, 12, 0.35);
     --shadow-md: 0 14px 35px rgba(0, 8, 12, 0.45);
@@ -98,9 +101,9 @@
 }
 
 body {
-    font-family: var(--font-primary);
-    background: radial-gradient(circle at top right, rgba(60, 120, 140, 0.45), transparent 45%),
-        radial-gradient(circle at 20% 20%, rgba(60, 145, 135, 0.35), transparent 40%),
+    font-family: var(--font-sans);
+    background: radial-gradient(circle at top right, rgba(90, 150, 170, 0.50), transparent 45%),
+        radial-gradient(circle at 20% 20%, rgba(90, 175, 165, 0.40), transparent 40%),
         var(--gradient-section);
     color: var(--color-text-secondary);
     font-weight: var(--font-regular);
@@ -111,18 +114,25 @@ body {
 }
 
 /* Typography Hierarchy */
-h1, h2, h3, h4, h5, h6,
-.question-text, .stepper .label,
-.welcome-title, .features-title {
-    font-family: var(--font-primary);
+h1, h2, h3,
+.welcome-title, .features-title, .hero-title {
+    font-family: var(--font-display);
+    color: var(--color-text-primary);
+    line-height: 1.2;
+    font-weight: var(--font-semibold);
+}
+
+h4, h5, h6,
+.question-text, .stepper .label {
+    font-family: var(--font-sans);
     color: var(--color-text-primary);
     line-height: 1.2;
     font-weight: var(--font-bold);
 }
 
-h1 { font-size: 3rem; font-weight: var(--font-black); }
-h2 { font-size: 2.25rem; font-weight: var(--font-black); }
-h3 { font-size: 1.875rem; font-weight: var(--font-bold); }
+h1 { font-size: 3rem; font-weight: 600; }
+h2 { font-size: 2.25rem; font-weight: 600; }
+h3 { font-size: 1.875rem; font-weight: 600; }
 h4 { font-size: 1.5rem; font-weight: var(--font-semibold); }
 h5 { font-size: 1.25rem; font-weight: var(--font-semibold); }
 h6 { font-size: 1.125rem; font-weight: var(--font-medium); }
@@ -146,21 +156,21 @@ a:hover {
 .app-container {
     max-width: 1200px;
     margin: var(--spacing-xl) auto var(--spacing-3xl);
-    background: rgba(70, 105, 120, 0.42);
+    background: rgba(120, 160, 180, 0.30);
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-sm);
     padding: var(--spacing-2xl);
-    border: 1px solid rgba(120, 173, 197, 0.32);
+    border: 1px solid rgba(140, 193, 217, 0.38);
     position: relative;
     overflow: hidden;
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(10px);
 }
 
 .app-container::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(120deg, rgba(60, 203, 139, 0.10), transparent 60%);
+    background: linear-gradient(120deg, rgba(60, 203, 139, 0.12), transparent 60%);
     pointer-events: none;
 }
 
@@ -1330,11 +1340,11 @@ a:hover {
 }
 
 .glass-panel {
-    background: rgba(42, 68, 80, 0.75);
-    border: 1px solid rgba(118, 193, 210, 0.32);
+    background: rgba(75, 110, 125, 0.65);
+    border: 1px solid rgba(138, 203, 220, 0.40);
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-md);
-    backdrop-filter: blur(18px);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(16px);
 }
 
 /* -- Header/Navigation -- */

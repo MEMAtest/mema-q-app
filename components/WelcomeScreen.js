@@ -25,12 +25,12 @@ const WelcomeScreen = ({ onStart }) => {
         <div className="header-logo">
           <a href="/" style={{ cursor: 'pointer', display: 'block' }}>
             <Image
-              src="/mema-logo-green.svg"
+              src="/mema-logo.png"
               alt="MEMA Consultants"
-              width={180}
-              height={48}
+              width={60}
+              height={60}
               priority
-              style={{ height: 'auto', width: 'auto' }}
+              style={{ height: 'auto', width: 'auto', borderRadius: '50%' }}
             />
           </a>
         </div>
@@ -299,10 +299,12 @@ const WelcomeScreen = ({ onStart }) => {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   {[
-                    { icon: '✓', title: '36 comprehensive questions', desc: 'Complete PERG 8 coverage across 6 key sections' },
-                    { icon: '📊', title: 'Instant compliance scoring', desc: 'Real-time health metrics and gap analysis' },
-                    { icon: '📄', title: 'Detailed gap analysis', desc: 'Identify issues with regulatory references' },
-                    { icon: '◉', title: 'Export & share reports', desc: 'Download CSV, PDF, or email results' }
+                    { icon: '✓', title: 'Preliminary Scope Assessment', desc: 'Determine if your communication is a financial promotion' },
+                    { icon: '⚖️', title: 'Fair, Clear & Consumer Duty', desc: 'Ensure compliance with core FCA principles' },
+                    { icon: '🏢', title: 'Firm Identification', desc: 'Meet requirements for identifying your firm' },
+                    { icon: '⚠️', title: 'Risk Warnings & Disclosures', desc: 'Product-specific requirements and risk warnings' },
+                    { icon: '📱', title: 'Social Media Compliance', desc: 'Channel-specific considerations and influencer oversight' },
+                    { icon: '📋', title: 'Approval & Record Keeping', desc: 'Due diligence, monitoring, and documentation' }
                   ].map((item, idx) => (
                     <div key={idx} style={{
                       background: 'rgba(58, 85, 101, 0.55)',
