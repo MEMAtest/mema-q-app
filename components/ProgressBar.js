@@ -1,17 +1,11 @@
 // components/ProgressBar.js
-import {
-  ClipboardDocumentCheckIcon,
-  CheckCircleIcon,
-  ChartBarIcon,
-  ClockIcon
-} from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 const ProgressBar = ({
   currentQuestion,
   totalQuestions,
   answeredQuestions,
   sections,
-  sectionMeta = [],
 }) => {
   const progress = totalQuestions > 0 ? (currentQuestion / totalQuestions) * 100 : 0;
   const answeredProgress = totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0;
@@ -21,17 +15,7 @@ const ProgressBar = ({
   const estimatedMinutes = Math.ceil((remainingQuestions * 0.5)); // 30 seconds = 0.5 minutes
 
   return (
-    <div style={{
-      position: 'sticky',
-      top: '5.5rem',
-      zIndex: 30,
-      background: 'var(--color-panel-soft)',
-      borderRadius: 'var(--radius-xl)',
-      padding: 'var(--spacing-lg)',
-      boxShadow: 'var(--shadow-md)',
-      border: '1px solid var(--color-border-light)',
-      backdropFilter: 'blur(18px)'
-    }}>
+    <div className="progress-bar">
       {/* Progress Bar */}
       <div style={{ marginBottom: 'var(--spacing-md)' }}>
         <div style={{
@@ -59,29 +43,44 @@ const ProgressBar = ({
         {/* Progress Track */}
         <div style={{
           width: '100%',
-          height: '8px',
-          background: 'rgba(255, 255, 255, 0.08)',
+          height: '12px',
+          background: 'rgba(15, 23, 42, 0.08)',
           borderRadius: 'var(--radius-full)',
           overflow: 'hidden',
-          position: 'relative'
+          position: 'relative',
+          border: '1px solid var(--color-border-light)'
         }}>
           <div style={{
             width: `${progress}%`,
             height: '100%',
-            background: 'linear-gradient(90deg, var(--color-accent-primary) 0%, var(--color-accent-secondary) 100%)',
+            background: 'var(--color-accent-primary)',
             borderRadius: 'var(--radius-full)',
             transition: 'width var(--transition-slow)'
           }} />
+          <div
+            style={{
+              position: 'absolute',
+              right: 0,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              padding: '0.18rem 0.5rem',
+              borderRadius: '999px',
+              background: 'rgba(255,255,255,0.85)',
+              border: '1px solid var(--color-border-light)',
+              fontSize: '0.75rem',
+              fontWeight: 'var(--font-semibold)',
+              color: 'var(--color-text-primary)',
+              lineHeight: 1,
+              boxShadow: 'var(--shadow-sm)'
+            }}
+          >
+            {Math.round(progress)}%
+          </div>
         </div>
       </div>
 
       {/* Metrics Grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: 'var(--spacing-md)',
-        marginTop: 'var(--spacing-lg)'
-      }}>
+      <div className="progress-metrics">
         {/* Metric 1: Current Position */}
         <div className="progress-metric">
           <div style={{
@@ -90,10 +89,9 @@ const ProgressBar = ({
             gap: 'var(--spacing-xs)',
             marginBottom: 'var(--spacing-xs)'
           }}>
-            <ClipboardDocumentCheckIcon style={{
+            <Image src="/icons/sections/clipboard-check.svg" alt="" width={16} height={16} style={{
               width: '1rem',
-              height: '1rem',
-              color: 'var(--color-accent-primary)'
+              height: '1rem'
             }} />
             <span style={{
               fontSize: '0.75rem',
@@ -122,10 +120,9 @@ const ProgressBar = ({
             gap: 'var(--spacing-xs)',
             marginBottom: 'var(--spacing-xs)'
           }}>
-            <CheckCircleIcon style={{
+            <Image src="/icons/actions/check-circle.svg" alt="" width={16} height={16} style={{
               width: '1rem',
-              height: '1rem',
-              color: 'var(--color-success)'
+              height: '1rem'
             }} />
             <span style={{
               fontSize: '0.75rem',
@@ -154,10 +151,9 @@ const ProgressBar = ({
             gap: 'var(--spacing-xs)',
             marginBottom: 'var(--spacing-xs)'
           }}>
-            <ChartBarIcon style={{
+            <Image src="/icons/actions/chart-bar.svg" alt="" width={16} height={16} style={{
               width: '1rem',
-              height: '1rem',
-              color: 'var(--color-accent-secondary)'
+              height: '1rem'
             }} />
             <span style={{
               fontSize: '0.75rem',
@@ -186,10 +182,9 @@ const ProgressBar = ({
             gap: 'var(--spacing-xs)',
             marginBottom: 'var(--spacing-xs)'
           }}>
-            <ClockIcon style={{
+            <Image src="/icons/ui/clock.svg" alt="" width={16} height={16} style={{
               width: '1rem',
-              height: '1rem',
-              color: 'var(--color-warning)'
+              height: '1rem'
             }} />
             <span style={{
               fontSize: '0.75rem',
@@ -211,93 +206,6 @@ const ProgressBar = ({
         </div>
       </div>
 
-      {sectionMeta.length > 0 && (
-        <div style={{ marginTop: 'var(--spacing-xl)' }}>
-          <p style={{
-            fontSize: '0.75rem',
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
-            color: 'var(--color-text-muted)',
-            marginBottom: 'var(--spacing-sm)',
-            fontWeight: 'var(--font-semibold)'
-          }}>
-            Sections Overview
-          </p>
-          <ul className="progress-section-list">
-            {sectionMeta.map((section, index) => (
-              <li
-                key={section.id || index}
-                data-status={section.status || 'pending'}
-              >
-                <span>
-                  <strong style={{ color: 'var(--color-text-primary)' }}>
-                    Section {index + 1}:
-                  </strong>{' '}
-                  {section.title}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {/* Add responsive styles */}
-      <style jsx>{`
-        .progress-metric {
-          padding: var(--spacing-sm);
-          border-radius: var(--radius-md);
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          transition: all var(--transition-base);
-        }
-
-        .progress-metric:hover {
-          background: var(--color-accent-primary-bg);
-          transform: translateY(-2px);
-          box-shadow: var(--shadow-sm);
-        }
-
-        .progress-section-list {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-          display: flex;
-          flex-direction: column;
-          gap: 0.35rem;
-        }
-
-        .progress-section-list li {
-          padding: 0.4rem 0.5rem;
-          border-radius: var(--radius-md);
-          font-size: 0.85rem;
-          color: var(--color-text-secondary);
-          border-left: 3px solid transparent;
-          transition: all var(--transition-base);
-        }
-
-        .progress-section-list li[data-status='active'] {
-          background: rgba(127, 90, 240, 0.18);
-          border-left-color: var(--color-accent-secondary);
-          color: var(--color-text-white);
-        }
-
-        .progress-section-list li[data-status='complete'] {
-          color: var(--color-accent-primary);
-          border-left-color: var(--color-accent-primary);
-        }
-
-        @media (max-width: 768px) {
-          div[style*="gridTemplateColumns"] {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-        }
-
-        @media (max-width: 480px) {
-          div[style*="gridTemplateColumns"] {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };

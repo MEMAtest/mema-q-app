@@ -1,8 +1,6 @@
 // pages/_app.js
 import { useEffect } from 'react';
 import '../styles/globals.css';
-import '../styles/mema-dark-theme.css';
-import { ThemeProvider } from '../lib/ThemeContext';
 import { validateEnv } from '../lib/validateEnv';
 import { appWithTranslation } from 'next-i18next';
 
@@ -21,9 +19,7 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <ThemeProvider>
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <Component {...pageProps} />
   );
 }
 

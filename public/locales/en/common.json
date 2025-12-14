@@ -7,7 +7,7 @@
   "buttons": {
     "login": "Login",
     "startAssessment": "Start Assessment",
-    "watchDemo": "Watch Demo",
+    "watchDemo": "Watch Overview",
     "viewResults": "View Results",
     "downloadCsv": "Download CSV",
     "downloadPdf": "Download PDF",

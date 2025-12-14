@@ -1,5 +1,5 @@
 // components/Breadcrumb.js
-import { HomeIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 const Breadcrumb = ({ items }) => {
   return (
@@ -14,11 +14,11 @@ const Breadcrumb = ({ items }) => {
       {items.map((item, index) => (
         <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
           {index > 0 && (
-            <ChevronRightIcon style={{ width: '1rem', height: '1rem', color: 'var(--color-text-light)' }} />
+            <Image src="/icons/ui/chevron-right.svg" alt="" width={16} height={16} style={{ width: '1rem', height: '1rem' }} />
           )}
 
           {item.icon === 'home' ? (
-            <HomeIcon style={{ width: '1rem', height: '1rem' }} />
+            <Image src="/icons/ui/home.svg" alt="" width={16} height={16} style={{ width: '1rem', height: '1rem' }} />
           ) : null}
 
           {item.href ? (

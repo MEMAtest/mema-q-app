@@ -1,516 +1,387 @@
 // components/WelcomeScreen.js
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
-import {
-  PlayCircleIcon,
-  CheckCircleIcon,
-  BoltIcon,
-  ChartBarIcon,
-  ClipboardDocumentCheckIcon,
-  LightBulbIcon,
-  ShieldCheckIcon,
-  ArrowPathIcon,
-  DocumentTextIcon,
-  RocketLaunchIcon,
-  InformationCircleIcon
-} from '@heroicons/react/24/outline';
+import InteractiveVision3D from './InteractiveVision3D';
+import TiltParallax from './TiltParallax';
+import InteractiveIcon from './InteractiveIcon';
+
+const IconWorkflow = () => (
+  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="3" y="8" width="22" height="12" rx="6" fill="#0fa294" opacity="0.12" />
+    <path d="M7 14h14" stroke="#0fa294" strokeWidth="2" strokeLinecap="round" />
+    <circle cx="9" cy="14" r="2.5" fill="white" stroke="#0fa294" strokeWidth="2" />
+    <circle cx="19" cy="14" r="2.5" fill="white" stroke="#0fa294" strokeWidth="2" />
+  </svg>
+);
+
+const IconInsights = () => (
+  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="5" y="5" width="18" height="18" rx="5" fill="#0fa294" opacity="0.08" />
+    <path d="M9 17l4-5 3 3 4-6" stroke="#0fa294" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="20" cy="9" r="1.5" fill="#0fa294" />
+  </svg>
+);
+
+const IconRisk = () => (
+  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="14" cy="14" r="10" fill="#0fa294" opacity="0.08" />
+    <path d="M14 8v8l4 2" stroke="#0fa294" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="14" cy="14" r="3" stroke="#0fa294" strokeWidth="2" />
+  </svg>
+);
+
+const IconMap = () => (
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M6 8l8-4 12 4v16l-8 4-12-4V8z" stroke="#0fa294" strokeWidth="2" fill="#0fa294" fillOpacity="0.07" />
+    <path d="M14 4v16M22 8v16" stroke="#0fa294" strokeWidth="2" strokeLinecap="round" />
+  </svg>
+);
+
+const IconShield = () => (
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 4l10 4v8c0 6-4 9-10 12-6-3-10-6-10-12V8l10-4z" stroke="#0fa294" strokeWidth="2" fill="#0fa294" fillOpacity="0.07" />
+    <path d="M12 16l3 3 5-5" stroke="#0fa294" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const IconGovernance = () => (
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="6" y="6" width="20" height="20" rx="6" fill="#0fa294" fillOpacity="0.08" />
+    <rect x="10" y="10" width="4" height="12" rx="2" fill="#0fa294" />
+    <rect x="18" y="10" width="4" height="12" rx="2" fill="#0fa294" opacity="0.7" />
+  </svg>
+);
+
+const HeroCrystal = () => (
+  <svg width="340" height="260" viewBox="0 0 280 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="hexShadow" x="-50%" y="-50%" width="200%" height="200%">
+        <feDropShadow dx="0" dy="18" stdDeviation="18" floodColor="#061927" floodOpacity="0.35" />
+      </filter>
+      <filter id="heroGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="15" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+    <rect x="10" y="10" width="260" height="200" rx="32" fill="#0fa294" opacity="0.16" />
+    <g filter="url(#hexShadow)">
+      {/* Back face (gives "depth") */}
+      <path
+        d="M140 50l70 40v80l-70 40-70-40v-80l70-40z"
+        transform="translate(7 9)"
+        stroke="#0b7286"
+        strokeOpacity="0.55"
+        strokeWidth="3"
+        fill="#0b7286"
+        fillOpacity="0.18"
+      />
+      {/* Front face */}
+      <path
+        d="M140 50l70 40v80l-70 40-70-40v-80l70-40z"
+        stroke="#8ee0d5"
+        strokeWidth="2"
+        fill="#8ee0d5"
+        fillOpacity="0.08"
+        filter="url(#heroGlow)"
+      />
+      {/* Inner detail */}
+      <circle cx="140" cy="110" r="28" stroke="#8ee0d5" strokeWidth="1.5" opacity="0.6" />
+      <circle cx="140" cy="110" r="8" fill="#8ee0d5" />
+      <line x1="140" y1="70" x2="140" y2="30" stroke="#8ee0d5" strokeWidth="1.5" opacity="0.4" />
+      <line x1="140" y1="150" x2="140" y2="190" stroke="#8ee0d5" strokeWidth="1.5" opacity="0.3" />
+      {/* Edge highlight */}
+      <path
+        d="M140 50l70 40v80l-70 40-70-40v-80l70-40z"
+        stroke="#ffffff"
+        strokeOpacity="0.10"
+        strokeWidth="5"
+      />
+    </g>
+  </svg>
+);
+
+const valueProps = [
+  {
+    icon: <IconWorkflow />,
+    title: 'Streamlined Workflows',
+    copy: 'Automate intake, approvals, and audit evidence for every promotion and perimeter check.'
+  },
+  {
+    icon: <IconInsights />,
+    title: 'Actionable Insights',
+    copy: 'Surface precise FCA references, risk signals, and next steps for each response.'
+  },
+  {
+    icon: <IconRisk />,
+    title: 'Reduced Risk Exposure',
+    copy: 'Proactively flag Section 21 FSMA, PERG, and MAR issues before they become findings.'
+  }
+];
+
+const featureDeepDive = [
+  {
+    title: 'Precision Perimeter Mapping & Authorisation',
+    icon: <IconMap />,
+    description: 'Forensic interpretation of your business model across PERG, RAO, and SUP 12 so permissions stay exact, defensible, and future-ready.',
+    points: ['Tailored PERG & RAO mapping', 'SMCR & Governance frameworks', 'Connect application support']
+  },
+  {
+    title: 'Intelligent Financial Promotions & Market Abuse Control',
+    icon: <IconShield />,
+    description: 'Operationalise Section 21 FSMA compliance with real-time guardrails, MNPI safeguards, and audit-ready documentation aligned to the FCA’s latest supervisory focus.',
+    points: ['Automated s21 approval workflows', 'Dynamic MNPI risk radar', 'Audit-ready compliance records']
+  },
+  {
+    title: 'Market-Ready Governance & Reporting',
+    icon: <IconGovernance />,
+    description: 'Embed Consumer Duty evidence, approvals, and Board reporting that scales with product launches and new jurisdictions.',
+    points: ['Board-ready MI packs', 'Evidence library & attestation trail', 'Consumer Duty monitoring']
+  }
+];
+
+const heroLogos = ['FinTech Scaleups', 'Advisory Firms', 'Digital Banks', 'Payments Innovators'];
+
+const sampleAnswers = [
+  { label: 'Yes', helper: 'Requirement satisfied or exemption applied.', defaultSelected: true },
+  { label: 'No', helper: 'Requirement missing or needs escalation.', defaultSelected: false }
+];
 
 const WelcomeScreen = ({ onStart }) => {
   const { t } = useTranslation('common');
+
   return (
     <>
-      {/* Header Navigation */}
       <header className="header">
         <div className="header-logo">
-          <a href="/" style={{ cursor: 'pointer', display: 'block' }}>
+          <Link href="/" style={{ cursor: 'pointer', display: 'block' }}>
             <Image
-              src="/mema-logo-green.svg"
-              alt="MEMA Consultants"
-              width={180}
-              height={48}
+              src="/mema-logo-light.svg"
+              alt="MEMA"
+              width={160}
+              height={42}
               priority
               style={{ height: 'auto', width: 'auto' }}
             />
-          </a>
+          </Link>
         </div>
-        <nav className="header-nav">
-          <a href="#how-it-works">{t('nav.howItWorks')}</a>
-          <a href="#features">{t('nav.features')}</a>
-          <a href="#about">{t('nav.about')}</a>
-        </nav>
+        <nav className="header-nav" />
         <div className="header-actions">
-          <button className="start-button" onClick={onStart} style={{ padding: '0.75rem 1.5rem', fontSize: '0.9rem' }}>
-            {t('buttons.startAssessment')}
+          <button className="start-button" onClick={onStart} style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem' }}>
+            Get Started
           </button>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="hero-section section-dark">
+      <section className="hero-section">
         <div className="hero-content">
-          <div className="hero-grid">
-            {/* Left: Text Column */}
-            <div className="hero-text">
-              <h1>{t('hero.title')}</h1>
-              <p>{t('hero.subtitle')}</p>
-
-              {/* Key Benefits */}
-              <ul className="benefits-list" style={{ marginTop: '2rem' }}>
-                <li>
-                  <LightBulbIcon className="icon" />
-                  <span>Intelligent Regulatory Navigation</span>
-                </li>
-                <li>
-                  <BoltIcon className="icon" />
-                  <span>Automated Compliance Workflows</span>
-                </li>
-                <li>
-                  <ShieldCheckIcon className="icon" />
-                  <span>Unwavering Audit Readiness</span>
-                </li>
-              </ul>
-
-              {/* CTAs */}
-              <div className="cta-buttons" style={{ marginTop: '2rem', justifyContent: 'flex-start' }}>
+            <div className="hero-cards">
+            <div className="hero-card hero-card-primary">
+              <p style={{ textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--color-ink-muted)', fontWeight: 'var(--font-semibold)', margin: 0 }}>
+                MEMA · Intelligent Compliance OS
+              </p>
+              <h1>Future-Proofing Compliance. Built for Tomorrow&apos;s Finance.</h1>
+              <p>
+                Unlock precision in regulatory navigation with AI-powered insights and expert guidance. Drive confident decisions even as FCA expectations evolve.
+              </p>
+              <div className="cta-buttons" style={{ justifyContent: 'flex-start', marginTop: 'var(--spacing-lg)' }}>
                 <button className="start-button" onClick={onStart}>
-                  <PlayCircleIcon style={{ width: '1.5rem', height: '1.5rem' }} />
-                  {t('buttons.startAssessment')}
+                  <Image src="/icons/ui/play-circle.svg" alt="" width={24} height={24} style={{ width: '1.5rem', height: '1.5rem' }} />
+                  Start Assessment
+                </button>
+                <button
+                  className="btn-ghost"
+                  style={{ borderColor: 'rgba(15, 23, 42, 0.14)', color: 'var(--color-ink-primary)', background: 'transparent' }}
+                  onClick={onStart}
+                >
+                  Explore Platform
                 </button>
               </div>
             </div>
-
-            {/* Right: Hero Visual */}
-            <div className="hero-visual">
-              <div className="hero-labyrinth">
-                <div className="labyrinth-rings" />
-                <div className="labyrinth-path" />
-                <div className="labyrinth-node" />
+            <div className="hero-card hero-card-visual">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--spacing-md)', fontSize: '0.9rem', color: 'rgba(255,255,255,0.85)' }}>
+                <span>Intelligent Guidance Workspace</span>
+                <span>Live Preview</span>
               </div>
-              <p className="labyrinth-caption">
-                Navigate the MEMA regulatory labyrinth with confidence.
-              </p>
+              <div className="hero-visual">
+                <TiltParallax className="hero-tilt" maxTilt={18}>
+                  <HeroCrystal />
+                </TiltParallax>
+              </div>
+              <p className="labyrinth-caption" style={{ color: 'rgba(255,255,255,0.8)' }}>Navigate the MEMA regulatory labyrinth with confidence.</p>
+            </div>
+          </div>
+          <div className="hero-social-proof">
+            <span>Trusted by leading FinTechs and advisory firms</span>
+            <div className="hero-logo-strip">
+              {heroLogos.map((logo) => (
+                <span key={logo} className="hero-logo-pill">{logo}</span>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Interactive Preview Section */}
-      <section id="demo-section" className="video-section section-light">
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <h2 style={{ textAlign: 'center', fontSize: '2.5rem', fontWeight: 'var(--font-black)', marginBottom: '1rem' }}>
-            {t('hero.previewHeading')}
+      <section id="benefits" className="section-light" style={{ maxWidth: '1200px', margin: '3rem auto' }}>
+        <div style={{ textAlign: 'center' }}>
+          <h2 style={{ fontSize: '2.25rem', color: 'var(--color-text-primary)', marginBottom: '0.5rem' }}>
+            Your Edge in Regulatory Compliance
           </h2>
-          <p style={{ textAlign: 'center', fontSize: '1.25rem', color: 'var(--color-text-secondary)', marginBottom: '3rem', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto' }}>
-            {t('hero.previewCopy')}
+          <p style={{ color: 'var(--color-text-secondary)', maxWidth: '640px', margin: '0 auto' }}>
+            Clarity, speed, and rigor baked into every workflow.
           </p>
-
-          {/* Interactive Sample Question Preview */}
-          <div style={{
-            maxWidth: '800px',
-            margin: '0 auto',
-            background: 'var(--color-bg-white)',
-            borderRadius: 'var(--radius-xl)',
-            padding: 'var(--spacing-2xl)',
-            boxShadow: 'var(--shadow-2xl)',
-            border: '1px solid var(--color-border-light)'
-          }}>
-            <div style={{ marginBottom: 'var(--spacing-xl)' }}>
-                <div style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 'var(--spacing-sm)',
-                  background: 'var(--color-accent-primary-bg)',
-                  color: 'var(--color-accent-primary)',
-                  padding: '0.5rem 1rem',
-                  borderRadius: 'var(--radius-full)',
-                  fontSize: '0.875rem',
-                  fontWeight: 'var(--font-semibold)',
-                  marginBottom: 'var(--spacing-md)'
-                }}>
-                  <InformationCircleIcon style={{ width: '1.25rem', height: '1.25rem' }} />
-                  {t('hero.sampleTag')}
-                </div>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 'var(--font-semibold)', marginBottom: 'var(--spacing-md)', color: 'var(--color-text-primary)' }}>
-                  {t('hero.sampleQuestion')}
-                </h3>
-                <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: 'var(--spacing-lg)' }}>
-                  {t('hero.sampleReference')}
-                </p>
-
-              <div style={{ display: 'flex', gap: 'var(--spacing-md)', marginBottom: 'var(--spacing-xl)' }}>
-                <div style={{
-                  flex: 1,
-                  padding: 'var(--spacing-lg)',
-                  border: '2px solid var(--color-border)',
-                  borderRadius: 'var(--radius-md)',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  transition: 'all var(--transition-base)',
-                  background: 'var(--color-bg-white)'
-                }} className="answer-option-preview">
-                  <CheckCircleIcon style={{ width: '2rem', height: '2rem', margin: '0 auto var(--spacing-sm)', color: 'var(--color-success)' }} />
-                  <strong style={{ fontSize: '1rem' }}>Yes</strong>
-                </div>
-                <div style={{
-                  flex: 1,
-                  padding: 'var(--spacing-lg)',
-                  border: '2px solid var(--color-border)',
-                  borderRadius: 'var(--radius-md)',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  transition: 'all var(--transition-base)',
-                  background: 'var(--color-bg-white)'
-                }} className="answer-option-preview">
-                  <ClipboardDocumentCheckIcon style={{ width: '2rem', height: '2rem', margin: '0 auto var(--spacing-sm)', color: 'var(--color-text-muted)' }} />
-                  <strong style={{ fontSize: '1rem' }}>No</strong>
-                </div>
-              </div>
-
-              <div style={{
-                background: 'var(--color-accent-primary-bg)',
-                border: '1px solid var(--color-accent-primary)',
-                borderLeft: '4px solid var(--color-accent-primary)',
-                padding: 'var(--spacing-lg)',
-                borderRadius: 'var(--radius-md)',
-                marginBottom: 'var(--spacing-lg)'
-              }}>
-                <div style={{ display: 'flex', gap: 'var(--spacing-sm)', marginBottom: 'var(--spacing-sm)' }}>
-                  <LightBulbIcon style={{ width: '1.25rem', height: '1.25rem', color: 'var(--color-accent-primary)', flexShrink: 0 }} />
-                  <strong style={{ color: 'var(--color-accent-primary)' }}>Why this is important</strong>
-                </div>
-                <p style={{ fontSize: '0.9rem', lineHeight: 1.6, margin: 0, color: 'var(--color-text-secondary)' }}>
-                  A financial promotion must invite or encourage someone to engage in a financial activity.
-                  Purely factual information, without any persuasive element, might not be considered an invitation or inducement. (PERG 8.4.2 - 8.4.4)
-                </p>
-              </div>
+        </div>
+        <div className="value-grid">
+          {valueProps.map(({ icon, title, copy }) => (
+            <div key={title} className="value-card">
+              <InteractiveIcon>
+                <div className="icon-circle">{icon}</div>
+              </InteractiveIcon>
+              <h4>{title}</h4>
+              <p>{copy}</p>
             </div>
+          ))}
+        </div>
+      </section>
 
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 'var(--spacing-md)',
-              alignItems: 'center'
-            }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--spacing-sm)',
-                color: 'var(--color-success)',
-                fontSize: '0.9rem',
-                fontWeight: 'var(--font-medium)'
-              }}>
-                <CheckCircleIcon style={{ width: '1.25rem', height: '1.25rem' }} />
-                36 comprehensive questions
+      <section id="product" className="section-light" style={{ maxWidth: '1200px', margin: '3rem auto' }}>
+        <div style={{ textAlign: 'center' }}>
+          <h2 style={{ fontSize: '2.3rem' }}>See Our Intelligent Guidance Workspace in Action</h2>
+          <p style={{ color: 'var(--color-text-secondary)', maxWidth: '700px', margin: '0.5rem auto 0' }}>
+            Experience how FinProms converts complex PERG analysis into clear, auditable steps.
+          </p>
+        </div>
+        <div className="product-card">
+          <div className="product-copy">
+            <InteractiveVision3D />
+            <h3 style={{ fontSize: '1.8rem', marginBottom: 'var(--spacing-md)' }}>Experience FinProms Live</h3>
+            <p>
+              Each answer updates risk radar, FCA references, and recommended actions automatically, giving teams immediate confidence.
+            </p>
+            <ul className="feature-points">
+              <li>Dynamic scoring across PERG, FSMA s21, and Consumer Duty</li>
+              <li>Inline evidence capture with audit-ready exports</li>
+              <li>Workflow prompts for approvals, follow-ups, and escalations</li>
+            </ul>
+          </div>
+          <div className="product-visual">
+            <div className="mockup-frame">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--spacing-lg)', color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem' }}>
+                <span>Question 1 of 10 · Section 1</span>
+                <span>Sample Interaction</span>
               </div>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--spacing-sm)',
-                color: 'var(--color-success)',
-                fontSize: '0.9rem',
-                fontWeight: 'var(--font-medium)'
-              }}>
-                <ChartBarIcon style={{ width: '1.25rem', height: '1.25rem' }} />
-                Instant compliance scoring
+              <h3 style={{ fontSize: '1.6rem', color: 'white', marginBottom: 'var(--spacing-sm)' }}>
+                1.1 Is the communication an &quot;invitation or inducement&quot; to engage in an activity?
+              </h3>
+              <p style={{ color: 'rgba(255,255,255,0.72)', marginBottom: 'var(--spacing-lg)' }}>
+                Reference: PERG 8.4
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-md)', marginBottom: 'var(--spacing-lg)' }}>
+                {sampleAnswers.map((answer) => (
+                  <div
+                    key={answer.label}
+                    style={{
+                      borderRadius: '1rem',
+                      padding: 'var(--spacing-lg)',
+                      border: `2px solid ${answer.defaultSelected ? 'var(--color-accent-primary)' : 'rgba(255,255,255,0.2)'}`,
+                      background: answer.defaultSelected ? 'rgba(15,162,148,0.12)' : 'rgba(255,255,255,0.02)',
+                      color: 'white'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 'var(--font-semibold)' }}>
+                      <Image src="/icons/actions/check-circle.svg" alt="" width={24} height={24} style={{ width: '1.5rem', height: '1.5rem', opacity: answer.defaultSelected ? 1 : 0.5 }} />
+                      {answer.label}
+                    </div>
+                    <p style={{ marginTop: '0.5rem', color: 'rgba(255,255,255,0.75)', fontSize: '0.9rem' }}>{answer.helper}</p>
+                  </div>
+                ))}
               </div>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--spacing-sm)',
-                color: 'var(--color-success)',
-                fontSize: '0.9rem',
-                fontWeight: 'var(--font-medium)'
-              }}>
-                <DocumentTextIcon style={{ width: '1.25rem', height: '1.25rem' }} />
-                Detailed gap analysis
+              <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '1rem', padding: 'var(--spacing-lg)', border: '1px solid rgba(255,255,255,0.12)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-accent-primary)', fontWeight: 'var(--font-semibold)', marginBottom: '0.5rem' }}>
+                  <Image src="/icons/ui/info-circle.svg" alt="" width={24} height={24} style={{ width: '1.2rem', height: '1.2rem' }} />
+                  Why this matters
+                </div>
+                <p style={{ margin: 0, color: 'rgba(255,255,255,0.78)' }}>
+                  A financial promotion must invite or encourage engagement in a financial activity. If it persuades the reader to take the next step, PERG 8.4 applies and Principal approval is required.
+                </p>
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* CTA below preview */}
-          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+      <section id="features" className="section-light" style={{ maxWidth: '1200px', margin: '3rem auto' }}>
+        <div style={{ textAlign: 'center' }}>
+          <h2 style={{ fontSize: '2.3rem', color: 'var(--color-text-primary)', marginBottom: '0.5rem' }}>
+            Navigate the Regulatory Landscape with Unrivalled Clarity
+          </h2>
+          <p style={{ color: 'var(--color-text-secondary)', maxWidth: '700px', margin: '0 auto' }}>
+            Deep regulatory expertise layered with intelligent automation.
+          </p>
+        </div>
+        <div className="feature-card-grid">
+          {featureDeepDive.map(({ title, description, points, icon }) => (
+            <div key={title} className="value-card">
+              <div className="icon-circle" style={{ marginBottom: 'var(--spacing-sm)' }}>{icon}</div>
+              <h4>{title}</h4>
+              <p>{description}</p>
+              <ul className="feature-points">
+                {points.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="about" className="section-light" style={{ maxWidth: '1100px', margin: '3rem auto' }}>
+        <div className="cta-band">
+          <h3>Ready to Transform Your Compliance Operations?</h3>
+          <p>Join leading financial firms leveraging intelligent guidance for robust, future-proof compliance.</p>
+          <div className="cta-buttons" style={{ justifyContent: 'center' }}>
             <button className="start-button" onClick={onStart}>
-              Start Your Free Assessment
+              <Image src="/icons/ui/rocket.svg" alt="" width={24} height={24} style={{ width: '1.25rem', height: '1.25rem' }} />
+              Get in Touch
             </button>
           </div>
         </div>
       </section>
 
-      {/* Problem/Solution Section */}
-      <section id="how-it-works" className="section-dark">
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <h2 style={{ textAlign: 'center', fontSize: '2.5rem', fontWeight: 'var(--font-black)', marginBottom: '1rem' }}>
-            Navigate the Regulatory Labyrinth with Confidence
-          </h2>
-          <p style={{ textAlign: 'center', fontSize: '1.25rem', marginBottom: '3rem', opacity: 0.9, maxWidth: '800px', marginLeft: 'auto', marginRight: 'auto' }}>
-            The financial promotions landscape is a constant challenge. We provide the compass you need.
-          </p>
-
-          <div className="hero-grid" style={{ marginTop: '3rem' }}>
-            {/* Left: FinProms Assessment Card */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <div style={{
-                position: 'relative',
-                width: '100%',
-                maxWidth: '480px',
-                background: 'rgba(42, 68, 80, 0.88)',
-                borderRadius: 'var(--radius-xl)',
-                boxShadow: 'var(--shadow-xl)',
-                padding: '2rem',
-                border: '1px solid rgba(60, 203, 139, 0.30)'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                  <div style={{
-                    width: '56px',
-                    height: '56px',
-                    borderRadius: '50%',
-                    background: 'rgba(60, 203, 139, 0.25)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    border: '2px solid rgba(60, 203, 139, 0.5)'
-                  }}>
-                    <span style={{
-                      fontSize: '1.5rem',
-                      fontWeight: 'var(--font-bold)',
-                      color: 'var(--color-accent-primary)'
-                    }}>F</span>
-                  </div>
-                  <div>
-                    <div style={{
-                      fontSize: '0.75rem',
-                      color: 'var(--color-text-light)',
-                      letterSpacing: '0.1em',
-                      marginBottom: '0.25rem'
-                    }}>MEMA CONNECT</div>
-                    <h3 style={{
-                      fontSize: '1.5rem',
-                      fontWeight: 'var(--font-bold)',
-                      color: 'var(--color-text-primary)',
-                      margin: 0
-                    }}>FinProms Assessment</h3>
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  {[
-                    { icon: '✓', title: 'Preliminary Scope Assessment', desc: 'Determine if your communication is a financial promotion' },
-                    { icon: '⚖️', title: 'Fair, Clear & Consumer Duty', desc: 'Ensure compliance with core FCA principles' },
-                    { icon: '🏢', title: 'Firm Identification', desc: 'Meet requirements for identifying your firm' },
-                    { icon: '⚠️', title: 'Risk Warnings & Disclosures', desc: 'Product-specific requirements and risk warnings' },
-                    { icon: '📱', title: 'Social Media Compliance', desc: 'Channel-specific considerations and influencer oversight' },
-                    { icon: '📋', title: 'Approval & Record Keeping', desc: 'Due diligence, monitoring, and documentation' }
-                  ].map((item, idx) => (
-                    <div key={idx} style={{
-                      background: 'rgba(58, 85, 101, 0.55)',
-                      borderRadius: 'var(--radius-md)',
-                      padding: '1rem',
-                      display: 'flex',
-                      gap: '0.75rem',
-                      border: '1px solid rgba(255, 255, 255, 0.10)'
-                    }}>
-                      <div style={{
-                        fontSize: '1.25rem',
-                        color: 'var(--color-accent-primary)',
-                        flexShrink: 0
-                      }}>{item.icon}</div>
-                      <div>
-                        <div style={{
-                          fontWeight: 'var(--font-semibold)',
-                          color: 'var(--color-text-primary)',
-                          marginBottom: '0.25rem',
-                          fontSize: '0.95rem'
-                        }}>{item.title}</div>
-                        <div style={{
-                          fontSize: '0.825rem',
-                          color: 'var(--color-text-light)',
-                          lineHeight: 1.4
-                        }}>{item.desc}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <button onClick={onStart} className="start-button" style={{
-                  width: '100%',
-                  marginTop: '1.5rem',
-                  background: 'var(--color-accent-primary)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.5rem'
-                }}>
-                  Start Assessment
-                  <span>→</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Right: Text & Benefits */}
-            <div>
-              <h3 style={{ fontSize: '2rem', fontWeight: 'var(--font-bold)', marginBottom: '1rem' }}>
-                Your Expert Guide Through PERG & FCA
-              </h3>
-              <p style={{ fontSize: '1.125rem', marginBottom: '2rem', opacity: 0.9, lineHeight: 1.7 }}>
-                FinProms translates intricate regulations into clear, actionable questions, giving your firm
-                a structured pathway to compliance. Gain certainty where others find complexity.
-              </p>
-
-              <ul className="benefits-list">
-                <li>
-                  <CheckCircleIcon className="icon" />
-                  <span>Simplified Regulatory Interpretation</span>
-                </li>
-                <li>
-                  <CheckCircleIcon className="icon" />
-                  <span>Consistent Assessment Application</span>
-                </li>
-                <li>
-                  <CheckCircleIcon className="icon" />
-                  <span>Reduced Compliance Burden</span>
-                </li>
-                <li>
-                  <CheckCircleIcon className="icon" />
-                  <span>Expert-Validated Framework</span>
-                </li>
-              </ul>
-            </div>
+      <footer>
+        <div className="footer-grid">
+          <div>
+            <Image src="/mema-logo-dark.svg" alt="MEMA" width={140} height={32} />
+            <p style={{ marginTop: 'var(--spacing-md)', color: 'rgba(255,255,255,0.75)' }}>
+              Future-proofing finance with intelligent regulatory navigation.
+            </p>
+          </div>
+          <div>
+            <h4>Product</h4>
+            <ul className="footer-links">
+              <li><a href="#product">FinProms Assessment</a></li>
+              <li><a href="#benefits">Workflow Automation</a></li>
+              <li><a href="#features">Authorisation Strategy</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Company</h4>
+            <ul className="footer-links">
+              <li><a href="#about">About MEMA</a></li>
+              <li><a href="mailto:info@memaconsultants.com">Contact</a></li>
+              <li><a href="#">Careers</a></li>
+            </ul>
           </div>
         </div>
-      </section>
-
-      {/* Core Capabilities Section */}
-      <section id="features" className="section-light">
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <h2 style={{ textAlign: 'center', fontSize: '2.5rem', fontWeight: 'var(--font-black)', marginBottom: '3rem' }}>
-            Precision, Efficiency, Control
-          </h2>
-
-          <div className="features-grid">
-            {/* Feature Card 1: Intuitive Guidance Engine */}
-            <div className="feature-card">
-              <div className="feature-card-icon">
-                <LightBulbIcon />
-              </div>
-              <h3>Intuitive Guidance Engine</h3>
-              <p>
-                Navigate complex regulatory requirements with our intelligent question-based system
-                that adapts to your responses and provides contextual guidance at every step.
-              </p>
-            </div>
-
-            {/* Feature Card 2: Automated Documentation */}
-            <div className="feature-card">
-              <div className="feature-card-icon">
-                <DocumentTextIcon />
-              </div>
-              <h3>Automated Documentation</h3>
-              <p>
-                Generate comprehensive, audit-ready reports automatically. Every response is captured,
-                timestamped, and formatted for regulatory review.
-              </p>
-            </div>
-
-            {/* Feature Card 3: Dynamic Reporting */}
-            <div className="feature-card">
-              <div className="feature-card-icon">
-                <ChartBarIcon />
-              </div>
-              <h3>Dynamic Reporting</h3>
-              <p>
-                Visualize your compliance posture with interactive dashboards. Track trends,
-                identify gaps, and demonstrate progress to stakeholders with clarity.
-              </p>
-            </div>
-          </div>
+        <div className="footer-bottom">
+          <span>© {new Date().getFullYear()} MEMA Consultants · All rights reserved.</span>
+          <span>Follow us on LinkedIn · Twitter</span>
         </div>
-      </section>
-
-      {/* Social Proof Section */}
-      <section className="section-dark">
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <h2 style={{ textAlign: 'center', fontSize: '2.5rem', fontWeight: 'var(--font-black)', marginBottom: '3rem' }}>
-            Compliance Backed by Confidence
-          </h2>
-
-          <div className="hero-grid" style={{ alignItems: 'start' }}>
-            {/* Left: Testimonial */}
-            <div className="testimonial-card">
-              <div className="testimonial-quote">
-                "FinProms provides a structured, systematic approach to navigating FCA financial promotions
-                regulations. The tool brings clarity to complex requirements and helps maintain consistent
-                compliance standards."
-              </div>
-              <div className="testimonial-author">
-                <div className="testimonial-avatar">
-                  <div style={{
-                    width: '100%',
-                    height: '100%',
-                    background: 'var(--color-accent-primary)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    fontSize: '1.5rem',
-                    fontWeight: 'var(--font-bold)'
-                  }}>
-                    MC
-                  </div>
-                </div>
-                <div className="testimonial-info">
-                  <h5>Compliance Professional</h5>
-                  <p>UK Financial Services Firm</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Right: Key Features */}
-            <div>
-              <div className="metrics-grid">
-                <div className="metric-card">
-                  <div className="metric-value">36</div>
-                  <div className="metric-label">PERG 8 Questions</div>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-value">6</div>
-                  <div className="metric-label">Core Sections</div>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-value">100%</div>
-                  <div className="metric-label">FCA Aligned</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA Section */}
-      <section id="about" className="cta-section">
-        <h2>{t('cta.title')}</h2>
-        <p>{t('cta.body')}</p>
-        <button className="start-button" onClick={onStart}>
-          <RocketLaunchIcon style={{ width: '1.5rem', height: '1.5rem' }} />
-          {t('buttons.startAssessment')}
-        </button>
-      </section>
-
-      {/* Add hover effect styles inline */}
-      <style jsx>{`
-        .play-button-hover:hover {
-          transform: scale(1.1);
-          box-shadow: 0 20px 40px rgba(0, 123, 255, 0.5);
-        }
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-      `}</style>
+      </footer>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 function Error({ statusCode, message }) {
   return (
@@ -11,7 +11,7 @@ function Error({ statusCode, message }) {
       padding: '2rem'
     }}>
       <div className="card" style={{ textAlign: 'center', maxWidth: '500px', padding: '3rem' }}>
-        <ExclamationTriangleIcon style={{ width: '5rem', height: '5rem', color: 'var(--color-danger)', margin: '0 auto 1.5rem' }} />
+        <Image src="/icons/sections/warning-triangle.svg" alt="" width={80} height={80} style={{ width: '5rem', height: '5rem', margin: '0 auto 1.5rem' }} />
         <h1 style={{ fontSize: '2rem', fontWeight: 'var(--font-bold)', color: 'var(--color-text-primary)', marginBottom: '1rem' }}>
           {statusCode ? `Error ${statusCode}` : 'An error occurred'}
         </h1>

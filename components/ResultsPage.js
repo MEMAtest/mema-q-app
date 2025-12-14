@@ -2,17 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
-import {
-  CheckCircleIcon,
-  XCircleIcon,
-  ExclamationTriangleIcon,
-  DocumentTextIcon,
-  ArrowDownTrayIcon,
-  ChartBarIcon,
-  ClipboardDocumentCheckIcon,
-  PrinterIcon,
-  EnvelopeIcon,
-} from '@heroicons/react/24/outline';
+import Image from 'next/image';
 import { exportResultsToPDF } from '../lib/exportPdf';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
@@ -260,25 +250,25 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
 
         <div className="summary-cards">
           <div className="summary-card">
-            <ClipboardDocumentCheckIcon style={{ width: '3rem', height: '3rem', color: 'var(--color-accent-primary)', margin: '0 auto var(--spacing-md)' }} />
+            <Image src="/icons/sections/clipboard-check.svg" alt="" width={48} height={48} style={{ width: '3rem', height: '3rem', margin: '0 auto var(--spacing-md)' }} />
             <div className="summary-card-value">{totalQuestions}</div>
             <div className="summary-card-label">Total Questions</div>
           </div>
 
           <div className="summary-card">
-            <CheckCircleIcon style={{ width: '3rem', height: '3rem', color: 'var(--color-success)', margin: '0 auto var(--spacing-md)' }} />
+            <Image src="/icons/actions/check-circle.svg" alt="" width={48} height={48} style={{ width: '3rem', height: '3rem', margin: '0 auto var(--spacing-md)' }} />
             <div className="summary-card-value" style={{ color: 'var(--color-success)' }}>{compliantAnswers}</div>
             <div className="summary-card-label">Compliant</div>
           </div>
 
           <div className="summary-card">
-            <ExclamationTriangleIcon style={{ width: '3rem', height: '3rem', color: issuesCount > 0 ? 'var(--color-danger)' : 'var(--color-success)', margin: '0 auto var(--spacing-md)' }} />
+            <Image src="/icons/sections/warning-triangle.svg" alt="" width={48} height={48} style={{ width: '3rem', height: '3rem', margin: '0 auto var(--spacing-md)' }} />
             <div className="summary-card-value" style={{ color: issuesCount > 0 ? 'var(--color-danger)' : 'var(--color-success)' }}>{issuesCount}</div>
             <div className="summary-card-label">Needs Action</div>
           </div>
 
           <div className="summary-card">
-            <ChartBarIcon style={{ width: '3rem', height: '3rem', color: 'var(--color-accent-primary)', margin: '0 auto var(--spacing-md)' }} />
+            <Image src="/icons/actions/chart-bar.svg" alt="" width={48} height={48} style={{ width: '3rem', height: '3rem', margin: '0 auto var(--spacing-md)' }} />
             <div className="summary-card-value">{questions.length}</div>
             <div className="summary-card-label">Sections Reviewed</div>
           </div>
@@ -307,7 +297,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
           previewFailures.map(failure => (
             <div key={failure.id} className="risk-card risk-card-critical">
               <div className="risk-card-header">
-                <ExclamationTriangleIcon className="risk-card-icon" />
+                <Image src="/icons/sections/warning-triangle.svg" alt="" width={24} height={24} className="risk-card-icon" />
                 <h4>Question {failure.id}: {failure.question}</h4>
               </div>
               {failure.notes && (
@@ -332,7 +322,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
             border: '2px solid var(--color-success)',
             textAlign: 'center'
           }}>
-            <CheckCircleIcon style={{ width: '3rem', height: '3rem', color: 'var(--color-success)', margin: '0 auto var(--spacing-md)' }} />
+            <Image src="/icons/actions/check-circle.svg" alt="" width={48} height={48} style={{ width: '3rem', height: '3rem', margin: '0 auto var(--spacing-md)' }} />
             <p style={{ color: 'var(--color-success-dark)', fontWeight: 'var(--font-semibold)', fontSize: '1.125rem', margin: 0 }}>
               No critical issues found in the first two sections. Great work!
             </p>
@@ -388,7 +378,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
               {results.potentialFailures.slice(previewFailures.length).map(failure => (
                 <div key={failure.id} className="risk-card risk-card-warning">
                   <div className="risk-card-header">
-                    <ExclamationTriangleIcon className="risk-card-icon" />
+                    <Image src="/icons/sections/warning-triangle.svg" alt="" width={24} height={24} className="risk-card-icon" />
                     <h4>Question {failure.id}: {failure.question}</h4>
                   </div>
                   {failure.notes && (
@@ -417,10 +407,9 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
               background: 'var(--color-success-bg)',
               border: '2px solid var(--color-success)'
             }}>
-              <DocumentTextIcon style={{
+              <Image src="/icons/actions/document-text.svg" alt="" width={80} height={80} style={{
                 width: '5rem',
                 height: '5rem',
-                color: 'var(--color-success)',
                 margin: '0 auto var(--spacing-lg)'
               }} />
               <h2 style={{
@@ -454,7 +443,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
                     gap: 'var(--spacing-sm)'
                   }}
                 >
-                  <ArrowDownTrayIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                  <Image src="/icons/actions/download.svg" alt="" width={24} height={24} style={{ width: '1.5rem', height: '1.5rem' }} />
                   {t('buttons.downloadCsv')}
                 </button>
 
@@ -468,7 +457,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
                     gap: 'var(--spacing-sm)'
                   }}
                 >
-                  <DocumentTextIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                  <Image src="/icons/actions/document-text.svg" alt="" width={24} height={24} style={{ width: '1.5rem', height: '1.5rem' }} />
                   {t('buttons.downloadPdf')}
                 </button>
 
@@ -482,7 +471,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
                     gap: 'var(--spacing-sm)'
                   }}
                 >
-                  <PrinterIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                  <Image src="/icons/actions/printer.svg" alt="" width={24} height={24} style={{ width: '1.5rem', height: '1.5rem' }} />
                   {t('buttons.printReport')}
                 </button>
 
@@ -497,7 +486,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
                     gap: 'var(--spacing-sm)'
                   }}
                 >
-                  <EnvelopeIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                  <Image src="/icons/actions/envelope.svg" alt="" width={24} height={24} style={{ width: '1.5rem', height: '1.5rem' }} />
                   {emailSending ? 'Sending...' : t('buttons.emailResults')}
                 </button>
               </div>

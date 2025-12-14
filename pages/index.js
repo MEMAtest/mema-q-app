@@ -4,22 +4,9 @@ import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import WelcomeScreen from '../components/WelcomeScreen';
-import Stepper from '../components/Stepper';
 import Breadcrumb from '../components/Breadcrumb';
 import ProgressBar from '../components/ProgressBar';
-import ThemeToggle from '../components/ThemeToggle';
 import LanguageSwitcher from '../components/LanguageSwitcher';
-
-// Re-using the icon map from our previous discussion
-import {
-  ClipboardDocumentCheckIcon,
-  SparklesIcon,
-  BuildingOfficeIcon,
-  ExclamationTriangleIcon,
-  ChatBubbleBottomCenterTextIcon,
-  ArchiveBoxIcon,
-  ChartPieIcon,
-} from '@heroicons/react/24/outline';
 
 const Questionnaire = dynamic(() => import('../components/Questionnaire'), {
   loading: () => <div className="app-container text-center">Loading assessment...</div>,
@@ -47,7 +34,6 @@ export default function Home() {
   const [currentSection, setCurrentSection] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [analysisResult, setAnalysisResult] = useState(null);
-  // --- ADDED: State to track completed sections for the Stepper ---
   const [completedSections, setCompletedSections] = useState({});
   const [sessionId, setSessionId] = useState('');
   const [progressLoaded, setProgressLoaded] = useState(false);
@@ -125,7 +111,6 @@ export default function Home() {
 
   const handleStart = () => setAppState('questionnaire');
 
-  // --- LOGIC FIX: Update completed sections when moving ---
   const updateCompletedSections = (sectionIndex) => {
     const newCompleted = {};
     for (let i = 0; i < sectionIndex; i++) {
@@ -133,16 +118,6 @@ export default function Home() {
         if(sectionId) newCompleted[sectionId] = true;
     }
     setCompletedSections(newCompleted);
-  };
-
-  const handleStepClick = (sectionIndex) => {
-    const sectionId = questions[sectionIndex]?.id;
-    // Allow navigation only to sections that have been completed
-    if (completedSections[sectionId] || sectionIndex <= currentSection) {
-      setCurrentSection(sectionIndex);
-      setCurrentQuestion(0);
-      updateCompletedSections(sectionIndex);
-    }
   };
 
   const handleAnswer = (questionId, answerPayload) => {
@@ -173,6 +148,14 @@ export default function Home() {
       setCurrentQuestion(questions[prevSectionIndex].items.length - 1);
       updateCompletedSections(prevSectionIndex);
     }
+  };
+
+  const handleJumpToQuestion = (sectionIndex, questionIndex = 0) => {
+    if (!questions[sectionIndex]) return;
+    const safeIndex = Math.min(Math.max(questionIndex, 0), questions[sectionIndex].items.length - 1);
+    setCurrentSection(sectionIndex);
+    setCurrentQuestion(safeIndex);
+    updateCompletedSections(sectionIndex);
   };
   
   const handleShowResults = () => {
@@ -252,12 +235,6 @@ export default function Home() {
     };
     return { potentialFailures, healthScore, chartData };
   };
-  
-  const sectionsForStepper = questions.map(section => ({
-      id: section.id,
-      title: section.title
-  }));
-
   const progressSectionMeta = questions.map((section, index) => {
     const title = section.title || section.sectionTitle || `Section ${index + 1}`;
     let status = 'pending';
@@ -271,19 +248,6 @@ export default function Home() {
     }
     return { id: section.id, title, status };
   });
-
-  const iconMap = {
-      '1': ExclamationTriangleIcon,
-      '2': ClipboardDocumentCheckIcon,
-      '3': SparklesIcon,
-      '4': BuildingOfficeIcon,
-      '5': ChatBubbleBottomCenterTextIcon,
-      '6': ArchiveBoxIcon,
-      'results': ChartPieIcon,
-  };
-  
-  // Determine current section ID for active step
-  const activeSectionId = appState === 'results' ? 'results' : questions[currentSection]?.id;
 
   // Breadcrumb items configuration
   const getBreadcrumbItems = () => {
@@ -351,7 +315,6 @@ export default function Home() {
         <div className="container mx-auto px-4 py-3 flex justify-between items-center gap-4">
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <LanguageSwitcher />
-              <ThemeToggle />
             </div>
             {appState === 'questionnaire' && (
                 <button onClick={handleShowResults} className="btn-primary-dark">
@@ -385,19 +348,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Stepper */}
-        {appState === 'questionnaire' && questions.length > 0 && (
-          <div className="container mx-auto px-4 mt-6">
-             <Stepper
-                sections={sectionsForStepper}
-                currentSectionId={activeSectionId}
-                // --- MODIFIED: Pass the new completed sections state ---
-                completedSections={Object.keys(completedSections)}
-                onStepClick={(index) => handleStepClick(index)}
-                iconMap={iconMap}
-              />
-          </div>
-        )}
         {appState === 'welcome' && <WelcomeScreen onStart={handleStart} />}
         {appState === 'questionnaire' && questions.length > 0 ? (
           <Questionnaire
@@ -409,6 +359,11 @@ export default function Home() {
             isFirstQuestion={currentSection === 0 && currentQuestion === 0}
             isLastQuestion={currentSection === questions.length - 1 && currentQuestion === questions[currentSection].items.length - 1}
             currentAnswer={answers[questions[currentSection].items[currentQuestion].id]}
+            allSections={questions}
+            currentSectionIndex={currentSection}
+            currentQuestionIndex={currentQuestion}
+            answers={answers}
+            onJumpToQuestion={handleJumpToQuestion}
           />
         ) : appState === 'questionnaire' ? (
           <div className="app-container text-center">Loading questions...</div>

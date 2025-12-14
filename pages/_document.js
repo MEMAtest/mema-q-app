@@ -12,7 +12,7 @@ export default function Document() {
           rel="stylesheet"
         />
       </Head>
-      <body className="mema-dark-theme">
+      <body>
         <Main />
         <NextScript />
       </body>

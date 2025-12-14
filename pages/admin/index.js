@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import {
-  UserGroupIcon,
-  ChartBarIcon,
-  ClipboardDocumentListIcon,
-} from '@heroicons/react/24/outline';
 
 export default function AdminDashboard() {
   const { t } = useTranslation('common');
@@ -135,17 +131,17 @@ export default function AdminDashboard() {
           {analytics && (
             <div className="metrics-grid" style={{ marginBottom: '2rem' }}>
               <div className="metric-card">
-                <UserGroupIcon style={{ width: '3rem', height: '3rem', color: 'var(--color-accent-primary)', margin: '0 auto 1rem' }} />
+                <Image src="/icons/ui/user-group.svg" alt="" width={48} height={48} style={{ width: '3rem', height: '3rem', margin: '0 auto 1rem' }} />
                 <div className="metric-value">{analytics.totalLeads}</div>
                 <div className="metric-label">Total Leads</div>
               </div>
               <div className="metric-card">
-                <ChartBarIcon style={{ width: '3rem', height: '3rem', color: 'var(--color-success)', margin: '0 auto 1rem' }} />
+                <Image src="/icons/actions/chart-bar.svg" alt="" width={48} height={48} style={{ width: '3rem', height: '3rem', margin: '0 auto 1rem' }} />
                 <div className="metric-value">{analytics.leadsThisWeek}</div>
                 <div className="metric-label">Leads (7 days)</div>
               </div>
               <div className="metric-card">
-                <ClipboardDocumentListIcon style={{ width: '3rem', height: '3rem', color: 'var(--color-warning)', margin: '0 auto 1rem' }} />
+                <Image src="/icons/sections/clipboard-check.svg" alt="" width={48} height={48} style={{ width: '3rem', height: '3rem', margin: '0 auto 1rem' }} />
                 <div className="metric-value">{analytics.averageCompletionRate}%</div>
                 <div className="metric-label">Avg. Completion</div>
               </div>

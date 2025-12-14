@@ -7,7 +7,7 @@
   "buttons": {
     "login": "Connexion",
     "startAssessment": "Commencer l'évaluation",
-    "watchDemo": "Voir la démo",
+    "watchDemo": "Voir l’aperçu",
     "viewResults": "Voir les résultats",
     "downloadCsv": "Télécharger le CSV",
     "downloadPdf": "Télécharger le PDF",

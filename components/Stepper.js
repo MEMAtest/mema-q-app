@@ -1,22 +1,15 @@
 // components/Stepper.js
 import React from 'react';
-import {
-  ClipboardDocumentCheckIcon,
-  SparklesIcon,
-  BuildingOfficeIcon,
-  ExclamationTriangleIcon,
-  ChatBubbleBottomCenterTextIcon,
-  ArchiveBoxIcon
-} from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
-// Map section IDs to icons for a more visual experience
+// Map section IDs to custom icon paths
 const iconMap = {
-  '1': ClipboardDocumentCheckIcon,
-  '2': SparklesIcon,
-  '3': BuildingOfficeIcon,
-  '4': ExclamationTriangleIcon,
-  '5': ChatBubbleBottomCenterTextIcon,
-  '6': ArchiveBoxIcon,
+  '1': '/icons/sections/clipboard-check.svg',
+  '2': '/icons/sections/sparkles.svg',
+  '3': '/icons/sections/building.svg',
+  '4': '/icons/sections/warning-triangle.svg',
+  '5': '/icons/sections/chat-bubble.svg',
+  '6': '/icons/sections/archive-box.svg',
 };
 
 const Stepper = ({ sections, currentSectionId, completedSections, onStepClick }) => {
@@ -27,7 +20,7 @@ const Stepper = ({ sections, currentSectionId, completedSections, onStepClick })
     <nav aria-label="Progress">
       <ol role="list" className="stepper">
         {sections.map((section) => {
-          const IconComponent = iconMap[section.id.split('.')[0]];
+          const iconPath = iconMap[section.id.split('.')[0]];
           const isCompleted = safeCompletedSections.includes(section.id);
           const isActive = section.id === currentSectionId;
           const statusClass = isCompleted ? 'completed' : isActive ? 'active' : '';
@@ -35,7 +28,7 @@ const Stepper = ({ sections, currentSectionId, completedSections, onStepClick })
           return (
             <li key={section.title} className={`step ${statusClass}`} onClick={() => onStepClick(section.id)}>
               <div className="dot">
-                {IconComponent && <IconComponent className="icon" aria-hidden="true" />}
+                {iconPath && <Image src={iconPath} alt="" width={20} height={20} className="icon" aria-hidden="true" />}
               </div>
               <span className="label">{section.title}</span>
             </li>
