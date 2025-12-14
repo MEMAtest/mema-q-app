@@ -1,0 +1,95 @@
+<svg width="320" height="280" viewBox="0 0 320 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient circle -->
+  <circle cx="160" cy="140" r="125" fill="#EFF6FF" opacity="0.5"/>
+
+  <!-- Person figure -->
+  <ellipse cx="160" cy="245" rx="55" ry="7" fill="#DBEAFE" opacity="0.6"/>
+
+  <!-- Body -->
+  <path d="M145 185 L145 230 L175 230 L175 185 Z" fill="#3B82F6"/>
+  <circle cx="160" cy="170" r="18" fill="#2563EB"/>
+
+  <!-- Arms extended toward charts -->
+  <path d="M145 190 L110 170 L115 165 L150 185 Z" fill="#3B82F6"/>
+  <path d="M175 190 L210 175 L205 170 L170 185 Z" fill="#3B82F6"/>
+
+  <!-- Predictive trend chart - left -->
+  <g transform="translate(40, 80)">
+    <rect x="0" y="0" width="85" height="70" rx="8" fill="white" stroke="#00C897" stroke-width="2.5"/>
+    <!-- Rising trend line -->
+    <polyline points="10,55 20,50 30,45 40,35 50,30 60,20 70,15"
+              fill="none" stroke="#7C3AED" stroke-width="3" stroke-linecap="round"/>
+    <!-- Prediction dashed line -->
+    <polyline points="70,15 75,10"
+              fill="none" stroke="#00C897" stroke-width="3" stroke-dasharray="4,3" stroke-linecap="round"/>
+    <!-- Data points -->
+    <circle cx="10" cy="55" r="3" fill="#7C3AED"/>
+    <circle cx="30" cy="45" r="3" fill="#7C3AED"/>
+    <circle cx="50" cy="30" r="3" fill="#7C3AED"/>
+    <circle cx="70" cy="15" r="3" fill="#7C3AED"/>
+    <!-- Future prediction point -->
+    <circle cx="75" cy="10" r="3" fill="#00C897"/>
+    <!-- Upward arrow -->
+    <path d="M73 12 L75 8 L77 12" stroke="#00C897" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Analytics dashboard - right -->
+  <g transform="translate(195, 100)">
+    <rect x="0" y="0" width="90" height="65" rx="8" fill="white" stroke="#3B82F6" stroke-width="2.5"/>
+    <!-- Progress bars with predictions -->
+    <g transform="translate(10, 15)">
+      <rect x="0" y="0" width="50" height="6" rx="3" fill="#E0E7FF"/>
+      <rect x="0" y="0" width="40" height="6" rx="3" fill="#7C3AED"/>
+      <rect x="40" y="0" width="8" height="6" rx="3" fill="#00C897" opacity="0.6"/>
+    </g>
+    <g transform="translate(10, 28)">
+      <rect x="0" y="0" width="50" height="6" rx="3" fill="#E0E7FF"/>
+      <rect x="0" y="0" width="30" height="6" rx="3" fill="#3B82F6"/>
+      <rect x="30" y="0" width="12" height="6" rx="3" fill="#00C897" opacity="0.6"/>
+    </g>
+    <g transform="translate(10, 41)">
+      <rect x="0" y="0" width="50" height="6" rx="3" fill="#E0E7FF"/>
+      <rect x="0" y="0" width="45" height="6" rx="3" fill="#7C3AED"/>
+      <rect x="45" y="0" width="5" height="6" rx="3" fill="#00C897" opacity="0.6"/>
+    </g>
+    <!-- Small forecast icon -->
+    <circle cx="70" cy="25" r="8" fill="#EFF6FF" stroke="#00C897" stroke-width="2"/>
+    <path d="M67 25 L70 22 L73 25" stroke="#00C897" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- AI/ML brain icon -->
+  <g transform="translate(160, 50)">
+    <circle cx="0" cy="0" r="20" fill="#EFF6FF" stroke="#3B82F6" stroke-width="2.5"/>
+    <!-- Neural network nodes -->
+    <circle cx="-6" cy="-3" r="2.5" fill="#7C3AED"/>
+    <circle cx="6" cy="-3" r="2.5" fill="#7C3AED"/>
+    <circle cx="0" cy="5" r="2.5" fill="#00C897"/>
+    <circle cx="-6" cy="-3" r="2.5" fill="#7C3AED"/>
+    <!-- Connections -->
+    <line x1="-6" y1="-3" x2="0" y2="5" stroke="#7C3AED" stroke-width="1.5" opacity="0.5"/>
+    <line x1="6" y1="-3" x2="0" y2="5" stroke="#7C3AED" stroke-width="1.5" opacity="0.5"/>
+    <line x1="-6" y1="-3" x2="6" y2="-3" stroke="#7C3AED" stroke-width="1.5" opacity="0.5"/>
+  </g>
+
+  <!-- Floating data indicators -->
+  <g transform="translate(70, 180)">
+    <rect x="0" y="0" width="35" height="25" rx="4" fill="white" stroke="#00C897" stroke-width="2"/>
+    <text x="17.5" y="16" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#00C897" text-anchor="middle">+24%</text>
+  </g>
+
+  <g transform="translate(220, 190)">
+    <rect x="0" y="0" width="40" height="25" rx="4" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="20" y="16" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#7C3AED" text-anchor="middle">95%</text>
+  </g>
+
+  <!-- Sparkles for "intelligence" -->
+  <path d="M130 120 L132 125 L137 127 L132 129 L130 134 L128 129 L123 127 L128 125 Z" fill="#00C897"/>
+  <path d="M190 140 L191 143 L194 144 L191 145 L190 148 L189 145 L186 144 L189 143 Z" fill="#3B82F6"/>
+  <path d="M90 220 L91 222 L93 223 L91 224 L90 226 L89 224 L87 223 L89 222 Z" fill="#7C3AED"/>
+  <path d="M235 230 L236 232 L238 233 L236 234 L235 236 L234 234 L232 233 L234 232 Z" fill="#00C897"/>
+
+  <!-- Connection lines from person to visualizations -->
+  <line x1="110" y1="170" x2="145" y2="190" stroke="#DBEAFE" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="210" y1="175" x2="175" y2="190" stroke="#DBEAFE" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="160" y1="50" x2="160" y2="170" stroke="#DBEAFE" stroke-width="1.5" stroke-dasharray="4,3"/>
+</svg>

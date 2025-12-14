@@ -1,0 +1,62 @@
+<svg width="320" height="280" viewBox="0 0 320 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background elements -->
+  <circle cx="160" cy="140" r="120" fill="#F3F0FF" opacity="0.4"/>
+
+  <!-- Person figure -->
+  <ellipse cx="160" cy="240" rx="60" ry="8" fill="#E5DEFF" opacity="0.6"/>
+
+  <!-- Body -->
+  <path d="M140 180 L140 220 L180 220 L180 180 Z" fill="#6B46C1"/>
+  <circle cx="160" cy="165" r="20" fill="#7C3AED"/>
+
+  <!-- Arms -->
+  <path d="M140 185 L120 200 L125 205 L145 190 Z" fill="#6B46C1"/>
+  <path d="M180 185 L200 195 L195 200 L175 190 Z" fill="#6B46C1"/>
+
+  <!-- Data visualization elements -->
+  <!-- Floating document/chart 1 -->
+  <g transform="translate(60, 60)">
+    <rect x="0" y="0" width="70" height="50" rx="6" fill="white" stroke="#00C897" stroke-width="2"/>
+    <line x1="10" y1="15" x2="35" y2="15" stroke="#7C3AED" stroke-width="2"/>
+    <line x1="10" y1="25" x2="50" y2="25" stroke="#00C897" stroke-width="2"/>
+    <line x1="10" y1="35" x2="40" y2="35" stroke="#7C3AED" stroke-width="2"/>
+  </g>
+
+  <!-- Floating chart 2 -->
+  <g transform="translate(200, 80)">
+    <rect x="0" y="0" width="60" height="60" rx="6" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <!-- Mini bar chart -->
+    <rect x="10" y="35" width="8" height="15" fill="#00C897" rx="2"/>
+    <rect x="22" y="25" width="8" height="25" fill="#7C3AED" rx="2"/>
+    <rect x="34" y="30" width="8" height="20" fill="#00C897" rx="2"/>
+    <rect x="46" y="20" width="8" height="30" fill="#7C3AED" rx="2"/>
+  </g>
+
+  <!-- Magnifying glass for analysis -->
+  <g transform="translate(90, 120)">
+    <circle cx="0" cy="0" r="18" fill="none" stroke="#00C897" stroke-width="3"/>
+    <line x1="13" y1="13" x2="25" y2="25" stroke="#00C897" stroke-width="3" stroke-linecap="round"/>
+    <!-- Insight spark inside glass -->
+    <path d="M-5,-3 L0,5 L5,-3 L0,0 Z" fill="#7C3AED"/>
+  </g>
+
+  <!-- Key icon -->
+  <g transform="translate(210, 140)">
+    <circle cx="0" cy="0" r="8" fill="none" stroke="#6B46C1" stroke-width="2.5"/>
+    <rect x="-1" y="5" width="2" height="12" fill="#6B46C1"/>
+    <rect x="-1" y="12" width="6" height="2" fill="#6B46C1"/>
+    <rect x="-1" y="15" width="4" height="2" fill="#6B46C1"/>
+  </g>
+
+  <!-- Analytics sparkles/stars -->
+  <path d="M70 40 L72 45 L77 47 L72 49 L70 54 L68 49 L63 47 L68 45 Z" fill="#00C897"/>
+  <path d="M250 50 L251 53 L254 54 L251 55 L250 58 L249 55 L246 54 L249 53 Z" fill="#7C3AED"/>
+  <path d="M100 200 L101 202 L103 203 L101 204 L100 206 L99 204 L97 203 L99 202 Z" fill="#00C897"/>
+
+  <!-- Data points connecting to person -->
+  <circle cx="150" cy="100" r="4" fill="#7C3AED"/>
+  <circle cx="230" cy="120" r="4" fill="#00C897"/>
+  <circle cx="110" cy="150" r="4" fill="#7C3AED"/>
+  <line x1="150" y1="100" x2="155" y2="165" stroke="#E5DEFF" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="230" y1="120" x2="170" y2="165" stroke="#E5DEFF" stroke-width="1" stroke-dasharray="3,3"/>
+</svg>

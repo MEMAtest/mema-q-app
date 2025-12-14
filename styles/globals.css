@@ -1536,6 +1536,48 @@ a:hover {
     line-height: 1.6;
 }
 
+/* -- Illustration Cards -- */
+.illustration-card {
+    background: var(--color-bg-white);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-2xl);
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    border: 1px solid var(--color-border-light);
+}
+
+.illustration-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-accent-primary);
+}
+
+.illustration-card img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+}
+
+.illustration-card h4 {
+    font-size: 1.125rem;
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+    margin-top: var(--spacing-md);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .illustration-card {
+        padding: var(--spacing-lg);
+    }
+
+    .illustration-card img {
+        max-width: 220px;
+    }
+}
+
 /* -- Benefit List with Icons -- */
 .benefits-list {
     list-style: none;
@@ -2416,6 +2458,13 @@ footer {
 .notes-field textarea {
     border: 1px solid rgba(15, 23, 42, 0.1);
     background: #ffffff;
+    min-height: 120px;
+    width: 100%;
+    padding: 0.875rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    resize: vertical;
 }
 
 .notes-counter {

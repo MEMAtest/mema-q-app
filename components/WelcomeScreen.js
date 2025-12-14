@@ -184,9 +184,18 @@ const WelcomeScreen = ({ onStart }) => {
               <p style={{ textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--color-ink-muted)', fontWeight: 'var(--font-semibold)', margin: 0 }}>
                 MEMA · Intelligent Compliance OS
               </p>
-              <h1>Future-Proofing Compliance. Built for Tomorrow&apos;s Finance.</h1>
+              <h1>Future-Proofing Compliance</h1>
+              <div style={{ margin: '1.5rem 0', display: 'flex', justifyContent: 'center' }}>
+                <Image
+                  src="/illustrations/compliance-shield.svg"
+                  alt="Compliance Assurance"
+                  width={400}
+                  height={240}
+                  style={{ width: '100%', maxWidth: '400px', height: 'auto' }}
+                />
+              </div>
               <p>
-                Unlock precision in regulatory navigation with AI-powered insights and expert guidance. Drive confident decisions even as FCA expectations evolve.
+                Navigate FCA regulations with precision. Get expert guidance and generate audit-ready compliance reports.
               </p>
               <div className="cta-buttons" style={{ justifyContent: 'flex-start', marginTop: 'var(--spacing-lg)' }}>
                 <button className="start-button" onClick={onStart}>
@@ -323,19 +332,42 @@ const WelcomeScreen = ({ onStart }) => {
             Deep regulatory expertise layered with intelligent automation.
           </p>
         </div>
-        <div className="feature-card-grid">
-          {featureDeepDive.map(({ title, description, points, icon }) => (
-            <div key={title} className="value-card">
-              <div className="icon-circle" style={{ marginBottom: 'var(--spacing-sm)' }}>{icon}</div>
-              <h4>{title}</h4>
-              <p>{description}</p>
-              <ul className="feature-points">
-                {points.map((point) => (
-                  <li key={point}>{point}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
+
+        {/* Illustration cards */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: 'var(--spacing-2xl)',
+          marginBottom: 'var(--spacing-2xl)',
+          marginTop: 'var(--spacing-2xl)'
+        }}>
+          <div className="illustration-card">
+            <img
+              src="/illustrations/key-insights.svg"
+              alt="Generate Compliance Reports"
+              style={{ width: '100%', maxWidth: '280px', margin: '0 auto', display: 'block' }}
+            />
+            <h4 style={{ textAlign: 'center', marginTop: 'var(--spacing-lg)', fontSize: '1.125rem', fontWeight: 'var(--font-semibold)', color: 'var(--color-text-primary)' }}>
+              Generate Audit-Ready Reports
+            </h4>
+            <p style={{ textAlign: 'center', color: 'var(--color-text-secondary)', fontSize: '0.9rem', marginTop: 'var(--spacing-sm)' }}>
+              Complete our assessment and receive comprehensive compliance reports with FCA references and regulatory guidance
+            </p>
+          </div>
+
+          <div className="illustration-card">
+            <img
+              src="/illustrations/predictive-analytics.svg"
+              alt="Understand Your FinProms Status"
+              style={{ width: '100%', maxWidth: '280px', margin: '0 auto', display: 'block' }}
+            />
+            <h4 style={{ textAlign: 'center', marginTop: 'var(--spacing-lg)', fontSize: '1.125rem', fontWeight: 'var(--font-semibold)', color: 'var(--color-text-primary)' }}>
+              Understand Your FinProms Status
+            </h4>
+            <p style={{ textAlign: 'center', color: 'var(--color-text-secondary)', fontSize: '0.9rem', marginTop: 'var(--spacing-sm)' }}>
+              Get instant clarity on your financial promotions compliance position with actionable insights and next steps
+            </p>
+          </div>
         </div>
       </section>
 
@@ -379,7 +411,6 @@ const WelcomeScreen = ({ onStart }) => {
         </div>
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} MEMA Consultants · All rights reserved.</span>
-          <span>Follow us on LinkedIn · Twitter</span>
         </div>
       </footer>
     </>

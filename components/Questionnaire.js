@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import Image from 'next/image';
 
 const YES_NO_DESCRIPTIONS = {
@@ -7,6 +7,16 @@ const YES_NO_DESCRIPTIONS = {
 };
 
 const MAX_NOTES = 280;
+
+// FCA Guidance Reference Texts
+const GUIDANCE_TEXTS = {
+  'PERG 8.8': 'PERG 8.8 provides guidance on the meaning of "invitation or inducement" in the context of financial promotions. A communication is likely to be an invitation or inducement if it is intended, or may reasonably be regarded as intended, to persuade or influence persons to engage in investment activity.',
+  'PERG 8.4': 'PERG 8.4 defines what constitutes a financial promotion under section 21 of the Financial Services and Markets Act 2000. It covers communications that invite or induce persons to engage in investment activity.',
+  'FG24/1 (2.47-2.52)': 'FG24/1 sections 2.47-2.52 provide guidance on Consumer Duty requirements for financial promotions, including ensuring communications are clear, fair and not misleading, and provide consumers with the information they need to make informed decisions.',
+  'PERG 8.12': 'PERG 8.12 addresses the real time and non-real time distinction for financial promotions. Real time communications occur during an interaction where there is opportunity for immediate response, while non-real time promotions are prepared in advance.',
+  'FSMA s21': 'Section 21 of the Financial Services and Markets Act 2000 restricts financial promotions. It states that a person must not, in the course of business, communicate an invitation or inducement to engage in investment activity unless they are an authorised person or the content is approved by an authorised person.',
+  'default': 'This reference provides guidance from the FCA Handbook or related regulatory materials. Click to view the full guidance in the FCA Handbook.'
+};
 
 const Questionnaire = ({
   question,
@@ -18,6 +28,8 @@ const Questionnaire = ({
   isLastQuestion,
   currentAnswer,
 }) => {
+  const [showGuidanceModal, setShowGuidanceModal] = useState(false);
+  const [selectedGuidance, setSelectedGuidance] = useState({ ref: '', text: '' });
   const notesLength = currentAnswer?.notes?.length || 0;
 
   const handleOptionChange = (value) => {
@@ -131,6 +143,13 @@ const Questionnaire = ({
 
   const questionNum = getQuestionNumber();
 
+  const handleGuidanceClick = (e, reference) => {
+    e.preventDefault();
+    const guidanceText = GUIDANCE_TEXTS[reference] || GUIDANCE_TEXTS['default'];
+    setSelectedGuidance({ ref: reference, text: guidanceText });
+    setShowGuidanceModal(true);
+  };
+
   const insightCards = useMemo(() => {
     const reference = question?.questionRef || 'FCA Handbook';
     return [
@@ -144,8 +163,9 @@ const Questionnaire = ({
       },
       {
         title: 'Relevant Guidance',
-        copy: reference,
-        link: reference
+        copy: 'Click the reference below to view full guidance text',
+        link: reference,
+        isGuidanceLink: true
       },
       {
         title: 'Best Practice',
@@ -222,7 +242,12 @@ const Questionnaire = ({
               <h5>{card.title}</h5>
               <p style={{ margin: 0 }}>{card.copy}</p>
               {card.link && (
-                <a className="link-chip" href="#" style={{ marginTop: '0.5rem', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                <a
+                  className="link-chip"
+                  href="#"
+                  onClick={(e) => card.isGuidanceLink ? handleGuidanceClick(e, card.link) : null}
+                  style={{ marginTop: '0.5rem', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', cursor: 'pointer' }}
+                >
                   {card.link}
                 </a>
               )}
@@ -230,6 +255,77 @@ const Questionnaire = ({
           ))}
         </aside>
       </div>
+
+      {/* Guidance Modal */}
+      {showGuidanceModal && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            padding: '1rem'
+          }}
+          onClick={() => setShowGuidanceModal(false)}
+        >
+          <div
+            style={{
+              backgroundColor: 'white',
+              borderRadius: 'var(--radius-xl)',
+              padding: 'var(--spacing-2xl)',
+              maxWidth: '600px',
+              width: '100%',
+              maxHeight: '80vh',
+              overflow: 'auto',
+              boxShadow: 'var(--shadow-2xl)',
+              position: 'relative'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--spacing-lg)' }}>
+              <div>
+                <h3 style={{ margin: 0, marginBottom: '0.5rem', color: 'var(--color-text-primary)' }}>Relevant Guidance</h3>
+                <p style={{ margin: 0, color: 'var(--color-accent-primary)', fontWeight: 'var(--font-semibold)', fontSize: '0.95rem' }}>
+                  {selectedGuidance.ref}
+                </p>
+              </div>
+              <button
+                onClick={() => setShowGuidanceModal(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '1.5rem',
+                  cursor: 'pointer',
+                  color: 'var(--color-text-muted)',
+                  padding: '0.25rem',
+                  lineHeight: 1
+                }}
+                aria-label="Close"
+              >
+                ×
+              </button>
+            </div>
+            <p style={{ lineHeight: 1.7, color: 'var(--color-text-secondary)', margin: 0 }}>
+              {selectedGuidance.text}
+            </p>
+            <div style={{ marginTop: 'var(--spacing-xl)', paddingTop: 'var(--spacing-lg)', borderTop: '1px solid var(--color-border-light)' }}>
+              <button
+                onClick={() => setShowGuidanceModal(false)}
+                className="start-button"
+                style={{ width: '100%', justifyContent: 'center' }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
