@@ -1,11 +1,12 @@
 // components/WelcomeScreen.js
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import InteractiveVision3D from './InteractiveVision3D';
 import TiltParallax from './TiltParallax';
 import InteractiveIcon from './InteractiveIcon';
+import ContactForm from './ContactForm';
 
 const IconWorkflow = () => (
   <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -153,9 +154,11 @@ const sampleAnswers = [
 
 const WelcomeScreen = ({ onStart }) => {
   const { t } = useTranslation('common');
+  const [showContactForm, setShowContactForm] = useState(false);
 
   return (
     <>
+      {showContactForm && <ContactForm onClose={() => setShowContactForm(false)} />}
       <header className="header">
         <div className="header-logo">
           <Link href="/" style={{ cursor: 'pointer', display: 'block' }}>
@@ -205,9 +208,9 @@ const WelcomeScreen = ({ onStart }) => {
                 <button
                   className="btn-ghost"
                   style={{ borderColor: 'rgba(15, 23, 42, 0.14)', color: 'var(--color-ink-primary)', background: 'transparent' }}
-                  onClick={onStart}
+                  onClick={() => setShowContactForm(true)}
                 >
-                  Explore Platform
+                  Contact Us
                 </button>
               </div>
             </div>
@@ -376,7 +379,7 @@ const WelcomeScreen = ({ onStart }) => {
           <h3>Ready to Transform Your Compliance Operations?</h3>
           <p>Join leading financial firms leveraging intelligent guidance for robust, future-proof compliance.</p>
           <div className="cta-buttons" style={{ justifyContent: 'center' }}>
-            <button className="start-button" onClick={onStart}>
+            <button className="start-button" onClick={() => setShowContactForm(true)}>
               <Image src="/icons/ui/rocket.svg" alt="" width={24} height={24} style={{ width: '1.25rem', height: '1.25rem' }} />
               Get in Touch
             </button>
