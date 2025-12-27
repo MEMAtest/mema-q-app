@@ -6,6 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import WelcomeScreen from '../components/WelcomeScreen';
 import Breadcrumb from '../components/Breadcrumb';
 import ProgressBar from '../components/ProgressBar';
+import Stepper from '../components/Stepper';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 
 const Questionnaire = dynamic(() => import('../components/Questionnaire'), {
@@ -77,6 +78,20 @@ export default function Home() {
             setAnswers(data.answers);
           }
         }
+        // Restore position from localStorage
+        const savedPosition = window.localStorage.getItem('mema-position');
+        if (savedPosition) {
+          const pos = JSON.parse(savedPosition);
+          if (typeof pos.section === 'number' && pos.section < questions.length) {
+            setCurrentSection(pos.section);
+          }
+          if (typeof pos.question === 'number') {
+            const maxQ = questions[pos.section]?.items?.length || 0;
+            if (pos.question < maxQ) {
+              setCurrentQuestion(pos.question);
+            }
+          }
+        }
       } catch (error) {
         console.error('Failed to load progress:', error);
       } finally {
@@ -108,6 +123,15 @@ export default function Home() {
 
     return () => clearTimeout(timeout);
   }, [answers, sessionId, currentSection, currentQuestion, progressLoaded]);
+
+  // Save position to localStorage for persistence across refresh
+  useEffect(() => {
+    if (typeof window === 'undefined' || !progressLoaded) return;
+    window.localStorage.setItem('mema-position', JSON.stringify({
+      section: currentSection,
+      question: currentQuestion
+    }));
+  }, [currentSection, currentQuestion, progressLoaded]);
 
   const handleStart = () => setAppState('questionnaire');
 
@@ -344,6 +368,28 @@ export default function Home() {
                 total: questions.length
               }}
               sectionMeta={progressSectionMeta}
+            />
+          </div>
+        )}
+
+        {/* Section Stepper */}
+        {appState === 'questionnaire' && questions.length > 0 && (
+          <div className="container mx-auto px-4 mt-4">
+            <Stepper
+              sections={questions.map((q, i) => ({
+                id: q.id,
+                title: (q.title || q.sectionTitle || `Section ${i + 1}`).replace(/Section \d+: /g, '')
+              }))}
+              currentSectionId={questions[currentSection]?.id}
+              completedSections={Object.keys(completedSections)}
+              onStepClick={(sectionId) => {
+                const index = questions.findIndex(q => q.id === sectionId);
+                if (index >= 0) {
+                  setCurrentSection(index);
+                  setCurrentQuestion(0);
+                  updateCompletedSections(index);
+                }
+              }}
             />
           </div>
         )}

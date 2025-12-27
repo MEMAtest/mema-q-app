@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 
 const YES_NO_DESCRIPTIONS = {
@@ -30,7 +31,38 @@ const Questionnaire = ({
 }) => {
   const [showGuidanceModal, setShowGuidanceModal] = useState(false);
   const [selectedGuidance, setSelectedGuidance] = useState({ ref: '', text: '' });
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const notesLength = currentAnswer?.notes?.length || 0;
+
+  // Track client-side mount for portal
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Handle body scroll lock when drawer is open
+  useEffect(() => {
+    if (isDrawerOpen) {
+      document.body.classList.add('drawer-open');
+    } else {
+      document.body.classList.remove('drawer-open');
+    }
+    return () => {
+      document.body.classList.remove('drawer-open');
+    };
+  }, [isDrawerOpen]);
+
+  // Close drawer/modal on escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        setIsDrawerOpen(false);
+        setShowGuidanceModal(false);
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
 
   const handleOptionChange = (value) => {
     onAnswer(question.id, {
@@ -256,65 +288,93 @@ const Questionnaire = ({
         </aside>
       </div>
 
+      {/* Mobile Drawer Toggle Button */}
+      <button
+        className="drawer-toggle-btn"
+        onClick={() => setIsDrawerOpen(true)}
+        aria-label="Open insights panel"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 16v-4" />
+          <path d="M12 8h.01" />
+        </svg>
+      </button>
+
+      {/* Mobile Drawer - Rendered via Portal to avoid stacking context issues */}
+      {isMounted && createPortal(
+        <>
+          <div
+            className={`drawer-overlay ${isDrawerOpen ? 'active' : ''}`}
+            onClick={() => setIsDrawerOpen(false)}
+          />
+          <div className={`drawer-container ${isDrawerOpen ? 'active' : ''}`}>
+            <div className="drawer-header">
+              <h4>Insights & Guidance</h4>
+              <button
+                className="drawer-close-btn"
+                onClick={() => setIsDrawerOpen(false)}
+                aria-label="Close panel"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+            <div className="drawer-content">
+              {insightCards.map((card) => (
+                <div key={`drawer-${card.title}`} className="insight-card">
+                  <h5>{card.title}</h5>
+                  <p style={{ margin: 0 }}>{card.copy}</p>
+                  {card.link && (
+                    <a
+                      className="link-chip"
+                      href="#"
+                      onClick={(e) => {
+                        if (card.isGuidanceLink) {
+                          handleGuidanceClick(e, card.link);
+                          setIsDrawerOpen(false);
+                        }
+                      }}
+                      style={{ marginTop: '0.5rem', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', cursor: 'pointer' }}
+                    >
+                      {card.link}
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </>,
+        document.body
+      )}
+
       {/* Guidance Modal */}
       {showGuidanceModal && (
         <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999,
-            padding: '1rem'
-          }}
+          className="guidance-modal-overlay"
           onClick={() => setShowGuidanceModal(false)}
         >
           <div
-            style={{
-              backgroundColor: 'white',
-              borderRadius: 'var(--radius-xl)',
-              padding: 'var(--spacing-2xl)',
-              maxWidth: '600px',
-              width: '100%',
-              maxHeight: '80vh',
-              overflow: 'auto',
-              boxShadow: 'var(--shadow-2xl)',
-              position: 'relative'
-            }}
+            className="guidance-modal"
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--spacing-lg)' }}>
+            <div className="guidance-modal-header">
               <div>
-                <h3 style={{ margin: 0, marginBottom: '0.5rem', color: 'var(--color-text-primary)' }}>Relevant Guidance</h3>
-                <p style={{ margin: 0, color: 'var(--color-accent-primary)', fontWeight: 'var(--font-semibold)', fontSize: '0.95rem' }}>
-                  {selectedGuidance.ref}
-                </p>
+                <h3 className="guidance-modal-title">Relevant Guidance</h3>
+                <p className="guidance-modal-ref">{selectedGuidance.ref}</p>
               </div>
               <button
                 onClick={() => setShowGuidanceModal(false)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  fontSize: '1.5rem',
-                  cursor: 'pointer',
-                  color: 'var(--color-text-muted)',
-                  padding: '0.25rem',
-                  lineHeight: 1
-                }}
+                className="guidance-modal-close"
                 aria-label="Close"
               >
                 ×
               </button>
             </div>
-            <p style={{ lineHeight: 1.7, color: 'var(--color-text-secondary)', margin: 0 }}>
-              {selectedGuidance.text}
-            </p>
-            <div style={{ marginTop: 'var(--spacing-xl)', paddingTop: 'var(--spacing-lg)', borderTop: '1px solid var(--color-border-light)' }}>
+            <p className="guidance-modal-body">{selectedGuidance.text}</p>
+            <div className="guidance-modal-footer">
               <button
                 onClick={() => setShowGuidanceModal(false)}
                 className="start-button"
