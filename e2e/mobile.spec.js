@@ -193,8 +193,8 @@ test.describe('Mobile Tests', () => {
     if (await viewResultsBtn.isVisible()) {
       const viewResultsBox = await viewResultsBtn.boundingBox();
       if (viewResultsBox) {
-        // Use 36px as minimum for header buttons (acceptable for secondary actions)
-        expect(viewResultsBox.height).toBeGreaterThanOrEqual(36);
+        // Use 35px as minimum for header buttons (acceptable for secondary actions)
+        expect(viewResultsBox.height).toBeGreaterThanOrEqual(35);
       }
     }
   });

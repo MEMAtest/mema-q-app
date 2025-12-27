@@ -52,7 +52,9 @@ test.describe('Results Page Tests', () => {
         break;
       }
 
-      await nextButton.first().click();
+      // Wait for element to be stable before clicking (webkit needs this)
+      await page.waitForTimeout(200);
+      await nextButton.first().click({ force: true });
       questionCount++;
 
       // Small delay to allow for navigation
