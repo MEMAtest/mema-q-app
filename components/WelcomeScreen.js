@@ -1,5 +1,5 @@
 // components/WelcomeScreen.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
@@ -147,6 +147,46 @@ const featureDeepDive = [
 
 const heroLogos = ['FinTech Scaleups', 'Advisory Firms', 'Digital Banks', 'Payments Innovators'];
 
+// Showcase questions for animated cycling
+const showcaseQuestions = [
+  {
+    section: 1,
+    questionNum: 1,
+    totalInSection: 10,
+    id: '1.1',
+    text: 'Is the communication an "invitation or inducement" to engage in an activity?',
+    reference: 'PERG 8.4',
+    whyItMatters: 'A financial promotion must invite or encourage engagement in a financial activity. If it persuades the reader to take the next step, PERG 8.4 applies and Principal approval is required.'
+  },
+  {
+    section: 2,
+    questionNum: 3,
+    totalInSection: 8,
+    id: '2.3',
+    text: 'Does the promotion include a clear and prominent risk warning?',
+    reference: 'COBS 4.5.2R',
+    whyItMatters: 'Risk warnings must be prominent and not hidden in footnotes. The FCA expects warnings to be balanced against promotional claims and easily visible to consumers.'
+  },
+  {
+    section: 3,
+    questionNum: 2,
+    totalInSection: 6,
+    id: '3.2',
+    text: 'Are past performance figures accompanied by required disclaimers?',
+    reference: 'COBS 4.6',
+    whyItMatters: 'Past performance disclaimers protect consumers from assuming future returns. Any performance data must clearly state that past performance is not a reliable indicator of future results.'
+  },
+  {
+    section: 4,
+    questionNum: 1,
+    totalInSection: 4,
+    id: '4.1',
+    text: 'Is there a clear call-to-action that could be considered misleading?',
+    reference: 'FG24/1',
+    whyItMatters: 'Consumer Duty requires fair treatment in all customer communications. CTAs must not create urgency or pressure that could lead to poor consumer outcomes.'
+  }
+];
+
 const sampleAnswers = [
   { label: 'Yes', helper: 'Requirement satisfied or exemption applied.', defaultSelected: true },
   { label: 'No', helper: 'Requirement missing or needs escalation.', defaultSelected: false }
@@ -155,6 +195,17 @@ const sampleAnswers = [
 const WelcomeScreen = ({ onStart }) => {
   const { t } = useTranslation('common');
   const [showContactForm, setShowContactForm] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
+  // Cycle through showcase questions
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentQuestionIndex((prev) => (prev + 1) % showcaseQuestions.length);
+    }, 5000); // 5 seconds per question
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentShowcase = showcaseQuestions[currentQuestionIndex];
 
   return (
     <>
@@ -283,15 +334,17 @@ const WelcomeScreen = ({ onStart }) => {
           <div className="product-visual">
             <div className="mockup-frame">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--spacing-lg)', color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem' }}>
-                <span>Question 1 of 10 · Section 1</span>
+                <span>Question {currentShowcase.questionNum} of {currentShowcase.totalInSection} · Section {currentShowcase.section}</span>
                 <span>Sample Interaction</span>
               </div>
-              <h3 style={{ fontSize: '1.6rem', color: 'white', marginBottom: 'var(--spacing-sm)' }}>
-                1.1 Is the communication an &quot;invitation or inducement&quot; to engage in an activity?
-              </h3>
-              <p style={{ color: 'rgba(255,255,255,0.72)', marginBottom: 'var(--spacing-lg)' }}>
-                Reference: PERG 8.4
-              </p>
+              <div key={currentQuestionIndex} className="mockup-question-content">
+                <h3 style={{ fontSize: '1.6rem', color: 'white', marginBottom: 'var(--spacing-sm)' }}>
+                  {currentShowcase.id} {currentShowcase.text}
+                </h3>
+                <p style={{ color: 'rgba(255,255,255,0.72)', marginBottom: 'var(--spacing-lg)' }}>
+                  Reference: {currentShowcase.reference}
+                </p>
+              </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-md)', marginBottom: 'var(--spacing-lg)' }}>
                 {sampleAnswers.map((answer) => (
                   <div
@@ -312,14 +365,33 @@ const WelcomeScreen = ({ onStart }) => {
                   </div>
                 ))}
               </div>
-              <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '1rem', padding: 'var(--spacing-lg)', border: '1px solid rgba(255,255,255,0.12)' }}>
+              <div key={`why-${currentQuestionIndex}`} className="mockup-why-matters" style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '1rem', padding: 'var(--spacing-lg)', border: '1px solid rgba(255,255,255,0.12)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-accent-primary)', fontWeight: 'var(--font-semibold)', marginBottom: '0.5rem' }}>
                   <Image src="/icons/ui/info-circle.svg" alt="" width={24} height={24} style={{ width: '1.2rem', height: '1.2rem' }} />
                   Why this matters
                 </div>
                 <p style={{ margin: 0, color: 'rgba(255,255,255,0.78)' }}>
-                  A financial promotion must invite or encourage engagement in a financial activity. If it persuades the reader to take the next step, PERG 8.4 applies and Principal approval is required.
+                  {currentShowcase.whyItMatters}
                 </p>
+              </div>
+              {/* Progress dots */}
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: 'var(--spacing-lg)' }}>
+                {showcaseQuestions.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentQuestionIndex(idx)}
+                    aria-label={`Go to question ${idx + 1}`}
+                    style={{
+                      width: idx === currentQuestionIndex ? '24px' : '8px',
+                      height: '8px',
+                      borderRadius: '4px',
+                      border: 'none',
+                      background: idx === currentQuestionIndex ? 'var(--color-accent-primary)' : 'rgba(255,255,255,0.3)',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                  />
+                ))}
               </div>
             </div>
           </div>
@@ -336,38 +408,40 @@ const WelcomeScreen = ({ onStart }) => {
           </p>
         </div>
 
-        {/* Illustration cards */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: 'var(--spacing-2xl)',
-          marginBottom: 'var(--spacing-2xl)',
-          marginTop: 'var(--spacing-2xl)'
-        }}>
-          <div className="illustration-card">
-            <img
-              src="/illustrations/key-insights.svg"
-              alt="Generate Compliance Reports"
-              style={{ width: '100%', maxWidth: '280px', margin: '0 auto', display: 'block' }}
-            />
-            <h4 style={{ textAlign: 'center', marginTop: 'var(--spacing-lg)', fontSize: '1.125rem', fontWeight: 'var(--font-semibold)', color: 'var(--color-text-primary)' }}>
+        {/* Illustration cards - 3D Style */}
+        <div className="illustration-grid">
+          <div className="illustration-card-3d">
+            <div className="illustration-blob"></div>
+            <div className="illustration-content">
+              <img
+                src="/illustrations/key-insights.svg"
+                alt="Generate Compliance Reports"
+                className="illustration-image"
+              />
+              <div className="illustration-pedestal"></div>
+            </div>
+            <h4 style={{ textAlign: 'center', marginTop: 'var(--spacing-lg)', fontSize: '1.25rem', fontWeight: 'var(--font-bold)', color: 'var(--color-text-primary)' }}>
               Generate Audit-Ready Reports
             </h4>
-            <p style={{ textAlign: 'center', color: 'var(--color-text-secondary)', fontSize: '0.9rem', marginTop: 'var(--spacing-sm)' }}>
+            <p style={{ textAlign: 'center', color: 'var(--color-text-secondary)', fontSize: '0.95rem', marginTop: 'var(--spacing-sm)', lineHeight: 1.6 }}>
               Complete our assessment and receive comprehensive compliance reports with FCA references and regulatory guidance
             </p>
           </div>
 
-          <div className="illustration-card">
-            <img
-              src="/illustrations/predictive-analytics.svg"
-              alt="Understand Your FinProms Status"
-              style={{ width: '100%', maxWidth: '280px', margin: '0 auto', display: 'block' }}
-            />
-            <h4 style={{ textAlign: 'center', marginTop: 'var(--spacing-lg)', fontSize: '1.125rem', fontWeight: 'var(--font-semibold)', color: 'var(--color-text-primary)' }}>
+          <div className="illustration-card-3d">
+            <div className="illustration-blob"></div>
+            <div className="illustration-content">
+              <img
+                src="/illustrations/predictive-analytics.svg"
+                alt="Understand Your FinProms Status"
+                className="illustration-image"
+              />
+              <div className="illustration-pedestal"></div>
+            </div>
+            <h4 style={{ textAlign: 'center', marginTop: 'var(--spacing-lg)', fontSize: '1.25rem', fontWeight: 'var(--font-bold)', color: 'var(--color-text-primary)' }}>
               Understand Your FinProms Status
             </h4>
-            <p style={{ textAlign: 'center', color: 'var(--color-text-secondary)', fontSize: '0.9rem', marginTop: 'var(--spacing-sm)' }}>
+            <p style={{ textAlign: 'center', color: 'var(--color-text-secondary)', fontSize: '0.95rem', marginTop: 'var(--spacing-sm)', lineHeight: 1.6 }}>
               Get instant clarity on your financial promotions compliance position with actionable insights and next steps
             </p>
           </div>

@@ -4,10 +4,12 @@ import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import WelcomeScreen from '../components/WelcomeScreen';
+import ScenarioSelector from '../components/ScenarioSelector';
 import Breadcrumb from '../components/Breadcrumb';
 import ProgressBar from '../components/ProgressBar';
 import Stepper from '../components/Stepper';
 import LanguageSwitcher from '../components/LanguageSwitcher';
+import { getScenario } from '../lib/scenarios';
 
 const Questionnaire = dynamic(() => import('../components/Questionnaire'), {
   loading: () => <div className="app-container text-center">Loading assessment...</div>,
@@ -30,6 +32,7 @@ export async function getStaticProps({ locale }) {
 export default function Home() {
   const { t } = useTranslation('common');
   const [appState, setAppState] = useState('welcome');
+  const [selectedScenario, setSelectedScenario] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [currentSection, setCurrentSection] = useState(0);
@@ -133,7 +136,19 @@ export default function Home() {
     }));
   }, [currentSection, currentQuestion, progressLoaded]);
 
-  const handleStart = () => setAppState('questionnaire');
+  const handleStart = () => setAppState('scenario');
+
+  const handleScenarioSelect = (scenarioId) => {
+    setSelectedScenario(scenarioId);
+    // Reset questionnaire state for new assessment
+    setAnswers({});
+    setCurrentSection(0);
+    setCurrentQuestion(0);
+    setCompletedSections({});
+    setAppState('questionnaire');
+  };
+
+  const handleScenarioBack = () => setAppState('welcome');
 
   const updateCompletedSections = (sectionIndex) => {
     const newCompleted = {};
@@ -284,18 +299,24 @@ export default function Home() {
       }
     ];
 
-    if (appState === 'questionnaire' && questions.length > 0) {
+    if (appState === 'scenario') {
       items.push({
-        label: 'Assessment',
+        label: 'Select Channel',
+      });
+    } else if (appState === 'questionnaire' && questions.length > 0) {
+      const scenarioConfig = selectedScenario ? getScenario(selectedScenario) : null;
+      items.push({
+        label: scenarioConfig?.label || 'Assessment',
         href: '#',
-        onClick: () => {} // Current page
+        onClick: () => setAppState('scenario')
       });
       items.push({
         label: questions[currentSection]?.title || 'Section',
       });
     } else if (appState === 'results') {
+      const scenarioConfig = selectedScenario ? getScenario(selectedScenario) : null;
       items.push({
-        label: 'Assessment',
+        label: scenarioConfig?.label || 'Assessment',
         href: '#',
         onClick: () => setAppState('questionnaire')
       });
@@ -350,7 +371,7 @@ export default function Home() {
 
       <main>
         {/* Breadcrumb Navigation */}
-        {appState !== 'welcome' && (
+        {appState !== 'welcome' && appState !== 'scenario' && (
           <div className="container mx-auto px-4 mt-4">
             <Breadcrumb items={getBreadcrumbItems()} />
           </div>
@@ -395,6 +416,12 @@ export default function Home() {
         )}
 
         {appState === 'welcome' && <WelcomeScreen onStart={handleStart} />}
+        {appState === 'scenario' && (
+          <ScenarioSelector
+            onSelect={handleScenarioSelect}
+            onBack={handleScenarioBack}
+          />
+        )}
         {appState === 'questionnaire' && questions.length > 0 ? (
           <Questionnaire
             section={questions[currentSection]}
@@ -410,17 +437,19 @@ export default function Home() {
             currentQuestionIndex={currentQuestion}
             answers={answers}
             onJumpToQuestion={handleJumpToQuestion}
+            scenario={selectedScenario}
           />
         ) : appState === 'questionnaire' ? (
           <div className="app-container text-center">Loading questions...</div>
         ) : null}
         
         {appState === 'results' && (
-          <ResultsPage 
-            results={analysisResult} 
+          <ResultsPage
+            results={analysisResult}
             onGoBack={handleGoBack}
             questions={questions}
             answers={answers}
+            scenario={selectedScenario}
           />
         )}
       </main>

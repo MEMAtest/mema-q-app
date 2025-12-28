@@ -4,10 +4,13 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearSca
 import { Doughnut, Bar } from 'react-chartjs-2';
 import Image from 'next/image';
 import { exportResultsToPDF } from '../lib/exportPdf';
+import { getScenario } from '../lib/scenarios';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
-export default function ResultsPage({ results, onGoBack, questions, answers }) {
+export default function ResultsPage({ results, onGoBack, questions, answers, scenario }) {
+  // Get scenario config for tailored content
+  const scenarioConfig = scenario ? getScenario(scenario) : null;
   const { t } = useTranslation('common');
   const [isFullReportUnlocked, setIsFullReportUnlocked] = useState(false);
   const [leadName, setLeadName] = useState('');
@@ -71,7 +74,16 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
   };
 
   const handleCsvExport = () => {
+    const reportTitle = scenarioConfig?.reportTitle || 'Compliance Report';
+    const channelLabel = scenarioConfig?.label || 'All Channels';
+
     let csvContent = "data:text/csv;charset=utf-8,";
+    // Add report header with scenario info
+    csvContent += `MEMA ${reportTitle}\r\n`;
+    csvContent += `Generated: ${new Date().toLocaleDateString()}\r\n`;
+    csvContent += `Channel: ${channelLabel}\r\n`;
+    csvContent += `Health Score: ${results.healthScore}%\r\n`;
+    csvContent += `\r\n`;
     csvContent += "Question,Regulation Reference,Your Answer,Your Notes\r\n";
     questions.forEach(section => {
         section.items.forEach(item => {
@@ -91,7 +103,9 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "mema_compliance_report.csv");
+    // Use scenario-specific filename
+    const filename = `mema_${scenario || 'full'}_compliance_report.csv`;
+    link.setAttribute("download", filename);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -176,10 +190,28 @@ export default function ResultsPage({ results, onGoBack, questions, answers }) {
             fontSize: '2.5rem',
             fontWeight: 'var(--font-black)',
             color: 'var(--color-text-primary)',
-            marginBottom: 'var(--spacing-md)'
+            marginBottom: 'var(--spacing-sm)'
           }}>
             {t('results.title')}
           </h1>
+          {/* Scenario Badge */}
+          {scenarioConfig && (
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              background: scenarioConfig.gradient,
+              color: 'white',
+              padding: '0.5rem 1.25rem',
+              borderRadius: '2rem',
+              fontSize: '0.95rem',
+              fontWeight: 'var(--font-semibold)',
+              marginBottom: 'var(--spacing-md)',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+            }}>
+              <span>{scenarioConfig.label} Assessment</span>
+            </div>
+          )}
           <p style={{
             fontSize: '1.125rem',
             color: 'var(--color-text-secondary)',

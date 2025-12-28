@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
+import { getScenario } from '../lib/scenarios';
 
 const YES_NO_DESCRIPTIONS = {
   Yes: 'Requirement satisfied or exemption applied.',
@@ -28,7 +29,10 @@ const Questionnaire = ({
   isFirstQuestion,
   isLastQuestion,
   currentAnswer,
+  scenario,
 }) => {
+  // Get scenario config for tailored content
+  const scenarioConfig = scenario ? getScenario(scenario) : null;
   const [showGuidanceModal, setShowGuidanceModal] = useState(false);
   const [selectedGuidance, setSelectedGuidance] = useState({ ref: '', text: '' });
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -184,6 +188,14 @@ const Questionnaire = ({
 
   const insightCards = useMemo(() => {
     const reference = question?.questionRef || 'FCA Handbook';
+    // Use scenario-specific examples if available
+    const examplesText = scenarioConfig?.examples
+      ? scenarioConfig.examples.slice(0, 2).join('. ') + '.'
+      : 'Look for invitations to act, incentives, or persuasive messaging aimed at the audience.';
+    // Use scenario-specific best practice if available
+    const bestPracticeText = scenarioConfig?.bestPractice
+      || 'Capture rationale and approvals for each decision to maintain an audit-ready record.';
+
     return [
       {
         title: 'Definition',
@@ -191,7 +203,7 @@ const Questionnaire = ({
       },
       {
         title: 'Examples',
-        copy: 'Look for invitations to act, incentives, or persuasive messaging aimed at the audience.'
+        copy: examplesText
       },
       {
         title: 'Relevant Guidance',
@@ -201,10 +213,10 @@ const Questionnaire = ({
       },
       {
         title: 'Best Practice',
-        copy: 'Capture rationale and approvals for each decision to maintain an audit-ready record.'
+        copy: bestPracticeText
       }
     ];
-  }, [question?.explanation, question?.questionRef]);
+  }, [question?.explanation, question?.questionRef, scenarioConfig]);
 
   const helperMessage = currentAnswer?.answer
     ? 'Document why you selected this response so reviewers understand the context.'
@@ -269,6 +281,38 @@ const Questionnaire = ({
         </section>
 
         <aside className="assessment-insights">
+          {/* Scenario Mockup Image */}
+          {scenarioConfig?.mockupImage && (
+            <div className="insight-mockup">
+              <h5>Example Illustration</h5>
+              <img
+                src={scenarioConfig.mockupImage}
+                alt={scenarioConfig.mockupAlt || `${scenarioConfig.label} example`}
+                className="mockup-image"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
+              />
+              <div className="mockup-placeholder" style={{
+                display: 'none',
+                height: '200px',
+                background: 'linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%)',
+                borderRadius: '8px',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#64748b',
+                fontSize: '0.875rem',
+                textAlign: 'center',
+                padding: '1rem'
+              }}>
+                <span>📷 {scenarioConfig.label} mockup<br/>Image pending</span>
+              </div>
+              <p className="mockup-caption">
+                Assess this {scenarioConfig.label.toLowerCase()} promotion against the questions
+              </p>
+            </div>
+          )}
           {insightCards.map((card) => (
             <div key={card.title} className="insight-card">
               <h5>{card.title}</h5>
@@ -323,6 +367,38 @@ const Questionnaire = ({
               </button>
             </div>
             <div className="drawer-content">
+              {/* Scenario Mockup Image in Drawer */}
+              {scenarioConfig?.mockupImage && (
+                <div className="insight-mockup">
+                  <h5>Example Illustration</h5>
+                  <img
+                    src={scenarioConfig.mockupImage}
+                    alt={scenarioConfig.mockupAlt || `${scenarioConfig.label} example`}
+                    className="mockup-image"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div className="mockup-placeholder" style={{
+                    display: 'none',
+                    height: '150px',
+                    background: 'linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%)',
+                    borderRadius: '8px',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#64748b',
+                    fontSize: '0.875rem',
+                    textAlign: 'center',
+                    padding: '1rem'
+                  }}>
+                    <span>📷 {scenarioConfig.label} mockup<br/>Image pending</span>
+                  </div>
+                  <p className="mockup-caption">
+                    Assess this {scenarioConfig.label.toLowerCase()} promotion
+                  </p>
+                </div>
+              )}
               {insightCards.map((card) => (
                 <div key={`drawer-${card.title}`} className="insight-card">
                   <h5>{card.title}</h5>
