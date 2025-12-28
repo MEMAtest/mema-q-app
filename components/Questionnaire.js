@@ -30,6 +30,8 @@ const Questionnaire = ({
   isLastQuestion,
   currentAnswer,
   scenario,
+  aiAnalysis,
+  uploadedPromoImage,
 }) => {
   // Get scenario config for tailored content
   const scenarioConfig = scenario ? getScenario(scenario) : null;
@@ -281,8 +283,49 @@ const Questionnaire = ({
         </section>
 
         <aside className="assessment-insights">
-          {/* Scenario Mockup Image */}
-          {scenarioConfig?.mockupImage && (
+          {/* User's Uploaded Promotion (from AI Analysis) */}
+          {uploadedPromoImage && (
+            <div className="insight-mockup">
+              <h5 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>🎯</span> Your Promotion
+              </h5>
+              <img
+                src={uploadedPromoImage}
+                alt="Your uploaded promotion"
+                className="mockup-image"
+              />
+              {aiAnalysis && (
+                <div style={{
+                  marginTop: '0.75rem',
+                  padding: '0.5rem 0.75rem',
+                  borderRadius: '0.5rem',
+                  background: aiAnalysis.overallRisk === 'high'
+                    ? 'rgba(239, 68, 68, 0.1)'
+                    : aiAnalysis.overallRisk === 'medium'
+                    ? 'rgba(245, 158, 11, 0.1)'
+                    : 'rgba(16, 185, 129, 0.1)',
+                  border: `1px solid ${
+                    aiAnalysis.overallRisk === 'high'
+                      ? 'rgba(239, 68, 68, 0.3)'
+                      : aiAnalysis.overallRisk === 'medium'
+                      ? 'rgba(245, 158, 11, 0.3)'
+                      : 'rgba(16, 185, 129, 0.3)'
+                  }`,
+                  fontSize: '0.8rem'
+                }}>
+                  <strong>AI Risk Level:</strong> {aiAnalysis.overallRisk?.toUpperCase()}
+                  {aiAnalysis.issues?.length > 0 && (
+                    <span> • {aiAnalysis.issues.length} issue(s) found</span>
+                  )}
+                </div>
+              )}
+              <p className="mockup-caption">
+                Reviewing your uploaded promotion
+              </p>
+            </div>
+          )}
+          {/* Scenario Mockup Image (only if no uploaded image) */}
+          {!uploadedPromoImage && scenarioConfig?.mockupImage && (
             <div className="insight-mockup">
               <h5>Example Illustration</h5>
               <img

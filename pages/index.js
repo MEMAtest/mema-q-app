@@ -5,6 +5,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import WelcomeScreen from '../components/WelcomeScreen';
 import ScenarioSelector from '../components/ScenarioSelector';
+import AIAnalyzer from '../components/AIAnalyzer';
 import Breadcrumb from '../components/Breadcrumb';
 import ProgressBar from '../components/ProgressBar';
 import Stepper from '../components/Stepper';
@@ -41,6 +42,8 @@ export default function Home() {
   const [completedSections, setCompletedSections] = useState({});
   const [sessionId, setSessionId] = useState('');
   const [progressLoaded, setProgressLoaded] = useState(false);
+  const [aiAnalysis, setAiAnalysis] = useState(null);
+  const [uploadedPromoImage, setUploadedPromoImage] = useState(null);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -136,19 +139,44 @@ export default function Home() {
     }));
   }, [currentSection, currentQuestion, progressLoaded]);
 
-  const handleStart = () => setAppState('scenario');
+  const handleStart = () => setAppState('ai-analyze');
+
+  const handleAIAnalysisComplete = ({ analysis, imagePreview, suggestedAnswers }) => {
+    setAiAnalysis(analysis);
+    setUploadedPromoImage(imagePreview);
+    // Pre-fill answers from AI suggestions
+    if (suggestedAnswers && Object.keys(suggestedAnswers).length > 0) {
+      const prefilled = {};
+      Object.entries(suggestedAnswers).forEach(([qId, suggestion]) => {
+        if (suggestion.confidence > 0.7) {
+          prefilled[qId] = {
+            answer: suggestion.answer,
+            notes: `AI suggested: ${suggestion.reason}`,
+            aiSuggested: true,
+            aiConfidence: suggestion.confidence,
+          };
+        }
+      });
+      setAnswers(prefilled);
+    }
+    setAppState('scenario');
+  };
+
+  const handleSkipAI = () => setAppState('scenario');
 
   const handleScenarioSelect = (scenarioId) => {
     setSelectedScenario(scenarioId);
-    // Reset questionnaire state for new assessment
-    setAnswers({});
+    // Reset questionnaire state for new assessment (keep AI pre-filled answers)
+    if (!aiAnalysis) {
+      setAnswers({});
+    }
     setCurrentSection(0);
     setCurrentQuestion(0);
     setCompletedSections({});
     setAppState('questionnaire');
   };
 
-  const handleScenarioBack = () => setAppState('welcome');
+  const handleScenarioBack = () => setAppState('ai-analyze');
 
   const updateCompletedSections = (sectionIndex) => {
     const newCompleted = {};
@@ -416,10 +444,17 @@ export default function Home() {
         )}
 
         {appState === 'welcome' && <WelcomeScreen onStart={handleStart} />}
+        {appState === 'ai-analyze' && (
+          <AIAnalyzer
+            onAnalysisComplete={handleAIAnalysisComplete}
+            onSkip={handleSkipAI}
+          />
+        )}
         {appState === 'scenario' && (
           <ScenarioSelector
             onSelect={handleScenarioSelect}
             onBack={handleScenarioBack}
+            aiAnalysis={aiAnalysis}
           />
         )}
         {appState === 'questionnaire' && questions.length > 0 ? (
@@ -438,6 +473,8 @@ export default function Home() {
             answers={answers}
             onJumpToQuestion={handleJumpToQuestion}
             scenario={selectedScenario}
+            aiAnalysis={aiAnalysis}
+            uploadedPromoImage={uploadedPromoImage}
           />
         ) : appState === 'questionnaire' ? (
           <div className="app-container text-center">Loading questions...</div>
