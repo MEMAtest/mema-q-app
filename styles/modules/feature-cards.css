@@ -1,0 +1,488 @@
+/* -- Feature Cards Grid -- */
+.features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+    margin: var(--spacing-2xl) 0;
+}
+
+.value-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-2xl);
+}
+
+.value-card {
+    background: #ffffff;
+    border-radius: 1.25rem;
+    padding: var(--spacing-xl);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    box-shadow: 0 12px 45px rgba(15, 23, 42, 0.08);
+    color: var(--color-ink-secondary);
+}
+
+.icon-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-accent-primary-bg);
+    color: var(--color-accent-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Interactive icon wrapper with 3D effects */
+.interactive-icon {
+  perspective: 300px;
+  transform-style: preserve-3d;
+  will-change: transform;
+  cursor: pointer;
+}
+
+/* Icon circle with 3D transforms */
+.interactive-icon .icon-circle {
+  transform-style: preserve-3d;
+  transform:
+    rotateX(calc(var(--icon-rx, 0) * 1deg))
+    rotateY(calc(var(--icon-ry, 0) * 1deg))
+    scale(1.0);
+  transition: transform 80ms ease, box-shadow 200ms ease;
+  will-change: transform;
+}
+
+/* Hover state enhancement */
+.interactive-icon:hover .icon-circle {
+  box-shadow:
+    0 8px 24px rgba(0, 200, 151, 0.25),
+    0 2px 8px rgba(0, 200, 151, 0.15);
+  transform:
+    rotateX(calc(var(--icon-rx, 0) * 1deg))
+    rotateY(calc(var(--icon-ry, 0) * 1deg))
+    scale(1.05);
+}
+
+/* SVG icon internal rotation (optional subtle effect) */
+.interactive-icon .icon-circle svg {
+  transform: rotate(calc(var(--icon-rotate, 0) * 1deg));
+  transition: transform 120ms ease;
+}
+
+/* Accessibility: respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .interactive-icon,
+  .interactive-icon .icon-circle,
+  .interactive-icon .icon-circle svg {
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+.value-card h4 {
+    margin: var(--spacing-md) 0 var(--spacing-sm);
+    font-size: 1.25rem;
+    color: var(--color-ink-primary);
+}
+
+.value-card p {
+    margin: 0;
+    color: var(--color-ink-secondary);
+    font-size: 0.95rem;
+}
+
+.feature-points {
+    list-style: none;
+    padding: 0;
+    margin: var(--spacing-md) 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.feature-points li {
+    color: var(--color-ink-secondary);
+    font-size: 0.95rem;
+    padding-left: 1rem;
+    position: relative;
+}
+
+.feature-points li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--color-accent-primary);
+    position: absolute;
+    left: 0;
+    top: 0.55rem;
+}
+
+@media (min-width: 768px) {
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.feature-card {
+    background: var(--color-panel);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(118, 193, 210, 0.18);
+    transition: all var(--transition-base);
+    text-align: center;
+}
+
+.product-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-2xl);
+    margin-top: var(--spacing-2xl);
+    align-items: center;
+}
+
+.product-copy {
+    text-align: left;
+}
+
+.product-copy p {
+    color: var(--color-text-secondary);
+}
+
+.vision3d {
+    margin: 0 0 var(--spacing-xl);
+    border-radius: 1.5rem;
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    --rx: 0;
+    --ry: 0;
+    --vx: 0.5;
+    --vy: 0.5;
+    --vision-surface: rgba(255, 255, 255, 0.92);
+    --vision-surface-2: rgba(248, 250, 253, 0.82);
+    --vision-ink: var(--color-text-primary);
+    --vision-ink-2: var(--color-text-muted);
+    --vision-border: var(--color-border-light);
+}
+
+.vision3d--product {
+    background: rgba(255, 255, 255, 0.92);
+}
+
+.vision3d--hero {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.18);
+    --vision-surface: rgba(7, 26, 42, 0.52);
+    --vision-surface-2: rgba(18, 43, 75, 0.55);
+    --vision-ink: rgba(255, 255, 255, 0.92);
+    --vision-ink-2: rgba(255, 255, 255, 0.70);
+    --vision-border: rgba(255, 255, 255, 0.14);
+}
+
+.vision3d--hero .vision3d-stage {
+    padding: var(--spacing-lg);
+}
+
+.vision3d--hero .vision3d-stack {
+    height: 260px;
+}
+
+.vision3d-stage {
+    perspective: 1100px;
+    padding: var(--spacing-xl);
+}
+
+.vision3d-stack {
+    position: relative;
+    height: 240px;
+    transform-style: preserve-3d;
+    transform: rotateX(calc(var(--rx) * 1deg)) rotateY(calc(var(--ry) * 1deg));
+    transition: transform 120ms ease;
+}
+
+.vision3d-stack::before {
+    content: '';
+    position: absolute;
+    inset: -18%;
+    background: rgba(0, 200, 151, 0.10);
+    filter: blur(14px);
+    transform: translateZ(-40px);
+    opacity: 0.9;
+}
+
+.vision3d-stackCard {
+    position: absolute;
+    inset: 0;
+    border-radius: 1.25rem;
+    background: var(--vision-surface);
+    border: 1px solid var(--vision-border);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
+    padding: 1.1rem 1.1rem 1.05rem;
+    transform-style: preserve-3d;
+    overflow: hidden;
+    backface-visibility: hidden;
+}
+
+.vision3d--hero .vision3d-stackCard {
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.24);
+}
+
+.vision3d-stackCard::after {
+    content: '';
+    position: absolute;
+    inset: -40% -30%;
+    background: rgba(0, 200, 151, 0.12);
+    opacity: 0.75;
+    transform: translateZ(-1px);
+}
+
+.vision3d-stackCard.is-back {
+    transform: translateZ(-18px) translateY(14px) translateX(10px) rotateZ(-4deg);
+    background: var(--vision-surface-2);
+    opacity: 0.92;
+}
+
+.vision3d-stackCard.is-far {
+    transform: translateZ(-38px) translateY(20px) translateX(-14px) rotateZ(6deg);
+    background: rgba(255, 255, 255, 0.70);
+    opacity: 0.78;
+    filter: blur(0.2px);
+}
+
+.vision3d--hero .vision3d-stackCard.is-far {
+    background: rgba(18, 43, 75, 0.40);
+    opacity: 0.65;
+}
+
+.vision3d-stackCard.is-mid {
+    transform: translateZ(6px) translateY(6px) translateX(-6px) rotateZ(2.5deg);
+}
+
+.vision3d-stackCard.is-front {
+    transform: translateZ(34px) translateY(-2px) rotateZ(-1deg);
+    box-shadow: 0 28px 70px rgba(15, 23, 42, 0.14);
+}
+
+.vision3d-cardTop {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.vision3d-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--vision-ink);
+    border: 1px solid var(--vision-border);
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.vision3d--hero .vision3d-pill {
+    background: rgba(255, 255, 255, 0.10);
+}
+
+.vision3d-pill.is-accent {
+    border-color: rgba(0, 200, 151, 0.35);
+    background: rgba(0, 200, 151, 0.12);
+}
+
+.vision3d-meta {
+    font-size: 0.8rem;
+    color: var(--vision-ink-2);
+    font-weight: 500;
+}
+
+.vision3d-title {
+    position: relative;
+    z-index: 1;
+    font-weight: 700;
+    color: var(--vision-ink);
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+}
+
+.vision3d-lines {
+    position: relative;
+    z-index: 1;
+    margin-top: 0.8rem;
+    display: grid;
+    gap: 0.55rem;
+}
+
+.vision3d-lines span {
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.08);
+}
+
+.vision3d--hero .vision3d-lines span {
+    background: rgba(255, 255, 255, 0.10);
+}
+
+.vision3d-lines span:nth-child(1) { width: 88%; }
+.vision3d-lines span:nth-child(2) { width: 68%; }
+.vision3d-lines span:nth-child(3) { width: 74%; }
+
+.vision3d-choiceRow {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.vision3d-choice {
+    font-size: 0.78rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.8rem;
+    border: 1px solid var(--vision-border);
+    color: var(--vision-ink-2);
+    background: rgba(255, 255, 255, 0.24);
+}
+
+.vision3d--hero .vision3d-choice {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.vision3d-gauges {
+    position: relative;
+    z-index: 1;
+    margin-top: 0.9rem;
+    display: grid;
+    gap: 0.65rem;
+}
+
+.vision3d-gauge {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0.75rem;
+    align-items: center;
+    font-size: 0.78rem;
+    color: var(--vision-ink-2);
+}
+
+.vision3d-bar {
+    position: relative;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.10);
+    overflow: hidden;
+    border: 1px solid var(--vision-border);
+}
+
+.vision3d--hero .vision3d-bar {
+    background: rgba(255, 255, 255, 0.10);
+}
+
+.vision3d-bar i {
+    display: block;
+    height: 100%;
+    width: var(--p);
+    background: rgba(0, 200, 151, 0.95);
+    border-radius: 999px;
+}
+
+@media (max-width: 768px) {
+    .vision3d-stage { padding: var(--spacing-lg); }
+    .vision3d-stack { height: 210px; }
+    .vision3d-gauge { grid-template-columns: 110px 1fr; }
+}
+
+.product-visual {
+    background: #0b3f54;
+    border-radius: 1.5rem;
+    padding: var(--spacing-xl);
+    box-shadow: 0 30px 70px rgba(6, 25, 39, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.mockup-frame {
+    background: rgba(8, 35, 68, 0.92);
+    border-radius: 1.25rem;
+    padding: var(--spacing-2xl);
+    margin: 0;
+    box-shadow: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Question cycling animation */
+.mockup-question-content {
+    animation: fadeInQuestion 0.5s ease;
+}
+
+.mockup-why-matters {
+    animation: fadeInQuestion 0.5s ease 0.1s both;
+}
+
+@keyframes fadeInQuestion {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.feature-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-2xl);
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-2xl);
+}
+
+.feature-card-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(99, 242, 187, 0.12);
+    border-radius: var(--radius-lg);
+    color: var(--color-accent-primary);
+}
+
+.feature-card-icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    font-weight: var(--font-semibold);
+    margin-bottom: var(--spacing-md);
+}
+
+.feature-card p {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.78);
+    line-height: 1.6;
+}
+

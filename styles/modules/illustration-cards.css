@@ -1,0 +1,231 @@
+/* -- Illustration Cards -- */
+.illustration-card {
+    background: var(--color-bg-white);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-2xl);
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    border: 1px solid var(--color-border-light);
+}
+
+.illustration-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-accent-primary);
+}
+
+.illustration-card img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+}
+
+.illustration-card h4 {
+    font-size: 1.125rem;
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+    margin-top: var(--spacing-md);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .illustration-card {
+        padding: var(--spacing-lg);
+    }
+
+    .illustration-card img {
+        max-width: 220px;
+    }
+}
+
+/* -- 3D Illustration Cards -- */
+.illustration-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--spacing-2xl);
+    margin-bottom: var(--spacing-2xl);
+    margin-top: var(--spacing-2xl);
+    padding: 0 var(--spacing-md);
+}
+
+@media (max-width: 700px) {
+    .illustration-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xl);
+        padding: 0;
+    }
+}
+
+.illustration-card-3d {
+    position: relative;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 100%);
+    border-radius: 24px;
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    box-shadow:
+        0 4px 6px rgba(0, 0, 0, 0.02),
+        0 12px 24px rgba(0, 0, 0, 0.04),
+        0 24px 48px rgba(0, 0, 0, 0.03);
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border: 1px solid rgba(0, 200, 151, 0.1);
+    overflow: visible;
+}
+
+.illustration-card-3d:hover {
+    transform: translateY(-12px);
+    box-shadow:
+        0 8px 16px rgba(0, 200, 151, 0.08),
+        0 24px 48px rgba(0, 200, 151, 0.12),
+        0 48px 80px rgba(99, 102, 241, 0.08);
+}
+
+.illustration-blob {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    height: 260px;
+    background:
+        radial-gradient(ellipse 80% 60% at 50% 40%,
+            rgba(96, 211, 230, 0.35) 0%,
+            rgba(0, 200, 151, 0.2) 30%,
+            rgba(99, 102, 241, 0.1) 60%,
+            transparent 100%);
+    border-radius: 50%;
+    filter: blur(30px);
+    z-index: 0;
+    pointer-events: none;
+    animation: blobFloat 8s ease-in-out infinite;
+}
+
+@keyframes blobFloat {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.05); }
+}
+
+.illustration-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 260px;
+    justify-content: flex-end;
+    padding-bottom: 1rem;
+}
+
+.illustration-image {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0 20px 40px rgba(99, 102, 241, 0.2));
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-style: preserve-3d;
+}
+
+.illustration-card-3d:hover .illustration-image {
+    transform: translateY(-16px) scale(1.08);
+    filter: drop-shadow(0 32px 48px rgba(99, 102, 241, 0.25));
+}
+
+.illustration-pedestal {
+    width: 200px;
+    height: 40px;
+    background:
+        radial-gradient(ellipse at center,
+            rgba(96, 211, 230, 0.4) 0%,
+            rgba(0, 200, 151, 0.2) 40%,
+            transparent 70%);
+    border-radius: 50%;
+    margin-top: -20px;
+    filter: blur(12px);
+    position: relative;
+    z-index: 0;
+}
+
+/* Add a second layer for more depth */
+.illustration-pedestal::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 160px;
+    height: 20px;
+    background: radial-gradient(ellipse at center,
+        rgba(99, 102, 241, 0.15) 0%,
+        transparent 70%);
+    border-radius: 50%;
+    filter: blur(8px);
+}
+
+.illustration-card-3d h4 {
+    position: relative;
+    z-index: 1;
+    margin-top: 1.5rem;
+}
+
+.illustration-card-3d p {
+    position: relative;
+    z-index: 1;
+}
+
+/* Floating particles effect */
+.illustration-card-3d::before {
+    content: '';
+    position: absolute;
+    top: 30%;
+    right: 15%;
+    width: 8px;
+    height: 8px;
+    background: rgba(0, 200, 151, 0.6);
+    border-radius: 50%;
+    animation: particleFloat 4s ease-in-out infinite;
+}
+
+.illustration-card-3d::after {
+    content: '';
+    position: absolute;
+    top: 45%;
+    left: 12%;
+    width: 6px;
+    height: 6px;
+    background: rgba(99, 102, 241, 0.5);
+    border-radius: 50%;
+    animation: particleFloat 5s ease-in-out infinite 1s;
+}
+
+@keyframes particleFloat {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+    50% { transform: translateY(-10px) scale(1.2); opacity: 1; }
+}
+
+@media (max-width: 768px) {
+    .illustration-card-3d {
+        padding: 1.5rem;
+    }
+
+    .illustration-image {
+        max-width: 220px;
+    }
+
+    .illustration-blob {
+        width: 240px;
+        height: 200px;
+    }
+
+    .illustration-content {
+        min-height: 200px;
+    }
+
+    .illustration-pedestal {
+        width: 160px;
+        height: 30px;
+    }
+}
+

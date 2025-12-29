@@ -1,0 +1,136 @@
+/* Assessments Table */
+.assessments-table-container {
+    overflow-x: auto;
+}
+
+.assessments-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.assessments-table th,
+.assessments-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.assessments-table th {
+    font-size: 0.75rem;
+    font-weight: var(--font-semibold);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--color-bg-secondary);
+}
+
+.assessments-table td {
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+}
+
+.assessments-table tr:hover td {
+    background: var(--color-bg-secondary);
+}
+
+.assessment-type {
+    font-weight: var(--font-medium);
+}
+
+.assessment-date {
+    color: var(--color-text-muted);
+}
+
+.score-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.score-bar {
+    width: 60px;
+    height: 6px;
+    border-radius: 3px;
+}
+
+.risk-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: var(--font-medium);
+    text-transform: capitalize;
+}
+
+.risk-badge.risk-high {
+    background: rgba(239, 68, 68, 0.1);
+    color: #DC2626;
+}
+
+.risk-badge.risk-medium {
+    background: rgba(245, 158, 11, 0.1);
+    color: #D97706;
+}
+
+.risk-badge.risk-low {
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+}
+
+.assessment-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.action-btn:hover {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+}
+
+.action-btn.delete:hover {
+    background: var(--color-danger-bg);
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+}
+
+/* Assessments Summary */
+.assessments-summary {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem;
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    margin-top: 1.5rem;
+}
+
+.summary-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.summary-value {
+    font-size: 1.25rem;
+    font-weight: var(--font-bold);
+    color: var(--color-text-primary);
+}
+
+.summary-label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+

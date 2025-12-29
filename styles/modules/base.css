@@ -1,0 +1,194 @@
+/* Import Google Fonts - Inter (SMCR Typography) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Tailwind base styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* -- MEMA Professional Solid Color Palette -- */
+:root {
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-fallback: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --font-light: 300;
+    --font-regular: 400;
+    --font-medium: 500;
+    --font-semibold: 600;
+    --font-bold: 700;
+    --font-black: 900;
+
+    /* Light mode (default) */
+    --color-bg-primary: #F6F8FC;
+    --color-bg-secondary: #EEF2F8;
+    --color-bg-tertiary: #FFFFFF;
+    --color-bg-elevated: #FFFFFF;
+
+    /* Surfaces */
+    --color-panel: #FFFFFF;
+    --color-panel-alt: #F8FAFD;
+    --color-panel-elevated: #FFFFFF;
+
+    /* Vibrant cyan-green accent - solid color */
+    --color-accent-primary: #00C897;
+    --color-accent-primary-hover: #00FFB3;
+    --color-accent-primary-light: #22D3EE;
+    --color-accent-primary-bg: rgba(0, 200, 151, 0.14);
+    --color-accent-primary-glow: rgba(0, 200, 151, 0.35);
+
+    /* Secondary accent - solid indigo */
+    --color-accent-secondary: #4F46E5;
+    --color-accent-secondary-hover: #4338CA;
+    --color-accent-secondary-light: #6366F1;
+    --color-accent-secondary-bg: rgba(79, 70, 229, 0.15);
+
+    /* Text (light mode) */
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #334155;
+    --color-text-muted: #64748B;
+    --color-text-light: #94A3B8;
+    --color-text-white: #FFFFFF;
+
+    /* Ink helpers (backwards compatible) */
+    --color-ink-primary: var(--color-text-primary);
+    --color-ink-secondary: var(--color-text-secondary);
+    --color-ink-muted: var(--color-text-muted);
+    --color-ink-subtle: #475569;
+
+    /* Contrast helpers */
+    --color-text-on-accent: #06221E;
+
+    /* Missing tokens used throughout the stylesheet */
+    --color-text-subtle: #475569;
+    --color-bg-light: rgba(15, 23, 42, 0.06);
+    --color-bg-dark: #071A2A;
+    --color-panel-soft: rgba(255, 255, 255, 0.72);
+    --color-primary: var(--color-accent-secondary);
+    --color-success-border: rgba(16, 185, 129, 0.3);
+    --shadow-accent-secondary: 0 0 18px rgba(79, 70, 229, 0.35), 0 0 36px rgba(79, 70, 229, 0.18);
+    --gradient-section: #0b7286;
+
+    /* Status colors - solid */
+    --color-success: #10B981;
+    --color-success-dark: #059669;
+    --color-success-bg: rgba(16, 185, 129, 0.15);
+    --color-success-glow: rgba(16, 185, 129, 0.5);
+
+    --color-warning: #F59E0B;
+    --color-warning-dark: #D97706;
+    --color-warning-bg: rgba(245, 158, 11, 0.15);
+
+    --color-danger: #EF4444;
+    --color-danger-dark: #DC2626;
+    --color-danger-bg: rgba(239, 68, 68, 0.15);
+    --color-danger-glow: rgba(239, 68, 68, 0.5);
+
+    /* Borders (light mode) */
+    --color-border-light: rgba(15, 23, 42, 0.08);
+    --color-border: rgba(15, 23, 42, 0.12);
+    --color-border-dark: rgba(15, 23, 42, 0.18);
+    --color-border-accent: rgba(0, 200, 151, 0.35);
+
+    /* Shadows (light mode) */
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.08);
+    --shadow-md: 0 10px 20px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 18px 45px rgba(15, 23, 42, 0.10);
+    --shadow-xl: 0 28px 70px rgba(15, 23, 42, 0.12);
+    --shadow-2xl: 0 45px 110px rgba(15, 23, 42, 0.14);
+
+    /* Glowing accent shadows */
+    --shadow-glow-primary: 0 0 20px var(--color-accent-primary-glow), 0 0 40px rgba(0, 200, 151, 0.2);
+    --shadow-glow-success: 0 0 20px var(--color-success-glow), 0 0 40px rgba(16, 185, 129, 0.2);
+    --shadow-glow-danger: 0 0 20px var(--color-danger-glow), 0 0 40px rgba(239, 68, 68, 0.2);
+
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 0.75rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --spacing-3xl: 4rem;
+
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    --radius-full: 9999px;
+
+    --transition-fast: 150ms ease;
+    --transition-base: 250ms ease;
+    --transition-slow: 350ms ease;
+}
+
+/* -- Global Styles -- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-primary);
+    background: var(--color-bg-primary);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-regular);
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography Hierarchy */
+h1, h2, h3, h4, h5, h6,
+.question-text, .stepper .label,
+.welcome-title, .features-title {
+    font-family: var(--font-primary);
+    color: var(--color-text-primary);
+    line-height: 1.2;
+    font-weight: var(--font-bold);
+}
+
+h1 { font-size: 3rem; font-weight: var(--font-black); }
+h2 { font-size: 2.25rem; font-weight: var(--font-black); }
+h3 { font-size: 1.875rem; font-weight: var(--font-bold); }
+h4 { font-size: 1.5rem; font-weight: var(--font-semibold); }
+h5 { font-size: 1.25rem; font-weight: var(--font-semibold); }
+h6 { font-size: 1.125rem; font-weight: var(--font-medium); }
+
+p {
+    margin-bottom: 1rem;
+    font-weight: var(--font-regular);
+}
+
+a {
+    color: var(--color-accent-primary);
+    text-decoration: none;
+    transition: color var(--transition-base);
+}
+
+a:hover {
+    color: var(--color-accent-primary-hover);
+    text-decoration: underline;
+}
+
+.app-container {
+    max-width: 1200px;
+    margin: var(--spacing-xl) auto var(--spacing-3xl);
+    background: #ffffff;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    padding: var(--spacing-2xl);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    color: var(--color-ink-secondary);
+}
+
+.app-container h1,
+.app-container h2,
+.app-container h3,
+.app-container h4,
+.app-container h5,
+.app-container h6 {
+    color: var(--color-ink-primary);
+}
+
+

@@ -95,20 +95,34 @@ const Icons = {
   )
 };
 
-const ScenarioSelector = ({ onSelect, onBack }) => {
+const ScenarioSelector = ({
+  onSelect,
+  onBack,
+  isLoading = false,
+  suggestedScenario = null,
+  aiAnalysis = null
+}) => {
   const { t } = useTranslation('common');
   const scenarios = getOrderedScenarios();
+
+  // Map promotion types to scenario IDs
+  const getScenarioLabel = (scenarioId) => {
+    const scenario = scenarios.find(s => s.id === scenarioId);
+    return scenario?.label || 'Full Assessment';
+  };
 
   return (
     <div className="scenario-selector">
       <div className="scenario-header">
-        <button className="scenario-back-btn" onClick={onBack}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="19" y1="12" x2="5" y2="12" />
-            <polyline points="12 19 5 12 12 5" />
-          </svg>
-          Back
-        </button>
+        {onBack && (
+          <button className="scenario-back-btn" onClick={onBack}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            Back
+          </button>
+        )}
 
         <div className="scenario-title-block">
           <h1 className="scenario-title">What are you promoting?</h1>
@@ -118,42 +132,83 @@ const ScenarioSelector = ({ onSelect, onBack }) => {
         </div>
       </div>
 
-      <div className="scenario-grid">
-        {scenarios.map((scenario) => (
-          <button
-            key={scenario.id}
-            className={`scenario-card ${scenario.recommended ? 'recommended' : ''}`}
-            onClick={() => onSelect(scenario.id)}
-            style={{ '--scenario-color': scenario.color, '--scenario-gradient': scenario.gradient }}
-          >
-            {scenario.recommended && (
-              <div className="scenario-badge">Recommended</div>
-            )}
+      {/* Suggestion Banner */}
+      {suggestedScenario && !isLoading && (
+        <div className="suggestion-banner">
+          <div className="suggestion-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4" />
+              <path d="M12 8h.01" />
+            </svg>
+          </div>
+          <div className="suggestion-content">
+            <strong>Recommendation:</strong> Based on your {aiAnalysis?.promotionTypeLabel || 'uploaded promotion'},
+            we suggest the <span className="suggested-type">{getScenarioLabel(suggestedScenario)}</span> assessment.
+          </div>
+        </div>
+      )}
 
-            <div className="scenario-icon-wrapper">
-              <div className="scenario-icon">
-                {Icons[scenario.icon]}
-              </div>
-            </div>
+      <div className={`scenario-grid ${isLoading ? 'loading' : ''}`}>
+        {scenarios.map((scenario) => {
+          const isSuggested = suggestedScenario === scenario.id && !isLoading;
 
-            <div className="scenario-content">
-              <h3 className="scenario-card-title">{scenario.label}</h3>
-              <p className="scenario-card-desc">{scenario.description}</p>
+          return (
+            <button
+              key={scenario.id}
+              className={`scenario-card ${scenario.recommended ? 'recommended' : ''} ${isSuggested ? 'suggested' : ''} ${isLoading ? 'disabled' : ''}`}
+              onClick={() => !isLoading && onSelect(scenario.id)}
+              disabled={isLoading}
+              style={{ '--scenario-color': scenario.color, '--scenario-gradient': scenario.gradient }}
+            >
+              {/* Loading overlay */}
+              {isLoading && (
+                <div className="scenario-loading-overlay">
+                  <div className="scenario-loading-shimmer"></div>
+                </div>
+              )}
 
-              <div className="scenario-meta">
-                <span className="scenario-questions">
-                  {scenario.questionCount} questions
-                </span>
-                <span className="scenario-arrow">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
+              {/* Suggested Badge */}
+              {isSuggested && (
+                <div className="scenario-badge suggested-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
                   </svg>
-                </span>
+                  Recommended
+                </div>
+              )}
+
+              {/* Regular Recommended Badge (only show if not AI suggested) */}
+              {scenario.recommended && !isSuggested && (
+                <div className="scenario-badge">Recommended</div>
+              )}
+
+              <div className="scenario-icon-wrapper">
+                <div className="scenario-icon">
+                  {Icons[scenario.icon]}
+                </div>
               </div>
-            </div>
-          </button>
-        ))}
+
+              <div className="scenario-content">
+                <h3 className="scenario-card-title">{scenario.label}</h3>
+                <p className="scenario-card-desc">{scenario.description}</p>
+
+                <div className="scenario-meta">
+                  <span className="scenario-questions">
+                    {scenario.questionCount} questions
+                  </span>
+                  <span className="scenario-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                      <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </button>
+          );
+        })}
       </div>
 
       <div className="scenario-footer">

@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import '../styles/globals.css';
 import { validateEnv } from '../lib/validateEnv';
 import { appWithTranslation } from 'next-i18next';
+import { AuthProvider } from '../lib/authContext';
 
 if (process.env.NODE_ENV === 'production' && typeof window === 'undefined') {
   validateEnv();
@@ -19,7 +20,9 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <Component {...pageProps} />
+    <AuthProvider>
+      <Component {...pageProps} />
+    </AuthProvider>
   );
 }
 

@@ -1,0 +1,258 @@
+/* ========================================
+   MOBILE DRAWER SYSTEM
+   ======================================== */
+
+/* Drawer Toggle Button - visible only on mobile */
+.drawer-toggle-btn {
+    display: none;
+    position: fixed;
+    bottom: var(--spacing-xl);
+    right: var(--spacing-lg);
+    z-index: 1000;
+    background: var(--color-accent-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-full);
+    width: 56px;
+    height: 56px;
+    box-shadow: var(--shadow-lg);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    align-items: center;
+    justify-content: center;
+}
+
+.drawer-toggle-btn:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-xl);
+}
+
+.drawer-toggle-btn:active {
+    transform: scale(0.98);
+}
+
+.drawer-toggle-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Drawer Overlay */
+.drawer-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100000;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+    isolation: isolate;
+}
+
+.drawer-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Drawer Container */
+.drawer-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    max-width: 380px;
+    height: 100vh;
+    height: 100dvh;
+    background: var(--color-panel);
+    z-index: 100001;
+    transition: right var(--transition-base) cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--shadow-2xl);
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.drawer-container.active {
+    right: 0;
+}
+
+/* Drawer Header */
+.drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-bottom: 1px solid var(--color-border-light);
+    background: var(--color-panel-alt);
+}
+
+.drawer-header h4 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+}
+
+.drawer-close-btn {
+    background: none;
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    transition: all var(--transition-fast);
+}
+
+.drawer-close-btn:hover {
+    background: var(--color-bg-light);
+    color: var(--color-text-primary);
+}
+
+.drawer-close-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Drawer Content */
+.drawer-content {
+    padding: var(--spacing-lg);
+    overflow-y: auto;
+    height: calc(100vh - 72px);
+    height: calc(100dvh - 72px);
+    -webkit-overflow-scrolling: touch;
+}
+
+.drawer-content .insight-card {
+    margin-bottom: var(--spacing-md);
+}
+
+/* Mobile Breakpoint - Show Drawer System */
+@media (max-width: 768px) {
+    .drawer-toggle-btn {
+        display: flex;
+    }
+
+    .drawer-overlay {
+        display: block;
+    }
+
+    .drawer-container {
+        display: block;
+    }
+
+    /* Hide desktop insights on mobile */
+    .assessment-insights {
+        display: none !important;
+    }
+
+    /* Adjust grid for mobile */
+    .assessment-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .assessment-shell {
+        padding: var(--spacing-md);
+        border-radius: var(--radius-lg);
+    }
+
+    .assessment-question-card {
+        padding: var(--spacing-lg);
+    }
+}
+
+/* ========================================
+   TOUCH-FRIENDLY MOBILE ENHANCEMENTS
+   ======================================== */
+
+@media (max-width: 768px) {
+    /* Ensure minimum 44x44px touch targets */
+    .answer-toggle {
+        min-height: 64px;
+        padding: var(--spacing-lg);
+    }
+
+    .btn-ghost,
+    .start-button {
+        min-height: 48px;
+        padding: 0.875rem 1.5rem;
+    }
+
+    /* Mobile form improvements */
+    .notes-field textarea {
+        font-size: 16px; /* Prevents iOS zoom on focus */
+        min-height: 100px;
+    }
+
+    select {
+        font-size: 16px; /* Prevents iOS zoom on focus */
+        min-height: 48px;
+    }
+
+    /* Question card spacing */
+    .question-meta {
+        flex-wrap: wrap;
+        gap: var(--spacing-xs);
+    }
+
+    .meta-pill {
+        font-size: 0.75rem;
+    }
+
+    /* Typography adjustments */
+    .assessment-question-card h3 {
+        font-size: 1.25rem;
+        line-height: 1.4;
+    }
+
+    /* Progress bar mobile */
+    .drawer-content .link-chip {
+        min-height: 44px;
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 375px) {
+    .assessment-shell {
+        padding: var(--spacing-sm);
+    }
+
+    .assessment-question-card {
+        padding: var(--spacing-md);
+    }
+
+    .answer-toggle {
+        padding: var(--spacing-md);
+    }
+
+    .drawer-toggle-btn {
+        width: 52px;
+        height: 52px;
+        bottom: var(--spacing-lg);
+        right: var(--spacing-md);
+    }
+}
+
+/* Safe area handling for notched devices */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .drawer-toggle-btn {
+        bottom: calc(var(--spacing-xl) + env(safe-area-inset-bottom));
+    }
+
+    .drawer-content {
+        padding-bottom: calc(var(--spacing-lg) + env(safe-area-inset-bottom));
+    }
+}
+
+/* Prevent body scroll when drawer is open */
+body.drawer-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
+

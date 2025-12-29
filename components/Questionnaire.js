@@ -313,7 +313,7 @@ const Questionnaire = ({
                   }`,
                   fontSize: '0.8rem'
                 }}>
-                  <strong>AI Risk Level:</strong> {aiAnalysis.overallRisk?.toUpperCase()}
+                  <strong>MEMA Risk Level:</strong> {aiAnalysis.overallRisk?.toUpperCase()}
                   {aiAnalysis.issues?.length > 0 && (
                     <span> • {aiAnalysis.issues.length} issue(s) found</span>
                   )}

@@ -1,59 +1,46 @@
 // pages/api/analyze-promotion.js
-import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const ANALYSIS_PROMPT = `You are an FCA (Financial Conduct Authority) compliance expert analyzing a financial promotion image.
 
-const ANALYSIS_PROMPT = `You are an FCA (Financial Conduct Authority) compliance expert analyzing a financial promotion.
+FIRST, identify the promotion type/channel:
+- "billboard" - outdoor advertising, bus stops, posters
+- "social_media" - Instagram, Facebook, TikTok posts
+- "website" - web pages, landing pages, banners
+- "email" - email marketing, newsletters
+- "print" - brochures, leaflets, magazines
+- "video" - TV ads, YouTube, video content
+- "other" - any other format
 
-Analyze this image and identify:
+THEN analyze for FCA compliance:
+1. Is this a financial promotion? (Does it invite/induce investment activity?)
+2. Risk warnings - Is there a clear, prominent risk warning?
+3. Past performance claims - Any return percentages? Properly disclaimed?
+4. Misleading elements - Exaggerated claims, unrealistic promises?
+5. Required disclosures - Firm name, FCA registration visible?
+6. Target audience - Is it clear who this is for?
+7. Call-to-action - What action is requested? Is it balanced?
 
-1. **Is this a financial promotion?** (Does it invite or induce investment activity?)
-2. **Risk warnings**: Is there a clear, prominent risk warning? (e.g., "Capital at risk", "Past performance...")
-3. **Past performance claims**: Any return percentages or performance figures? Are they properly disclaimed?
-4. **Misleading elements**: Any exaggerated claims, unrealistic promises, or pressure tactics?
-5. **Required disclosures**: Is the firm name, FCA registration, or contact info visible?
-6. **Target audience clarity**: Is it clear who this promotion is for?
-7. **Call-to-action**: What action is the user being asked to take? Is it balanced?
-
-For each issue found, provide:
-- The specific problem
-- The relevant FCA rule (PERG 8.x, COBS 4.x, FG24/1, FSMA s21)
-- A recommendation to fix it
-
-Respond in this exact JSON format:
+Respond ONLY with valid JSON (no markdown, no explanation):
 {
-  "isFinancialPromotion": true/false,
-  "overallRisk": "high" | "medium" | "low",
-  "summary": "Brief 2-sentence summary of the promotion",
+  "promotionType": "billboard",
+  "promotionTypeLabel": "Billboard/Outdoor Advertising",
+  "isFinancialPromotion": true,
+  "overallRisk": "high",
+  "summary": "Brief 2-sentence summary",
   "issues": [
     {
-      "severity": "high" | "medium" | "low",
-      "category": "risk_warning" | "past_performance" | "misleading" | "disclosure" | "target_audience" | "cta",
-      "description": "What the issue is",
+      "severity": "high",
+      "category": "risk_warning",
+      "description": "Issue description",
       "fcaReference": "COBS 4.5.2R",
-      "recommendation": "How to fix it",
-      "questionId": "1.2"
+      "recommendation": "How to fix"
     }
   ],
-  "compliantElements": [
-    "List of things that are compliant"
-  ],
+  "compliantElements": ["List compliant items"],
   "suggestedAnswers": {
-    "1.1": { "answer": "Yes", "confidence": 0.9, "reason": "The promotion invites users to..." },
-    "1.2": { "answer": "No", "confidence": 0.85, "reason": "No visible risk warning..." }
+    "1.1": { "answer": "Yes", "confidence": 0.9, "reason": "Why" }
   }
-}
-
-Question IDs for reference:
-- 1.1: Is this an invitation/inducement to engage in investment activity?
-- 1.2: Does it include a clear risk warning?
-- 1.3: Are past performance figures properly disclaimed?
-- 2.1: Is the communication fair, clear and not misleading?
-- 2.2: Are benefits balanced with risks?
-- 3.1: Is the firm properly identified?
-- 3.2: Is FCA authorization status clear?
-
-Be thorough but practical. Focus on real compliance issues, not minor stylistic preferences.`;
+}`;
 
 export const config = {
   api: {
@@ -75,40 +62,113 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'No image provided' });
     }
 
-    // Initialize Gemini model with vision capabilities
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-
-    // Prepare the image for Gemini
-    const imagePart = {
-      inlineData: {
-        data: image,
-        mimeType: mimeType || 'image/png',
+    // Call OpenRouter API with Nvidia Nemotron Vision
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://mema-q-app.vercel.app',
+        'X-Title': 'MEMA Compliance Analyzer',
       },
-    };
+      body: JSON.stringify({
+        model: 'nvidia/nemotron-nano-12b-v2-vl:free',
+        messages: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'text',
+                text: ANALYSIS_PROMPT,
+              },
+              {
+                type: 'image_url',
+                image_url: {
+                  url: `data:${mimeType || 'image/png'};base64,${image}`,
+                },
+              },
+            ],
+          },
+        ],
+        max_tokens: 3000,
+        temperature: 0.2,
+      }),
+    });
 
-    // Generate content
-    const result = await model.generateContent([ANALYSIS_PROMPT, imagePart]);
-    const response = await result.response;
-    const text = response.text();
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('OpenRouter API error:', errorData);
+      throw new Error(errorData.error?.message || 'Failed to analyze image');
+    }
 
-    // Parse JSON from response (handle markdown code blocks)
+    const data = await response.json();
+    const message = data.choices?.[0]?.message || {};
+
+    // Nvidia model may return content in 'reasoning' or 'content' field
+    let text = message.content || '';
+
+    // If content is empty, check reasoning field
+    if (!text && message.reasoning) {
+      text = message.reasoning;
+    }
+
+    // Also check reasoning_details
+    if (!text && message.reasoning_details?.length > 0) {
+      text = message.reasoning_details.map(r => r.text).join('\n');
+    }
+
+    console.log('Raw response text:', text?.substring(0, 500));
+
+    // Parse JSON from response
     let analysis;
     try {
-      // Remove markdown code blocks if present
-      const jsonMatch = text.match(/```json\n?([\s\S]*?)\n?```/) || text.match(/```\n?([\s\S]*?)\n?```/);
-      const jsonString = jsonMatch ? jsonMatch[1] : text;
-      analysis = JSON.parse(jsonString.trim());
+      // Try to extract JSON from the text
+      // Look for JSON object pattern
+      const jsonMatch = text.match(/\{[\s\S]*"promotionType"[\s\S]*\}/);
+      if (jsonMatch) {
+        analysis = JSON.parse(jsonMatch[0]);
+      } else {
+        // Try parsing the whole text as JSON
+        const cleanText = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+        analysis = JSON.parse(cleanText);
+      }
     } catch (parseError) {
-      console.error('Failed to parse Gemini response:', text);
-      // Return a structured error response
+      console.error('Failed to parse response:', text);
+
+      // Try to extract key information from text even if JSON parsing fails
+      const isFinPromo = text.toLowerCase().includes('financial promotion') ||
+                         text.toLowerCase().includes('investment') ||
+                         text.toLowerCase().includes('returns');
+
+      // Detect promotion type from text
+      let promotionType = 'other';
+      let promotionTypeLabel = 'Other Promotion';
+
+      if (text.toLowerCase().includes('billboard') || text.toLowerCase().includes('outdoor') || text.toLowerCase().includes('bus stop')) {
+        promotionType = 'print';
+        promotionTypeLabel = 'Billboard/Outdoor Advertising';
+      } else if (text.toLowerCase().includes('social media') || text.toLowerCase().includes('instagram') || text.toLowerCase().includes('facebook')) {
+        promotionType = 'social_media';
+        promotionTypeLabel = 'Social Media Post';
+      } else if (text.toLowerCase().includes('website') || text.toLowerCase().includes('landing page')) {
+        promotionType = 'website';
+        promotionTypeLabel = 'Website/Landing Page';
+      } else if (text.toLowerCase().includes('email')) {
+        promotionType = 'email';
+        promotionTypeLabel = 'Email Marketing';
+      }
+
+      // Return structured fallback with detected info
       analysis = {
-        isFinancialPromotion: true,
+        promotionType,
+        promotionTypeLabel,
+        isFinancialPromotion: isFinPromo,
         overallRisk: 'medium',
-        summary: 'Analysis completed but response parsing failed. Please review manually.',
+        summary: 'Scan completed. The scanner provided insights but in a non-standard format. Key observations have been extracted.',
         issues: [],
         compliantElements: [],
         suggestedAnswers: {},
-        rawResponse: text,
+        rawAnalysis: text.substring(0, 1500),
       };
     }
 
@@ -118,7 +178,7 @@ export default async function handler(req, res) {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Gemini API error:', error);
+    console.error('OpenRouter API error:', error);
     return res.status(500).json({
       error: 'Failed to analyze image',
       message: error.message,

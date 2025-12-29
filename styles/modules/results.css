@@ -1,0 +1,167 @@
+/* -- 6. Results Page -- */
+.results-section h3 { 
+    font-size: 1.5rem; 
+    margin-bottom: 1rem; 
+}
+
+.potential-failure-item { 
+    background-color: var(--color-danger-bg); 
+    border-left: 4px solid var(--color-danger); 
+    padding: 1.25rem; 
+    margin-bottom: 1rem; 
+    border-radius: 0.5rem; 
+}
+
+.potential-failure-item strong { 
+    color: var(--color-danger-dark); 
+}
+
+.chart-container { 
+    position: relative; 
+    width: 100%; 
+    max-width: 700px; 
+    margin: 2rem auto; 
+    height: 350px; 
+    padding: 1rem; 
+    background-color: var(--color-panel); 
+    border-radius: 0.5rem; 
+    border: 1px solid var(--color-border-light);
+}
+
+.export-contact-form { 
+    background-color: var(--color-success-bg); 
+    border: 1px solid var(--color-success-border); 
+    padding: 2rem; 
+    border-radius: 0.75rem; 
+    margin-top: 2.5rem; 
+}
+
+.export-contact-form button {
+    width: 100%;
+    background-color: var(--color-success);
+}
+
+.export-contact-form button:hover {
+    background-color: var(--color-success-dark);
+}
+
+/* -- 7. Custom Button Variants -- */
+.btn-finish {
+    background-color: var(--color-success);
+    color: var(--color-text-white);
+}
+
+.btn-finish:hover {
+    background-color: var(--color-success-dark);
+    box-shadow: var(--shadow-glow-success);
+}
+
+.btn-back {
+    background-color: var(--color-text-muted);
+    color: var(--color-text-white);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-semibold);
+    font-family: var(--font-primary);
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.btn-back:hover {
+    background-color: var(--color-text-secondary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* View Results Button (Secondary Accent) */
+.btn-view-results {
+    background-color: var(--color-accent-secondary);
+    color: var(--color-text-white);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-bold);
+    font-family: var(--font-primary);
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-accent-secondary);
+    border: none;
+    cursor: pointer;
+}
+
+.btn-view-results:hover {
+    background-color: var(--color-accent-secondary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* Header "View Results" button */
+.btn-primary-dark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: 0.65rem 1.1rem;
+    border-radius: 0.9rem;
+    background: var(--color-accent-primary);
+    color: var(--color-text-on-accent);
+    border: 1px solid rgba(0, 200, 151, 0.35);
+    box-shadow: var(--shadow-sm);
+    font-weight: var(--font-semibold);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-primary-dark:hover {
+    background: var(--color-accent-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-primary-dark:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Ghost Button Variant */
+.btn-ghost {
+    background-color: transparent;
+    color: var(--color-accent-primary);
+    border: 1px solid var(--color-border-accent);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-semibold);
+    font-family: var(--font-primary);
+    transition: all var(--transition-base);
+    cursor: pointer;
+}
+
+.btn-ghost:hover {
+    background-color: var(--color-accent-primary-bg);
+    border-color: var(--color-accent-primary-hover);
+    color: var(--color-accent-primary);
+}
+
+/* Ghost Button on Dark Background */
+.btn-ghost-dark {
+    background-color: transparent;
+    color: var(--color-text-white);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-semibold);
+    font-family: var(--font-primary);
+    transition: all var(--transition-base);
+    cursor: pointer;
+}
+
+.btn-ghost-dark:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(99, 242, 187, 0.6);
+    color: var(--color-accent-primary);
+}
+

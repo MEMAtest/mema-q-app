@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
 import Image from 'next/image';
 import { exportResultsToPDF } from '../lib/exportPdf';
 import { getScenario } from '../lib/scenarios';
+import { getRecommendation } from '../lib/recommendations';
+import RecommendationCard from './RecommendationCard';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
@@ -171,6 +173,30 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
   const compliantAnswers = results.chartData.doughnut[0];
   const issuesCount = results.potentialFailures.length;
   const healthStatus = results.healthScore >= 80 ? 'Strong' : results.healthScore >= 60 ? 'Needs Attention' : 'Critical';
+
+  // Build recommendations map for each failure
+  const recommendationsMap = useMemo(() => {
+    const map = {};
+    if (!questions || !answers) return map;
+
+    // Flatten questions from all sections
+    questions.forEach(section => {
+      section.items?.forEach(item => {
+        const answer = answers[item.id]?.answer;
+        if (answer) {
+          const rec = getRecommendation(item.id, answer, item);
+          if (rec) {
+            map[item.id] = {
+              recommendation: rec,
+              fcaRef: item.ref
+            };
+          }
+        }
+      });
+    });
+
+    return map;
+  }, [questions, answers]);
 
   return (
     <div style={{
@@ -346,6 +372,15 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
                 <strong style={{ color: 'var(--color-danger-dark)' }}>Potential Implication: </strong>
                 <span>{failure.implication}</span>
               </div>
+              {/* Actionable Recommendation */}
+              {recommendationsMap[failure.id] && (
+                <RecommendationCard
+                  recommendation={recommendationsMap[failure.id].recommendation}
+                  questionId={failure.id}
+                  question={failure.question}
+                  fcaRef={recommendationsMap[failure.id].fcaRef}
+                />
+              )}
             </div>
           ))
         ) : (
@@ -427,6 +462,15 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
                     <strong style={{ color: 'var(--color-warning-dark)' }}>Potential Implication: </strong>
                     <span>{failure.implication}</span>
                   </div>
+                  {/* Actionable Recommendation */}
+                  {recommendationsMap[failure.id] && (
+                    <RecommendationCard
+                      recommendation={recommendationsMap[failure.id].recommendation}
+                      questionId={failure.id}
+                      question={failure.question}
+                      fcaRef={recommendationsMap[failure.id].fcaRef}
+                    />
+                  )}
                 </div>
               ))}
             </section>

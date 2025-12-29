@@ -51,3 +51,60 @@ model Lead {
   firm      String?  // --- ADDED THIS LINE ---
   createdAt DateTime @default(now())
 }
+
+// ========================================
+// USER AUTHENTICATION & DASHBOARD MODELS
+// ========================================
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  name          String?
+  company       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  assessments     Assessment[]
+  savedPromotions SavedPromotion[]
+
+  @@index([email])
+}
+
+model Assessment {
+  id            String   @id @default(cuid())
+  userId        String
+  scenarioId    String
+  scenarioLabel String?
+  answers       Json
+  score         Int
+  riskLevel     String   // "low", "medium", "high"
+  completedAt   DateTime @default(now())
+  createdAt     DateTime @default(now())
+
+  // Relations
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([completedAt])
+}
+
+model SavedPromotion {
+  id            String   @id @default(cuid())
+  userId        String
+  name          String?
+  imageData     String?  @db.Text
+  mimeType      String?
+  promotionType String?
+  analysis      Json?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+}

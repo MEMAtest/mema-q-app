@@ -1,0 +1,283 @@
+/* -- Benefit List with Icons -- */
+.benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--spacing-xl) 0;
+}
+
+.benefits-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    font-size: 1.125rem;
+}
+
+.benefits-list .icon {
+    width: 24px;
+    height: 24px;
+    color: var(--color-accent-primary);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* -- Video Player Section -- */
+.video-section {
+    padding: var(--spacing-3xl) var(--spacing-xl);
+    text-align: center;
+    background: rgba(2, 15, 25, 0.65);
+    border-radius: var(--radius-xl);
+    border: 1px solid rgba(118, 193, 210, 0.14);
+}
+
+.video-container {
+    max-width: 900px;
+    margin: var(--spacing-2xl) auto;
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-2xl);
+    transition: all var(--transition-base);
+    background: rgba(3, 18, 30, 0.9);
+    border: 1px solid rgba(120, 173, 197, 0.2);
+}
+
+.video-container:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-2xl);
+}
+
+.video-container video,
+.video-container iframe {
+    width: 100%;
+    height: auto;
+    display: block;
+    min-height: 500px;
+}
+
+/* -- Metric Cards -- */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+    margin: var(--spacing-xl) 0;
+}
+
+@media (min-width: 768px) {
+    .metrics-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.metric-card {
+    background: var(--color-panel);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    text-align: center;
+    transition: all var(--transition-base);
+}
+
+.metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-accent-primary);
+}
+
+.metric-value {
+    font-size: 3rem;
+    font-weight: var(--font-black);
+    color: var(--color-accent-primary);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1;
+}
+
+.metric-label {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: var(--font-medium);
+}
+
+/* -- Risk/Alert Cards -- */
+.risk-card {
+    background-color: var(--color-panel-alt);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    border-left: 4px solid var(--color-accent-primary);
+    margin-bottom: var(--spacing-lg);
+    transition: all var(--transition-base);
+}
+
+.risk-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateX(4px);
+}
+
+.risk-card-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.risk-card-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--color-danger);
+}
+
+.risk-card h4 {
+    font-size: 1.125rem;
+    font-weight: var(--font-semibold);
+    color: var(--color-danger-dark);
+    margin: 0;
+}
+
+.risk-card p {
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text-secondary);
+}
+
+.risk-card-critical {
+    border-left-color: var(--color-danger);
+    background-color: var(--color-danger-bg);
+}
+
+.risk-card-warning {
+    border-left-color: var(--color-warning);
+    background-color: var(--color-warning-bg);
+}
+
+.risk-card-warning h4 {
+    color: var(--color-warning-dark);
+}
+
+.risk-card-warning .risk-card-icon {
+    color: var(--color-warning);
+}
+
+/* -- Testimonial Card -- */
+.testimonial-card {
+    background-color: var(--color-panel);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+    box-shadow: var(--shadow-xl);
+    max-width: 600px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.testimonial-quote {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    font-style: italic;
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-text-secondary);
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.testimonial-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.testimonial-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.testimonial-info h5 {
+    font-size: 1.125rem;
+    font-weight: var(--font-semibold);
+    margin-bottom: 0.25rem;
+}
+
+.testimonial-info p {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+/* -- Compliance Score Gauge -- */
+.score-gauge-container {
+    max-width: 300px;
+    margin: var(--spacing-xl) auto;
+    text-align: center;
+}
+
+.score-gauge {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto var(--spacing-lg);
+}
+
+.score-value {
+    font-size: 3.5rem;
+    font-weight: var(--font-black);
+    color: var(--color-accent-primary);
+}
+
+.score-label {
+    font-size: 1.125rem;
+    color: var(--color-text-muted);
+    font-weight: var(--font-medium);
+}
+
+/* -- Summary Cards -- */
+.summary-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+    margin: var(--spacing-xl) 0;
+}
+
+@media (min-width: 768px) {
+    .summary-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .summary-cards {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.summary-card {
+    background-color: var(--color-panel);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    transition: all var(--transition-base);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.summary-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.summary-card-value {
+    font-size: 2.5rem;
+    font-weight: var(--font-black);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1;
+}
+
+.summary-card-label {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    font-weight: var(--font-medium);
+}
+

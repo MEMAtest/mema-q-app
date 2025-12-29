@@ -1,0 +1,569 @@
+/* ========================================
+   SCENARIO SELECTOR LOADING & SUGGESTION STATES
+   ======================================== */
+
+/* Suggestion Banner */
+.suggestion-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, rgba(0, 200, 151, 0.1), rgba(16, 185, 129, 0.1));
+    border: 1px solid rgba(0, 200, 151, 0.25);
+    border-radius: var(--radius-lg);
+    padding: 0.875rem 1rem;
+    margin-bottom: 1rem;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.suggestion-banner .suggestion-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 200, 151, 0.15);
+    border-radius: var(--radius-md);
+    color: var(--color-accent-primary);
+}
+
+.suggestion-banner .suggestion-content {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.suggestion-banner .suggestion-content strong {
+    color: var(--color-accent-primary);
+}
+
+.suggestion-banner .suggested-type {
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+}
+
+/* Scenario Grid Loading State */
+.scenario-grid.loading {
+    position: relative;
+}
+
+.scenario-grid.loading::before {
+    content: 'Scanning your promotion...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    z-index: 15;
+    background: var(--color-panel);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    white-space: nowrap;
+}
+
+/* Scenario Card Loading Overlay */
+.scenario-card .scenario-loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: inherit;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.scenario-loading-shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 200, 151, 0.1),
+        transparent
+    );
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.scenario-card.disabled {
+    pointer-events: none;
+}
+
+.scenario-card.disabled .scenario-content {
+    opacity: 0.5;
+}
+
+/* Suggested Card State */
+.scenario-card.suggested {
+    border-color: var(--color-accent-primary) !important;
+    box-shadow: 0 0 0 3px rgba(0, 200, 151, 0.2), var(--shadow-lg) !important;
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 0 3px rgba(0, 200, 151, 0.2), var(--shadow-lg);
+    }
+    50% {
+        box-shadow: 0 0 0 6px rgba(0, 200, 151, 0.15), 0 0 30px rgba(0, 200, 151, 0.3), var(--shadow-lg);
+    }
+}
+
+/* Recommended Badge on Card */
+.scenario-badge.suggested-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: linear-gradient(135deg, #00C897, #10B981);
+    color: white;
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.scenario-badge.suggested-badge svg {
+    flex-shrink: 0;
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+    .choice-modal {
+        padding: 1.5rem;
+    }
+
+    .choice-modal-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .choice-option {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem 1rem;
+    }
+
+    .choice-badge {
+        position: static;
+        margin-top: 0.5rem;
+    }
+
+    .suggestion-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* ========================================
+   AUTHENTICATION MODAL STYLES
+   ======================================== */
+
+.auth-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+    animation: fadeIn 0.2s ease;
+}
+
+.auth-modal {
+    background: var(--color-panel);
+    border-radius: var(--radius-xl);
+    max-width: 420px;
+    width: 100%;
+    padding: 2rem;
+    position: relative;
+    box-shadow: var(--shadow-2xl);
+    animation: slideUp 0.3s ease;
+}
+
+.auth-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.auth-modal-close:hover {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+}
+
+.auth-modal-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.auth-modal-header h2 {
+    font-size: 1.5rem;
+    font-weight: var(--font-bold);
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.auth-modal-header p {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.auth-error {
+    background: var(--color-danger-bg);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: var(--color-danger);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.auth-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.auth-input-group label {
+    font-size: 0.875rem;
+    font-weight: var(--font-medium);
+    color: var(--color-text-secondary);
+}
+
+.auth-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.auth-input-icon {
+    position: absolute;
+    left: 0.875rem;
+    color: var(--color-text-muted);
+    pointer-events: none;
+    display: flex;
+}
+
+.auth-input-wrapper input {
+    width: 100%;
+    padding: 0.75rem 0.875rem 0.75rem 2.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    transition: all var(--transition-fast);
+}
+
+.auth-input-wrapper input:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 0 3px rgba(0, 200, 151, 0.15);
+}
+
+.auth-input-wrapper input::placeholder {
+    color: var(--color-text-light);
+}
+
+.auth-password-toggle {
+    position: absolute;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    padding: 0.5rem;
+    display: flex;
+}
+
+.auth-password-toggle:hover {
+    color: var(--color-text-secondary);
+}
+
+.auth-submit-btn {
+    margin-top: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    background: var(--color-accent-primary);
+    color: var(--color-text-on-accent);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: var(--font-semibold);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+    background: var(--color-accent-primary-hover);
+    transform: translateY(-1px);
+}
+
+.auth-submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.auth-loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.auth-modal-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border-light);
+}
+
+.auth-modal-footer p {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+.auth-switch-btn {
+    background: none;
+    border: none;
+    color: var(--color-accent-primary);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    padding: 0;
+}
+
+.auth-switch-btn:hover {
+    text-decoration: underline;
+}
+
+/* ========================================
+   USER MENU STYLES
+   ======================================== */
+
+.user-menu {
+    position: relative;
+}
+
+.user-menu-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.user-menu-trigger:hover {
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-border-dark);
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: var(--font-bold);
+}
+
+.user-avatar.large {
+    width: 40px;
+    height: 40px;
+    font-size: 0.875rem;
+}
+
+.user-name {
+    font-size: 0.875rem;
+    font-weight: var(--font-medium);
+    color: var(--color-text-primary);
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-chevron {
+    color: var(--color-text-muted);
+    transition: transform var(--transition-fast);
+    display: flex;
+}
+
+.user-chevron.open {
+    transform: rotate(180deg);
+}
+
+.user-menu-dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    background: var(--color-panel);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    min-width: 240px;
+    z-index: 100;
+    animation: fadeInDown 0.15s ease;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.user-menu-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.user-display-name {
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+    font-size: 0.9rem;
+}
+
+.user-email {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-menu-divider {
+    height: 1px;
+    background: var(--color-border-light);
+    margin: 0;
+}
+
+.user-menu-nav {
+    padding: 0.5rem;
+}
+
+.user-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 0.75rem;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    font-size: 0.875rem;
+    background: none;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+}
+
+.user-menu-item:hover {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+}
+
+.user-menu-item.logout {
+    color: var(--color-danger);
+    margin: 0.5rem;
+    width: calc(100% - 1rem);
+}
+
+.user-menu-item.logout:hover {
+    background: var(--color-danger-bg);
+}
+
+/* Sign In Button */
+.sign-in-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.sign-in-btn:hover {
+    background: var(--color-bg-secondary);
+    border-color: var(--color-accent-primary);
+    color: var(--color-accent-primary);
+}
+
+@media (max-width: 640px) {
+    .auth-modal {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .user-name {
+        display: none;
+    }
+
+    .user-menu-trigger {
+        padding: 0.25rem;
+    }
+}
+
