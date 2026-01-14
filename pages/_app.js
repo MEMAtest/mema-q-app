@@ -4,6 +4,7 @@ import '../styles/globals.css';
 import { validateEnv } from '../lib/validateEnv';
 import { appWithTranslation } from 'next-i18next';
 import { AuthProvider } from '../lib/authContext';
+import { Analytics } from '@vercel/analytics/react';
 
 if (process.env.NODE_ENV === 'production' && typeof window === 'undefined') {
   validateEnv();
@@ -22,6 +23,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <AuthProvider>
       <Component {...pageProps} />
+      <Analytics />
     </AuthProvider>
   );
 }

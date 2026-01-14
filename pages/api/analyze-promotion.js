@@ -1,5 +1,40 @@
 // pages/api/analyze-promotion.js
 
+// Simple in-memory rate limiting (resets on cold start)
+const rateLimitMap = new Map();
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 10; // 10 requests per minute per IP
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const windowStart = now - RATE_LIMIT_WINDOW;
+
+  // Get or create entry for this IP
+  let requests = rateLimitMap.get(ip) || [];
+
+  // Filter to only requests within the window
+  requests = requests.filter(timestamp => timestamp > windowStart);
+
+  if (requests.length >= MAX_REQUESTS_PER_WINDOW) {
+    return false; // Rate limited
+  }
+
+  // Add this request
+  requests.push(now);
+  rateLimitMap.set(ip, requests);
+
+  // Cleanup old IPs periodically (every 100th request)
+  if (Math.random() < 0.01) {
+    for (const [key, timestamps] of rateLimitMap.entries()) {
+      if (timestamps.every(t => t < windowStart)) {
+        rateLimitMap.delete(key);
+      }
+    }
+  }
+
+  return true;
+}
+
 const ANALYSIS_PROMPT = `You are an FCA (Financial Conduct Authority) compliance expert analyzing a financial promotion image.
 
 FIRST, identify the promotion type/channel:
@@ -55,6 +90,15 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Rate limiting
+  const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket?.remoteAddress || 'unknown';
+  if (!checkRateLimit(ip)) {
+    return res.status(429).json({
+      error: 'Too many requests',
+      message: 'Please wait a moment before scanning another promotion',
+    });
+  }
+
   try {
     const { image, mimeType } = req.body;
 
@@ -62,17 +106,17 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'No image provided' });
     }
 
-    // Call OpenRouter API with Nvidia Nemotron Vision
+    // Call OpenRouter API with Google Gemini Flash (faster than Nvidia)
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://mema-q-app.vercel.app',
+        'HTTP-Referer': 'https://finproms.memaconsultants.com',
         'X-Title': 'MEMA Compliance Analyzer',
       },
       body: JSON.stringify({
-        model: 'nvidia/nemotron-nano-12b-v2-vl:free',
+        model: 'google/gemini-flash-1.5',
         messages: [
           {
             role: 'user',
