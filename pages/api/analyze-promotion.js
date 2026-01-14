@@ -163,6 +163,38 @@ export default async function handler(req, res) {
 
     console.log('Raw response text:', text?.substring(0, 500));
 
+    // Function to generate key observations from analysis
+    const generateKeyObservations = (analysisData) => {
+      const observations = [];
+
+      if (analysisData.isFinancialPromotion) {
+        observations.push(`This appears to be a financial promotion under FCA rules.`);
+      }
+
+      if (analysisData.overallRisk === 'high') {
+        observations.push(`High compliance risk detected - immediate attention recommended.`);
+      } else if (analysisData.overallRisk === 'medium') {
+        observations.push(`Moderate compliance risk - review recommended before publication.`);
+      }
+
+      if (analysisData.issues?.length > 0) {
+        const highIssues = analysisData.issues.filter(i => i.severity === 'high').length;
+        const mediumIssues = analysisData.issues.filter(i => i.severity === 'medium').length;
+        if (highIssues > 0) {
+          observations.push(`Found ${highIssues} high-severity issue${highIssues > 1 ? 's' : ''} requiring action.`);
+        }
+        if (mediumIssues > 0) {
+          observations.push(`Found ${mediumIssues} medium-severity issue${mediumIssues > 1 ? 's' : ''} to review.`);
+        }
+      }
+
+      if (analysisData.compliantElements?.length > 0) {
+        observations.push(`${analysisData.compliantElements.length} compliant element${analysisData.compliantElements.length > 1 ? 's' : ''} identified.`);
+      }
+
+      return observations;
+    };
+
     // Parse JSON from response
     let analysis;
     try {
@@ -215,6 +247,9 @@ export default async function handler(req, res) {
         rawAnalysis: text.substring(0, 1500),
       };
     }
+
+    // Add key observations to analysis
+    analysis.keyObservations = generateKeyObservations(analysis);
 
     return res.status(200).json({
       success: true,

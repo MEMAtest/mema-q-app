@@ -605,11 +605,27 @@ const AIAnalyzer = ({ onAnalysisComplete, onSkip, onAnalysisStart, compact = fal
             </div>
           </div>
 
+          {/* Key Observations - Always show if available */}
+          {analysis.keyObservations && analysis.keyObservations.length > 0 && (
+            <div className="key-observations-section">
+              <h4>
+                <Icons.lightbulb />
+                <span>Key Observations</span>
+              </h4>
+              <ul className="key-observations-list">
+                {analysis.keyObservations.map((obs, index) => (
+                  <li key={index}>{obs}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Raw Analysis - Show when JSON parsing failed */}
           {analysis.rawAnalysis && (
             <div className="raw-analysis-section">
               <h4>
                 <Icons.document />
-                <span>Scanner Observations</span>
+                <span>Detailed Analysis</span>
               </h4>
               <div className="raw-analysis-content">
                 <p>{analysis.rawAnalysis}</p>
