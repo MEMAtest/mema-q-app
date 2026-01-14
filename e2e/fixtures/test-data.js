@@ -131,10 +131,20 @@ const notesTestData = {
 // Selectors used across tests
 const selectors = {
   // Welcome screen
-  startButton: 'button:has-text("Start Assessment")',
-  getStartedButton: 'button:has-text("Get Started")',
+  startButton: '.start-button',
   welcomeHero: '.hero-section',
   contactButton: 'button:has-text("Contact Us")',
+
+  // Choice Modal (appears after clicking start)
+  choiceModal: '.choice-modal',
+  quickStartButton: '.choice-option.quick-start',
+  smartScanButton: '.choice-option.smart-scan',
+  choiceModalClose: '.choice-modal-close',
+
+  // Scenario Selector
+  scenarioSelector: '.scenario-selector',
+  scenarioCard: '.scenario-card',
+  scenarioCardFirst: '.scenario-card:first-child',
 
   // Questionnaire
   questionCard: '.assessment-question-card',
@@ -173,6 +183,34 @@ const selectors = {
   drawerToggle: '.drawer-toggle-btn'
 };
 
+/**
+ * Helper function to navigate through the app flow to questionnaire
+ * Flow: Home -> Click Start -> Choice Modal -> Quick Start -> Scenario Selector -> Select Scenario -> Questionnaire
+ * @param {import('@playwright/test').Page} page
+ */
+async function navigateToQuestionnaire(page) {
+  // Step 1: Go to home page
+  await page.goto('/');
+  await page.waitForLoadState('networkidle');
+
+  // Step 2: Click Start Assessment button (opens Choice Modal)
+  const startButton = page.locator('.start-button').first();
+  await startButton.click();
+
+  // Step 3: Wait for Choice Modal and click Quick Start
+  await page.waitForSelector('.choice-modal', { timeout: 5000 });
+  const quickStartBtn = page.locator('.choice-option.quick-start');
+  await quickStartBtn.click();
+
+  // Step 4: Wait for Scenario Selector and select first scenario (Full Assessment)
+  await page.waitForSelector('.scenario-selector', { timeout: 5000 });
+  const scenarioCard = page.locator('.scenario-card').first();
+  await scenarioCard.click();
+
+  // Step 5: Wait for questionnaire to load
+  await page.waitForSelector('.assessment-question-card', { timeout: 10000 });
+}
+
 module.exports = {
   mockLeadFormData,
   testAnswers,
@@ -182,5 +220,6 @@ module.exports = {
   dropdownOptions,
   multiselectOptions,
   notesTestData,
-  selectors
+  selectors,
+  navigateToQuestionnaire
 };

@@ -6,6 +6,34 @@ const { test, expect } = require('@playwright/test');
  * Tests for mobile-specific functionality and responsiveness
  */
 
+/**
+ * Helper function to navigate through the app flow to questionnaire on mobile
+ * Flow: Home -> Click Start -> Choice Modal -> Quick Start -> Scenario Selector -> Select Scenario -> Questionnaire
+ * @param {import('@playwright/test').Page} page
+ */
+async function navigateToQuestionnaireMobile(page) {
+  // Step 1: Go to home page
+  await page.goto('/');
+  await page.waitForLoadState('networkidle');
+
+  // Step 2: Click Start Assessment button (opens Choice Modal)
+  const startButton = page.locator('.start-button').first();
+  await startButton.click();
+
+  // Step 3: Wait for Choice Modal and click Quick Start
+  await page.waitForSelector('.choice-modal', { timeout: 5000 });
+  const quickStartBtn = page.locator('.choice-option.quick-start');
+  await quickStartBtn.click();
+
+  // Step 4: Wait for Scenario Selector and select first scenario (Full Assessment)
+  await page.waitForSelector('.scenario-selector', { timeout: 5000 });
+  const scenarioCard = page.locator('.scenario-card').first();
+  await scenarioCard.click();
+
+  // Step 5: Wait for questionnaire to load
+  await page.waitForSelector('.assessment-question-card', { timeout: 10000 });
+}
+
 test.describe('Mobile Tests', () => {
   // Define mobile viewport (iPhone 13 dimensions)
   const mobileViewport = { width: 375, height: 812 };
@@ -16,15 +44,8 @@ test.describe('Mobile Tests', () => {
   });
 
   test('MOB-001: Mobile drawer toggle visible at 375px viewport', async ({ page }) => {
-    // Navigate to home page
-    await page.goto('/');
-
-    // Start the assessment to get to the questionnaire
-    await page.waitForSelector('.start-button', { timeout: 10000 });
-    await page.click('.start-button');
-
-    // Wait for questionnaire to load
-    await page.waitForSelector('.assessment-question-card', { timeout: 10000 });
+    // Navigate to questionnaire using the full flow
+    await navigateToQuestionnaireMobile(page);
 
     // Look for the drawer toggle button (mobile insights panel toggle)
     const drawerToggleBtn = page.locator('.drawer-toggle-btn');
@@ -52,15 +73,8 @@ test.describe('Mobile Tests', () => {
   });
 
   test('MOB-002: Drawer opens/closes on tap', async ({ page }) => {
-    // Navigate to home page
-    await page.goto('/');
-
-    // Start the assessment
-    await page.waitForSelector('.start-button', { timeout: 10000 });
-    await page.click('.start-button');
-
-    // Wait for questionnaire to load
-    await page.waitForSelector('.assessment-question-card', { timeout: 10000 });
+    // Navigate to questionnaire
+    await navigateToQuestionnaireMobile(page);
 
     // Find the drawer toggle button
     const drawerToggleBtn = page.locator('.drawer-toggle-btn');
@@ -137,11 +151,8 @@ test.describe('Mobile Tests', () => {
       expect(startButtonBox.width).toBeGreaterThanOrEqual(44);
     }
 
-    // Start assessment
-    await page.click('.start-button');
-
-    // Wait for questionnaire
-    await page.waitForSelector('.assessment-question-card', { timeout: 10000 });
+    // Navigate to questionnaire
+    await navigateToQuestionnaireMobile(page);
 
     // Test Yes/No toggle buttons
     const toggleButtons = page.locator('.answer-toggle');
@@ -223,9 +234,8 @@ test.describe('Mobile Tests', () => {
     // This is more realistic for production layouts
     expect(scrollInfo.diff).toBeLessThanOrEqual(5);
 
-    // Start assessment
-    await page.click('.start-button');
-    await page.waitForSelector('.assessment-question-card', { timeout: 10000 });
+    // Navigate to questionnaire
+    await navigateToQuestionnaireMobile(page);
 
     // Verify questionnaire card fits mobile viewport
     const questionCard = page.locator('.assessment-question-card');
@@ -239,9 +249,7 @@ test.describe('Mobile Tests', () => {
 
   test('MOB-005: Form inputs are usable on mobile', async ({ page }) => {
     // Navigate to questionnaire and go to results
-    await page.goto('/');
-    await page.click('.start-button');
-    await page.waitForSelector('.assessment-question-card', { timeout: 10000 });
+    await navigateToQuestionnaireMobile(page);
 
     // Click View Results to go to results page
     const viewResultsBtn = page.locator('button:has-text("View Results")');
@@ -285,9 +293,7 @@ test.describe('Mobile Tests', () => {
 
   test('MOB-006: Keyboard interactions work on mobile', async ({ page }) => {
     // Navigate to questionnaire
-    await page.goto('/');
-    await page.click('.start-button');
-    await page.waitForSelector('.assessment-question-card', { timeout: 10000 });
+    await navigateToQuestionnaireMobile(page);
 
     // Open the drawer
     const drawerToggle = page.locator('.drawer-toggle-btn');
@@ -312,9 +318,7 @@ test.describe('Mobile Tests', () => {
 
   test('MOB-007: Notes textarea is usable on mobile', async ({ page }) => {
     // Navigate to questionnaire
-    await page.goto('/');
-    await page.click('.start-button');
-    await page.waitForSelector('.assessment-question-card', { timeout: 10000 });
+    await navigateToQuestionnaireMobile(page);
 
     // Select an answer first (notes field works better after answer selection)
     const yesButton = page.locator('.answer-toggle').filter({ hasText: 'Yes' });

@@ -1,6 +1,6 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
-const { selectors, firstQuestion } = require('./fixtures/test-data');
+const { selectors, navigateToQuestionnaire } = require('./fixtures/test-data');
 
 /**
  * Smoke Tests for FinProms App
@@ -30,34 +30,26 @@ test.describe('Smoke Tests', () => {
     // Verify the main heading is present
     await expect(page.locator('h1')).toContainText(/Future-Proofing Compliance|MEMA/i);
 
-    // Verify start button is present and visible (could be "Begin Assessment Now" or "Get Started")
+    // Verify start button is present and visible
     const startButton = page.locator('.start-button').first();
     await expect(startButton).toBeVisible();
 
     // Verify the page title is set correctly
     await expect(page).toHaveTitle(/MEMA|Financial Promotions|Compliance/i);
 
-    // Verify key value propositions are visible (using first() to avoid strict mode violation)
+    // Verify key value propositions are visible
     await expect(page.locator('text=Streamlined Workflows').first()).toBeVisible();
     await expect(page.locator('text=Actionable Insights').first()).toBeVisible();
     await expect(page.locator('text=Reduced Risk Exposure').first()).toBeVisible();
   });
 
   test('ST-002: Start assessment flow', async ({ page }) => {
-    // Navigate to the app
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
-
-    // Click the start button (uses .start-button class)
-    const startButton = page.locator('.start-button').first();
-    await startButton.click();
-
-    // Wait for the questionnaire to load
-    await page.waitForLoadState('networkidle');
+    // Use the helper to navigate through the full flow
+    await navigateToQuestionnaire(page);
 
     // Verify questionnaire appears
     const questionCard = page.locator('.assessment-question-card');
-    await expect(questionCard).toBeVisible({ timeout: 10000 });
+    await expect(questionCard).toBeVisible();
 
     // Verify first question is shown
     const questionText = page.locator('.assessment-question-card h3');
@@ -87,16 +79,8 @@ test.describe('Smoke Tests', () => {
   });
 
   test('ST-003: Basic navigation - answer question and click next', async ({ page }) => {
-    // Navigate to the app and start assessment
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
-
-    const startBtn = page.locator('.start-button').first();
-    await startBtn.click();
-
-    // Wait for questionnaire to load
-    await page.waitForLoadState('networkidle');
-    await expect(page.locator('.assessment-question-card')).toBeVisible({ timeout: 10000 });
+    // Use the helper to navigate to questionnaire
+    await navigateToQuestionnaire(page);
 
     // Get initial question text
     const initialQuestionText = await page.locator('.assessment-question-card h3').textContent();
