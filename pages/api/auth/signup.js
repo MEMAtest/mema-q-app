@@ -1,12 +1,21 @@
 // pages/api/auth/signup.js
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../../lib/prisma';
 import { hashPassword, createToken, setAuthCookie, isValidEmail, isValidPassword } from '../../../lib/auth';
-
-const prisma = new PrismaClient();
+import { checkRateLimit, getClientIP, RATE_LIMIT_CONFIGS } from '../../../lib/rateLimit';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Rate limiting check
+  const clientIP = getClientIP(req);
+  const { maxRequests, windowMs } = RATE_LIMIT_CONFIGS.signup;
+
+  if (!checkRateLimit(`signup:${clientIP}`, maxRequests, windowMs)) {
+    return res.status(429).json({
+      error: 'Too many registration attempts. Please try again later.'
+    });
   }
 
   try {
@@ -21,8 +30,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid email format' });
     }
 
-    if (!isValidPassword(password)) {
-      return res.status(400).json({ error: 'Password must be at least 8 characters' });
+    // Server-side password validation (strengthened)
+    const passwordValidation = isValidPassword(password);
+    if (!passwordValidation.valid) {
+      return res.status(400).json({ error: passwordValidation.error });
     }
 
     // Check if user already exists
@@ -31,7 +42,12 @@ export default async function handler(req, res) {
     });
 
     if (existingUser) {
-      return res.status(400).json({ error: 'An account with this email already exists' });
+      // SECURITY: Return generic success to prevent user enumeration
+      // Attacker cannot determine if email is already registered
+      return res.status(201).json({
+        success: true,
+        message: 'Account created successfully. Please check your email.'
+      });
     }
 
     // Hash password and create user
@@ -61,7 +77,10 @@ export default async function handler(req, res) {
       },
     });
   } catch (error) {
-    console.error('Signup error:', error);
+    // Log error only in development
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Signup error:', error);
+    }
     return res.status(500).json({ error: 'Failed to create account' });
   }
 }

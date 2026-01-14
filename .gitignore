@@ -1,10 +1,42 @@
 node_modules
-# Keep environment variables out of version control
-.env
 
+# Environment variables - NEVER commit these
+.env
+.env.local
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Prisma generated
 /generated/prisma
 
 # Next.js build output
 .next/
 out/
 .vercel
+
+# Testing
+test-results/
+playwright-report/
+playwright/.cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage
+coverage/
+.nyc_output/

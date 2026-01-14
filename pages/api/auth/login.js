@@ -1,12 +1,21 @@
 // pages/api/auth/login.js
-import { PrismaClient } from '@prisma/client';
-import { verifyPassword, createToken, setAuthCookie, isValidEmail } from '../../../lib/auth';
-
-const prisma = new PrismaClient();
+import prisma from '../../../lib/prisma';
+import { verifyPasswordSafe, createToken, setAuthCookie, isValidEmail } from '../../../lib/auth';
+import { checkRateLimit, getClientIP, RATE_LIMIT_CONFIGS } from '../../../lib/rateLimit';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Rate limiting check
+  const clientIP = getClientIP(req);
+  const { maxRequests, windowMs } = RATE_LIMIT_CONFIGS.login;
+
+  if (!checkRateLimit(`login:${clientIP}`, maxRequests, windowMs)) {
+    return res.status(429).json({
+      error: 'Too many login attempts. Please try again in 15 minutes.'
+    });
   }
 
   try {
@@ -26,14 +35,11 @@ export default async function handler(req, res) {
       where: { email: email.toLowerCase() },
     });
 
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid email or password' });
-    }
+    // SECURITY: Use timing-safe password verification
+    // This prevents timing attacks that could reveal if an email exists
+    const isValid = await verifyPasswordSafe(password, user?.passwordHash);
 
-    // Verify password
-    const isValid = await verifyPassword(password, user.passwordHash);
-
-    if (!isValid) {
+    if (!user || !isValid) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
@@ -52,7 +58,10 @@ export default async function handler(req, res) {
       },
     });
   } catch (error) {
-    console.error('Login error:', error);
+    // Log error only in development
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Login error:', error);
+    }
     return res.status(500).json({ error: 'Failed to log in' });
   }
 }
