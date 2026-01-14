@@ -233,26 +233,88 @@ const AIAnalyzer = ({ onAnalysisComplete, onSkip, onAnalysisStart, compact = fal
     if (file) processFile(file);
   };
 
-  const processFile = (file) => {
+  // Compress image to fit within Vercel's 4.5MB limit
+  const compressImage = (file, maxWidth = 1600, maxHeight = 1600, quality = 0.8) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          // Calculate new dimensions maintaining aspect ratio
+          let { width, height } = img;
+          if (width > maxWidth || height > maxHeight) {
+            const ratio = Math.min(maxWidth / width, maxHeight / height);
+            width = Math.round(width * ratio);
+            height = Math.round(height * ratio);
+          }
+
+          // Create canvas and draw resized image
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Convert to blob with compression
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                // Convert blob to base64
+                const blobReader = new FileReader();
+                blobReader.onload = () => resolve(blobReader.result);
+                blobReader.onerror = reject;
+                blobReader.readAsDataURL(blob);
+              } else {
+                reject(new Error('Failed to compress image'));
+              }
+            },
+            'image/jpeg',
+            quality
+          );
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const processFile = async (file) => {
     const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/gif'];
     if (!validTypes.includes(file.type)) {
       setError('Please upload a valid image file (PNG, JPG, WEBP, or GIF)');
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
-      setError('Image must be less than 10MB');
+    if (file.size > 20 * 1024 * 1024) {
+      setError('Image must be less than 20MB');
       return;
     }
 
     setError(null);
-    setUploadedImage(file);
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setImagePreview(e.target.result);
-    };
-    reader.readAsDataURL(file);
+    try {
+      // Compress large images to stay within Vercel's 4.5MB limit
+      // Base64 adds ~33% overhead, so target ~3MB compressed
+      const needsCompression = file.size > 2 * 1024 * 1024;
+
+      if (needsCompression) {
+        const compressedDataUrl = await compressImage(file, 1600, 1600, 0.7);
+        setImagePreview(compressedDataUrl);
+        setUploadedImage(null); // Use compressed preview directly
+      } else {
+        setUploadedImage(file);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setImagePreview(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (err) {
+      console.error('Image processing error:', err);
+      setError('Failed to process image. Please try a different file.');
+    }
   };
 
   const analyzeImage = async () => {

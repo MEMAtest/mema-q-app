@@ -151,11 +151,16 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
     }
   };
 
-  const handlePdfExport = () => {
-    exportResultsToPDF(results, questions, answers, {
-      firm: leadFirm,
-      email: leadEmail,
-    });
+  const handlePdfExport = async () => {
+    try {
+      await exportResultsToPDF(results, questions, answers, {
+        firm: leadFirm,
+        email: leadEmail,
+      });
+    } catch (error) {
+      console.error('PDF export failed:', error);
+      alert('Failed to generate PDF. Please try again.');
+    }
   };
 
   const doughnutOptions = {

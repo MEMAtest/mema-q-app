@@ -1,8 +1,6 @@
 // pages/api/dashboard/stats.js
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../../lib/prisma';
 import { getCurrentUser } from '../../../lib/auth';
-
-const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -60,7 +58,5 @@ export default async function handler(req, res) {
   } catch (error) {
     console.error('Stats error:', error);
     return res.status(500).json({ message: 'Internal server error' });
-  } finally {
-    await prisma.$disconnect();
   }
 }

@@ -1,10 +1,11 @@
 // pages/api/auth/me.js
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../../lib/prisma';
 import { getCurrentUser } from '../../../lib/auth';
 
-const prisma = new PrismaClient();
-
 export default async function handler(req, res) {
+  // Always return JSON
+  res.setHeader('Content-Type', 'application/json');
+
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -47,6 +48,7 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error('Get current user error:', error);
-    return res.status(500).json({ error: 'Failed to get user' });
+    // Always return JSON even on error
+    return res.status(500).json({ error: 'Failed to get user', user: null });
   }
 }
