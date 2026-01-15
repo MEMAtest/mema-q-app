@@ -116,7 +116,7 @@ export default async function handler(req, res) {
         'X-Title': 'MEMA Compliance Analyzer',
       },
       body: JSON.stringify({
-        model: 'nvidia/nemotron-nano-12b-v2-vl:free',
+        model: 'google/gemini-2.5-flash',
         messages: [
           {
             role: 'user',
