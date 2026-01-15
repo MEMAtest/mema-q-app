@@ -276,7 +276,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
                 textAlign: 'center'
               }}>
                 <div className="score-value">{results.healthScore}%</div>
-                <div className="score-label">Health Score</div>
+                <div className="score-label" title="Percentage of compliant answers vs. total questions answered">Health Score</div>
               </div>
             </div>
             <div style={{
@@ -295,6 +295,16 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
                 Overall Status: {healthStatus}
               </p>
             </div>
+            <p style={{
+              marginTop: 'var(--spacing-md)',
+              fontSize: '0.875rem',
+              color: 'var(--color-text-muted)',
+              maxWidth: '400px',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }}>
+              Your Health Score reflects the percentage of FCA compliance questions answered positively. A higher score indicates better alignment with regulatory requirements.
+            </p>
           </div>
         </div>
       </section>
@@ -305,11 +315,19 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
           fontSize: '2rem',
           fontWeight: 'var(--font-bold)',
           color: 'var(--color-text-primary)',
-          marginBottom: 'var(--spacing-xl)',
+          marginBottom: 'var(--spacing-sm)',
           textAlign: 'center'
         }}>
           Assessment Overview
         </h2>
+        <p style={{
+          fontSize: '1rem',
+          color: 'var(--color-text-muted)',
+          marginBottom: 'var(--spacing-xl)',
+          textAlign: 'center'
+        }}>
+          Summary of your compliance assessment results
+        </p>
 
         <div className="summary-cards">
           <div className="summary-card">

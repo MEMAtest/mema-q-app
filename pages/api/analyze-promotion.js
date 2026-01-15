@@ -1,22 +1,31 @@
 // pages/api/analyze-promotion.js
+import jwt from 'jsonwebtoken';
 
-// Simple in-memory rate limiting (resets on cold start)
+// Tiered rate limiting (resets on cold start)
+// Guests: 2 scans per day, Logged-in: 5 scans per day
 const rateLimitMap = new Map();
-const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
-const MAX_REQUESTS_PER_WINDOW = 10; // 10 requests per minute per IP
+const RATE_LIMIT_WINDOW_DAY = 24 * 60 * 60 * 1000; // 24 hours
+const GUEST_DAILY_LIMIT = 2;
+const USER_DAILY_LIMIT = 5;
 
-function checkRateLimit(ip) {
+function checkRateLimit(ip, isAuthenticated) {
   const now = Date.now();
-  const windowStart = now - RATE_LIMIT_WINDOW;
+  const windowStart = now - RATE_LIMIT_WINDOW_DAY;
+  const maxRequests = isAuthenticated ? USER_DAILY_LIMIT : GUEST_DAILY_LIMIT;
 
   // Get or create entry for this IP
   let requests = rateLimitMap.get(ip) || [];
 
-  // Filter to only requests within the window
+  // Filter to only requests within the 24hr window
   requests = requests.filter(timestamp => timestamp > windowStart);
 
-  if (requests.length >= MAX_REQUESTS_PER_WINDOW) {
-    return false; // Rate limited
+  if (requests.length >= maxRequests) {
+    return {
+      allowed: false,
+      remaining: 0,
+      limit: maxRequests,
+      isAuthenticated,
+    };
   }
 
   // Add this request
@@ -32,7 +41,30 @@ function checkRateLimit(ip) {
     }
   }
 
-  return true;
+  return {
+    allowed: true,
+    remaining: maxRequests - requests.length,
+    limit: maxRequests,
+    isAuthenticated,
+  };
+}
+
+function getUserFromToken(req) {
+  try {
+    const token = req.cookies?.auth_token;
+    if (!token) return null;
+
+    if (!process.env.JWT_SECRET) {
+      console.error('CRITICAL: JWT_SECRET is not configured');
+      return null;
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return decoded;
+  } catch (error) {
+    console.warn('JWT verification failed:', error.message);
+    return null;
+  }
 }
 
 const ANALYSIS_PROMPT = `You are an FCA (Financial Conduct Authority) compliance expert analyzing a financial promotion image.
@@ -55,6 +87,19 @@ THEN analyze for FCA compliance:
 6. Target audience - Is it clear who this is for?
 7. Call-to-action - What action is requested? Is it balanced?
 
+For suggestedAnswers, analyze the image and suggest answers for these FCA checklist questions:
+- "1.1": Is this an invitation/inducement to engage in investment activity? (Yes/No)
+- "1.2": Is it made in the course of business? (Yes/No)
+- "1.6": Promotion type: "non_real_time_website", "non_real_time_social_post", "non_real_time_social_video", "real_time_solicited", "real_time_unsolicited", "other_nrt"
+- "1.9": Is it clear, fair, and not misleading overall? (Yes/No)
+- "1.10": Is it standalone compliant? (Yes/No)
+- "2.2": Are important warnings/statements NOT obscured or diminished? (Yes/No)
+- "2.3": Are all factual claims accurate? (Yes/No)
+- "2.4": Does it give balanced view of benefits AND risks? (Yes/No)
+- "3.1": Is it clearly identifiable as a financial promotion/advertisement? (Yes/No)
+- "3.2": Does it include the firm name? (Yes/No)
+- "4.1": Are risk warnings prominent and clear? (Yes/No)
+
 Respond ONLY with valid JSON (no markdown, no explanation):
 {
   "promotionType": "billboard",
@@ -73,7 +118,15 @@ Respond ONLY with valid JSON (no markdown, no explanation):
   ],
   "compliantElements": ["List compliant items"],
   "suggestedAnswers": {
-    "1.1": { "answer": "Yes", "confidence": 0.9, "reason": "Why" }
+    "1.1": { "answer": "Yes", "confidence": 0.9, "reason": "Brief reason" },
+    "1.2": { "answer": "Yes", "confidence": 0.85, "reason": "Brief reason" },
+    "1.6": { "answer": "non_real_time_social_post", "confidence": 0.9, "reason": "Brief reason" },
+    "1.9": { "answer": "No", "confidence": 0.8, "reason": "Brief reason" },
+    "2.2": { "answer": "No", "confidence": 0.85, "reason": "Brief reason" },
+    "2.4": { "answer": "No", "confidence": 0.9, "reason": "Brief reason" },
+    "3.1": { "answer": "Yes", "confidence": 0.7, "reason": "Brief reason" },
+    "3.2": { "answer": "No", "confidence": 0.95, "reason": "Brief reason" },
+    "4.1": { "answer": "No", "confidence": 0.9, "reason": "Brief reason" }
   }
 }`;
 
@@ -90,16 +143,37 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Rate limiting
+  // Check authentication for tiered rate limiting
+  const user = getUserFromToken(req);
+  const isAuthenticated = !!user;
+
+  // Rate limiting (2/day for guests, 5/day for logged-in users)
   const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket?.remoteAddress || 'unknown';
-  if (!checkRateLimit(ip)) {
+  const rateLimit = checkRateLimit(ip, isAuthenticated);
+
+  if (!rateLimit.allowed) {
+    const message = isAuthenticated
+      ? `You've reached your daily limit of ${rateLimit.limit} scans. Try again tomorrow.`
+      : `Free users get ${rateLimit.limit} scans per day. Sign up for more scans!`;
+
     return res.status(429).json({
-      error: 'Too many requests',
-      message: 'Please wait a moment before scanning another promotion',
+      error: 'Rate limit exceeded',
+      message,
+      remaining: rateLimit.remaining,
+      limit: rateLimit.limit,
     });
   }
 
   try {
+    // Validate API key is configured
+    if (!process.env.OPENROUTER_API_KEY) {
+      console.error('CRITICAL: OPENROUTER_API_KEY is not configured');
+      return res.status(500).json({
+        error: 'Configuration error',
+        message: 'AI service is not configured. Please contact support.',
+      });
+    }
+
     const { image, mimeType } = req.body;
 
     if (!image) {
@@ -255,6 +329,11 @@ export default async function handler(req, res) {
       success: true,
       analysis,
       timestamp: new Date().toISOString(),
+      rateLimit: {
+        remaining: rateLimit.remaining,
+        limit: rateLimit.limit,
+        isAuthenticated,
+      },
     });
   } catch (error) {
     console.error('OpenRouter API error:', error);

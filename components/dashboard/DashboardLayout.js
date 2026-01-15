@@ -29,6 +29,12 @@ const Icons = {
       <line x1="6" y1="20" x2="6" y2="14" />
     </svg>
   ),
+  feedback: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      <line x1="9" y1="10" x2="15" y2="10" />
+    </svg>
+  ),
   plus: () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <line x1="12" y1="5" x2="12" y2="19" />
@@ -68,6 +74,28 @@ const DashboardLayout = ({ children, title = 'Dashboard' }) => {
   const { user, logout } = useAuth();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackText, setFeedbackText] = useState('');
+  const [feedbackStatus, setFeedbackStatus] = useState('idle'); // idle, sending, sent, error
+
+  const handleFeedbackSubmit = async () => {
+    if (!feedbackText.trim()) return;
+    setFeedbackStatus('sending');
+    try {
+      // For now, just log feedback - could be connected to an API later
+      console.log('Feedback submitted:', feedbackText);
+      // Simulate sending
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setFeedbackStatus('sent');
+      setTimeout(() => {
+        setShowFeedback(false);
+        setFeedbackText('');
+        setFeedbackStatus('idle');
+      }, 2000);
+    } catch (err) {
+      setFeedbackStatus('error');
+    }
+  };
 
   const getInitials = (name, email) => {
     if (name) {
@@ -161,14 +189,57 @@ const DashboardLayout = ({ children, title = 'Dashboard' }) => {
           })}
         </nav>
 
-        {/* Logout */}
+        {/* Feedback & Logout */}
         <div className="dashboard-sidebar-footer">
+          <button className="dashboard-feedback-btn" onClick={() => setShowFeedback(true)}>
+            <Icons.feedback />
+            <span>Send Feedback</span>
+          </button>
           <button className="dashboard-logout-btn" onClick={handleLogout}>
             <Icons.logout />
             <span>Sign Out</span>
           </button>
         </div>
       </aside>
+
+      {/* Feedback Modal */}
+      {showFeedback && (
+        <div className="feedback-modal-overlay" onClick={() => setShowFeedback(false)}>
+          <div className="feedback-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="feedback-modal-close" onClick={() => setShowFeedback(false)}>
+              <Icons.close />
+            </button>
+            <h3>Send Feedback</h3>
+            <p>Help us improve MEMA Compliance. Share your thoughts, suggestions, or report issues.</p>
+
+            {feedbackStatus === 'sent' ? (
+              <div className="feedback-success">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+                <p>Thank you for your feedback!</p>
+              </div>
+            ) : (
+              <>
+                <textarea
+                  value={feedbackText}
+                  onChange={(e) => setFeedbackText(e.target.value)}
+                  placeholder="What would you like to share with us?"
+                  rows={4}
+                />
+                <button
+                  className="feedback-submit-btn"
+                  onClick={handleFeedbackSubmit}
+                  disabled={feedbackStatus === 'sending' || !feedbackText.trim()}
+                >
+                  {feedbackStatus === 'sending' ? 'Sending...' : 'Submit Feedback'}
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="dashboard-main">

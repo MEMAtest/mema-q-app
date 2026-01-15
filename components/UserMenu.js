@@ -80,59 +80,56 @@ const UserMenu = () => {
   if (!user) return null;
 
   return (
-    <div className="user-menu" ref={menuRef}>
-      <button
-        className="user-menu-trigger"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-expanded={isOpen}
-      >
-        <div className="user-avatar">
-          {getInitials(user.name, user.email)}
-        </div>
-        <span className="user-name">{user.name || user.email.split('@')[0]}</span>
-        <span className={`user-chevron ${isOpen ? 'open' : ''}`}>
-          <Icons.chevron />
-        </span>
-      </button>
-
+    <>
+      {/* Backdrop to close menu when clicking outside */}
       {isOpen && (
-        <div className="user-menu-dropdown">
-          <div className="user-menu-header">
-            <div className="user-avatar large">
-              {getInitials(user.name, user.email)}
-            </div>
-            <div className="user-info">
-              <span className="user-display-name">{user.name || 'User'}</span>
-              <span className="user-email">{user.email}</span>
-            </div>
-          </div>
-
-          <div className="user-menu-divider" />
-
-          <nav className="user-menu-nav">
-            <a href="/dashboard" className="user-menu-item">
-              <Icons.dashboard />
-              <span>Dashboard</span>
-            </a>
-            <a href="/dashboard/assessments" className="user-menu-item">
-              <Icons.history />
-              <span>Assessment History</span>
-            </a>
-            <a href="/dashboard/promotions" className="user-menu-item">
-              <Icons.folder />
-              <span>Saved Promotions</span>
-            </a>
-          </nav>
-
-          <div className="user-menu-divider" />
-
-          <button className="user-menu-item logout" onClick={handleLogout}>
-            <Icons.logout />
-            <span>Sign Out</span>
-          </button>
-        </div>
+        <div
+          className="user-menu-backdrop"
+          onClick={() => setIsOpen(false)}
+        />
       )}
-    </div>
+      <div className="user-menu" ref={menuRef}>
+        <button
+          className="user-menu-trigger"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+        >
+          <div className="user-avatar">
+            {getInitials(user.name, user.email)}
+          </div>
+          <span className="user-name">{user.name || user.email.split('@')[0]}</span>
+          <span className={`user-chevron ${isOpen ? 'open' : ''}`}>
+            <Icons.chevron />
+          </span>
+        </button>
+
+        {isOpen && (
+          <div className="user-menu-dropdown">
+            <nav className="user-menu-nav">
+              <a href="/dashboard" className="user-menu-item" onClick={() => setIsOpen(false)}>
+                <Icons.dashboard />
+                <span>Dashboard</span>
+              </a>
+              <a href="/dashboard/assessments" className="user-menu-item" onClick={() => setIsOpen(false)}>
+                <Icons.history />
+                <span>Assessment History</span>
+              </a>
+              <a href="/dashboard/promotions" className="user-menu-item" onClick={() => setIsOpen(false)}>
+                <Icons.folder />
+                <span>Saved Promotions</span>
+              </a>
+            </nav>
+
+            <div className="user-menu-divider" />
+
+            <button className="user-menu-item logout" onClick={handleLogout}>
+              <Icons.logout />
+              <span>Sign Out</span>
+            </button>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -80,6 +80,8 @@
 .assessment-actions {
     display: flex;
     gap: 0.5rem;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .action-btn {
@@ -132,5 +134,39 @@
 .summary-label {
     font-size: 0.75rem;
     color: var(--color-text-muted);
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    .assessments-table th:nth-child(2),
+    .assessments-table td:nth-child(2) {
+        display: none;
+    }
+
+    .assessments-table th,
+    .assessments-table td {
+        padding: 0.5rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .score-bar {
+        width: 40px;
+    }
+
+    .risk-badge {
+        font-size: 0.65rem;
+        padding: 0.2rem 0.4rem;
+    }
+
+    .action-btn {
+        width: 28px;
+        height: 28px;
+    }
+
+    .assessments-summary {
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
 }
 
