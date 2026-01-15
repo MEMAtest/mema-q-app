@@ -10,7 +10,7 @@ import RecommendationCard from './RecommendationCard';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
-export default function ResultsPage({ results, onGoBack, questions, answers, scenario }) {
+export default function ResultsPage({ results, onGoBack, questions, answers, scenario, isAuthenticated }) {
   // Get scenario config for tailored content
   const scenarioConfig = scenario ? getScenario(scenario) : null;
   const { t } = useTranslation('common');
@@ -20,7 +20,6 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
   const [leadPhone, setLeadPhone] = useState('');
   const [leadFirm, setLeadFirm] = useState('');
   const [formState, setFormState] = useState({ status: 'idle', message: '' });
-  const [emailSending, setEmailSending] = useState(false);
 
   if (!results) {
     return (
@@ -115,40 +114,6 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
 
   const handlePrint = () => {
     window.print();
-  };
-
-  const handleEmailResults = async () => {
-    if (!leadEmail) {
-      alert('Please enter your email address to receive the report.');
-      return;
-    }
-
-    setEmailSending(true);
-    try {
-      const response = await fetch('/api/send-results', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: leadEmail,
-          firm: leadFirm,
-          results,
-          questions,
-          answers,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to send email');
-      }
-
-      alert('Results sent successfully to your email!');
-    } catch (error) {
-      console.error('Failed to send email results:', error);
-      alert(error.message || 'Failed to send email. Please try again.');
-    } finally {
-      setEmailSending(false);
-    }
   };
 
   const handlePdfExport = async () => {
@@ -334,24 +299,28 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
             <Image src="/icons/sections/clipboard-check.svg" alt="" width={48} height={48} style={{ width: '3rem', height: '3rem', margin: '0 auto var(--spacing-md)' }} />
             <div className="summary-card-value">{totalQuestions}</div>
             <div className="summary-card-label">Total Questions</div>
+            <div className="summary-card-desc">Questions answered in this assessment.</div>
           </div>
 
           <div className="summary-card">
             <Image src="/icons/actions/check-circle.svg" alt="" width={48} height={48} style={{ width: '3rem', height: '3rem', margin: '0 auto var(--spacing-md)' }} />
             <div className="summary-card-value" style={{ color: 'var(--color-success)' }}>{compliantAnswers}</div>
             <div className="summary-card-label">Compliant</div>
+            <div className="summary-card-desc">Responses meeting FCA requirements.</div>
           </div>
 
           <div className="summary-card">
             <Image src="/icons/sections/warning-triangle.svg" alt="" width={48} height={48} style={{ width: '3rem', height: '3rem', margin: '0 auto var(--spacing-md)' }} />
             <div className="summary-card-value" style={{ color: issuesCount > 0 ? 'var(--color-danger)' : 'var(--color-success)' }}>{issuesCount}</div>
             <div className="summary-card-label">Needs Action</div>
+            <div className="summary-card-desc">Items flagged for follow-up.</div>
           </div>
 
           <div className="summary-card">
             <Image src="/icons/actions/chart-bar.svg" alt="" width={48} height={48} style={{ width: '3rem', height: '3rem', margin: '0 auto var(--spacing-md)' }} />
             <div className="summary-card-value">{questions.length}</div>
             <div className="summary-card-label">Sections Reviewed</div>
+            <div className="summary-card-desc">Checklist sections completed.</div>
           </div>
         </div>
       </section>
@@ -503,14 +472,9 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
           <section style={{ maxWidth: '800px', margin: 'var(--spacing-3xl) auto 0', padding: '0 var(--spacing-md)' }}>
             <div className="card card-lg" style={{
               textAlign: 'center',
-              background: 'var(--color-success-bg)',
-              border: '2px solid var(--color-success)'
+              background: 'var(--color-panel)',
+              border: '1px solid var(--color-border-light)'
             }}>
-              <Image src="/icons/actions/document-text.svg" alt="" width={80} height={80} style={{
-                width: '5rem',
-                height: '5rem',
-                margin: '0 auto var(--spacing-lg)'
-              }} />
               <h2 style={{
                 fontSize: '1.875rem',
                 fontWeight: 'var(--font-bold)',
@@ -526,7 +490,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
               }}>
                 {t('results.downloadCardCopy')}
               </p>
-              <div style={{
+              <div className="report-action-group" style={{
                 display: 'flex',
                 flexWrap: 'wrap',
                 justifyContent: 'center',
@@ -534,61 +498,30 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
               }}>
                 <button
                   onClick={handleCsvExport}
-                  className="start-button"
-                  style={{
-                    background: 'var(--color-success)',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 'var(--spacing-sm)'
-                  }}
+                  className="report-action-button"
                 >
-                  <Image src="/icons/actions/download.svg" alt="" width={24} height={24} style={{ width: '1.5rem', height: '1.5rem' }} />
                   {t('buttons.downloadCsv')}
                 </button>
 
                 <button
                   onClick={handlePdfExport}
-                  className="start-button"
-                  style={{
-                    background: 'var(--color-accent-secondary)',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 'var(--spacing-sm)'
-                  }}
+                  className="report-action-button"
                 >
-                  <Image src="/icons/actions/document-text.svg" alt="" width={24} height={24} style={{ width: '1.5rem', height: '1.5rem' }} />
                   {t('buttons.downloadPdf')}
                 </button>
 
                 <button
                   onClick={handlePrint}
-                  className="start-button"
-                  style={{
-                    background: 'var(--color-accent-primary)',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 'var(--spacing-sm)'
-                  }}
+                  className="report-action-button"
                 >
-                  <Image src="/icons/actions/printer.svg" alt="" width={24} height={24} style={{ width: '1.5rem', height: '1.5rem' }} />
                   {t('buttons.printReport')}
                 </button>
-
-                <button
-                  onClick={handleEmailResults}
-                  className="start-button"
-                  disabled={emailSending}
-                  style={{
-                    background: 'var(--color-warning)',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 'var(--spacing-sm)'
-                  }}
-                >
-                  <Image src="/icons/actions/envelope.svg" alt="" width={24} height={24} style={{ width: '1.5rem', height: '1.5rem' }} />
-                  {emailSending ? 'Sending...' : t('buttons.emailResults')}
-                </button>
               </div>
+              {!isAuthenticated && (
+                <p className="report-save-note">
+                  Sign in to save this assessment to your dashboard.
+                </p>
+              )}
             </div>
           </section>
         </>

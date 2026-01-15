@@ -405,8 +405,7 @@ footer {
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
     backdrop-filter: blur(8px);
-    position: sticky;
-    top: 1rem;
+    position: static;
     z-index: 50;
 }
 
@@ -433,7 +432,6 @@ footer {
     .app-header {
         padding: 0.5rem 1rem;
         margin: 0.5rem;
-        top: 0.5rem;
     }
 
     .app-header .header-logo img {
@@ -470,5 +468,4 @@ footer {
         max-height: 400px;
     }
 }
-
 

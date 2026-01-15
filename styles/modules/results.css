@@ -28,6 +28,13 @@
     border: 1px solid var(--color-border-light);
 }
 
+.summary-card-desc {
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+}
+
 .export-contact-form { 
     background-color: var(--color-success-bg); 
     border: 1px solid var(--color-success-border); 
@@ -43,6 +50,41 @@
 
 .export-contact-form button:hover {
     background-color: var(--color-success-dark);
+}
+
+.report-action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: var(--color-panel-alt);
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+    font-weight: var(--font-semibold);
+    font-family: var(--font-primary);
+    cursor: pointer;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+}
+
+.report-action-button:hover {
+    background: var(--color-bg-secondary);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.report-action-button:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+.report-save-note {
+    margin-top: var(--spacing-md);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
 }
 
 /* -- 7. Custom Button Variants -- */
@@ -164,4 +206,3 @@
     border-color: rgba(99, 242, 187, 0.6);
     color: var(--color-accent-primary);
 }
-

@@ -162,9 +162,6 @@ export default function Home() {
         if (suggestion.confidence >= 0.6) {
           prefilled[qId] = {
             answer: suggestion.answer,
-            notes: `AI Analysis (${Math.round(suggestion.confidence * 100)}% confidence): ${suggestion.reason}`,
-            aiSuggested: true,
-            aiConfidence: suggestion.confidence,
           };
         }
       });
@@ -548,6 +545,7 @@ export default function Home() {
             questions={questions}
             answers={answers}
             scenario={selectedScenario}
+            isAuthenticated={isAuthenticated}
           />
         )}
       </main>

@@ -65,10 +65,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ success: false, message: 'A valid email address is required.' });
   }
 
-  if (!sanitizedPhone) {
-    return res.status(400).json({ success: false, message: 'Phone number is required.' });
-  }
-
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   try {
@@ -76,7 +72,7 @@ export default async function handler(req, res) {
       data: {
         name: sanitizedName,
         email: sanitizedEmail,
-        phone: sanitizedPhone,
+        phone: sanitizedPhone || '',
         firm: sanitizedFirm,
       },
     });
@@ -86,7 +82,7 @@ export default async function handler(req, res) {
         <h2>New MEMA FinProms Lead</h2>
         <p><strong>Name:</strong> ${sanitizedName || 'N/A'}</p>
         <p><strong>Email:</strong> ${sanitizedEmail}</p>
-        <p><strong>Phone:</strong> ${sanitizedPhone}</p>
+        <p><strong>Phone:</strong> ${sanitizedPhone || 'Not provided'}</p>
         <p><strong>Firm:</strong> ${sanitizedFirm || 'N/A'}</p>
       </div>
     `;
