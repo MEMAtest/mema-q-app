@@ -377,32 +377,34 @@ export default function Home() {
         <meta name="description" content="Professional FCA PERG 8 financial promotions compliance assessment tool by MEMA Consultants" />
       </Head>
 
-      <header className="app-header">
-        <a href="/" className="header-logo">
-          <img src="/mema-icon.svg" alt="MEMA" />
-        </a>
-        <div className="header-right">
-          <LanguageSwitcher />
-          {appState === 'questionnaire' && (
-            <button onClick={handleShowResults} className="btn-primary-dark">
-              {t('buttons.viewResults')}
-            </button>
-          )}
-          {!authLoading && (
-            isAuthenticated ? (
-              <UserMenu />
-            ) : (
-              <button className="sign-in-btn" onClick={() => openAuthModal('login')}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                  <circle cx="12" cy="7" r="4" />
-                </svg>
-                Sign In
+      {appState !== 'welcome' && (
+        <header className="app-header">
+          <a href="/" className="header-logo">
+            <img src="/mema-icon.svg" alt="MEMA" />
+          </a>
+          <div className="header-right">
+            <LanguageSwitcher />
+            {appState === 'questionnaire' && (
+              <button onClick={handleShowResults} className="btn-primary-dark">
+                {t('buttons.viewResults')}
               </button>
-            )
-          )}
-        </div>
-      </header>
+            )}
+            {!authLoading && (
+              isAuthenticated ? (
+                <UserMenu />
+              ) : (
+                <button className="sign-in-btn" onClick={() => openAuthModal('login')}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                  Sign In
+                </button>
+              )
+            )}
+          </div>
+        </header>
+      )}
 
       {/* Auth Modal */}
       <AuthModal
@@ -457,7 +459,14 @@ export default function Home() {
           </div>
         )}
 
-        {appState === 'welcome' && <WelcomeScreen onStart={handleStart} />}
+        {appState === 'welcome' && (
+          <WelcomeScreen
+            onStart={handleStart}
+            onSignIn={() => openAuthModal('login')}
+            isAuthenticated={isAuthenticated}
+            authLoading={authLoading}
+          />
+        )}
 
         {/* Choice Modal - Quick Start vs Smart Scan */}
         <ChoiceModal

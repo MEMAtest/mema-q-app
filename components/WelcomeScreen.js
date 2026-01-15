@@ -7,6 +7,8 @@ import InteractiveVision3D from './InteractiveVision3D';
 import TiltParallax from './TiltParallax';
 import InteractiveIcon from './InteractiveIcon';
 import ContactForm from './ContactForm';
+import LanguageSwitcher from './LanguageSwitcher';
+import UserMenu from './UserMenu';
 
 const IconWorkflow = () => (
   <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -192,7 +194,7 @@ const sampleAnswers = [
   { label: 'No', helper: 'Requirement missing or needs escalation.', defaultSelected: false }
 ];
 
-const WelcomeScreen = ({ onStart }) => {
+const WelcomeScreen = ({ onStart, onSignIn, isAuthenticated, authLoading }) => {
   const { t } = useTranslation('common');
   const [showContactForm, setShowContactForm] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -225,6 +227,20 @@ const WelcomeScreen = ({ onStart }) => {
         </div>
         <nav className="header-nav" />
         <div className="header-actions">
+          <LanguageSwitcher />
+          {!authLoading && (
+            isAuthenticated ? (
+              <UserMenu />
+            ) : (
+              <button className="sign-in-btn" onClick={onSignIn}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                Sign In
+              </button>
+            )
+          )}
           <button className="start-button" onClick={onStart} style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem' }}>
             Get Started
           </button>

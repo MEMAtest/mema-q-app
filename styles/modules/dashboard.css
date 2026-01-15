@@ -383,12 +383,12 @@
     position: fixed;
     inset: 0;
     background: transparent;
-    z-index: 99;
+    z-index: 140;
 }
 
 .user-menu {
     position: relative;
-    z-index: 100;
+    z-index: 150;
 }
 
 .user-menu-trigger {
@@ -456,7 +456,7 @@
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-xl);
     min-width: 200px;
-    z-index: 101;
+    z-index: 160;
     animation: fadeInDown 0.15s ease;
 }
 
@@ -575,4 +575,3 @@
         padding: 0.25rem;
     }
 }
-
