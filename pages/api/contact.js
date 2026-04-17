@@ -2,44 +2,18 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const CONTACT_REASONS_MAP = {
-  assessment: 'Request a Compliance Assessment',
-  demo: 'Schedule a Product Demo',
-  consulting: 'Compliance Consulting Services',
-  authorization: 'FCA Authorization Support',
-  finproms: 'Financial Promotions Guidance',
-  partnership: 'Partnership Opportunities',
-  support: 'Technical Support',
-  other: 'Other'
-};
-
-const BEST_TIMES_MAP = {
-  morning: 'Morning (9am - 12pm)',
-  afternoon: 'Afternoon (12pm - 5pm)',
-  evening: 'Evening (5pm - 7pm)',
-  anytime: 'Anytime'
-};
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const { name, email, phone, company, reason, reasonOther, bestTime, message } = req.body;
+    const { name, email, phone, firmName, businessType, purpose, howFoundUs, timeframe, requirements } = req.body;
 
     // Validation
-    if (!name || !email || !company || !reason || !bestTime) {
+    if (!name || !email || !firmName || !purpose) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
-
-    if (reason === 'other' && !reasonOther) {
-      return res.status(400).json({ error: 'Please specify your reason for contact' });
-    }
-
-    // Determine the reason text
-    const reasonText = reason === 'other' ? reasonOther : CONTACT_REASONS_MAP[reason];
-    const bestTimeText = BEST_TIMES_MAP[bestTime];
 
     // Create email content
     const emailHtml = `
@@ -149,24 +123,40 @@ export default async function handler(req, res) {
             ` : ''}
 
             <div class="field">
-              <div class="field-label">Company</div>
-              <div class="field-value">${company}</div>
+              <div class="field-label">Firm Name</div>
+              <div class="field-value">${firmName}</div>
             </div>
 
+            ${businessType ? `
             <div class="field">
-              <div class="field-label">Reason for Contact</div>
-              <div class="field-value">${reasonText}</div>
+              <div class="field-label">Business Type</div>
+              <div class="field-value">${businessType}</div>
             </div>
+            ` : ''}
 
             <div class="field">
-              <div class="field-label">Best Time to Contact</div>
-              <div class="field-value">${bestTimeText}</div>
+              <div class="field-label">Purpose / Reason for Contact</div>
+              <div class="field-value">${purpose}</div>
             </div>
 
-            ${message ? `
+            ${timeframe ? `
             <div class="field">
-              <div class="field-label">Additional Details</div>
-              <div class="message-box">${message.replace(/\n/g, '<br>')}</div>
+              <div class="field-label">Timeframe</div>
+              <div class="field-value">${timeframe}</div>
+            </div>
+            ` : ''}
+
+            ${howFoundUs ? `
+            <div class="field">
+              <div class="field-label">How They Found Us</div>
+              <div class="field-value">${howFoundUs}</div>
+            </div>
+            ` : ''}
+
+            ${requirements ? `
+            <div class="field">
+              <div class="field-label">Requirements / Additional Details</div>
+              <div class="message-box">${requirements.replace(/\n/g, '<br>')}</div>
             </div>
             ` : ''}
           </div>
@@ -189,10 +179,9 @@ New Contact Form Submission
 
 Contact Person: ${name}
 Email: ${email}
-${phone ? `Phone: ${phone}\n` : ''}Company: ${company}
-Reason: ${reasonText}
-Best Time to Contact: ${bestTimeText}
-${message ? `\nAdditional Details:\n${message}\n` : ''}
+${phone ? `Phone: ${phone}\n` : ''}Firm Name: ${firmName}
+${businessType ? `Business Type: ${businessType}\n` : ''}Purpose: ${purpose}
+${timeframe ? `Timeframe: ${timeframe}\n` : ''}${howFoundUs ? `How Found Us: ${howFoundUs}\n` : ''}${requirements ? `\nRequirements:\n${requirements}\n` : ''}
 ---
 Received on ${new Date().toLocaleString('en-GB', {
   dateStyle: 'long',
@@ -206,7 +195,7 @@ Received on ${new Date().toLocaleString('en-GB', {
       from: 'MEMA Contact Form <noreply@memaconsultants.com>',
       to: ['contact@memaconsultants.com'],
       replyTo: email,
-      subject: `New Contact Form: ${reasonText} - ${company}`,
+      subject: `New Contact Form: ${purpose} - ${firmName}`,
       html: emailHtml,
       text: emailText,
     });
