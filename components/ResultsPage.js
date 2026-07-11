@@ -7,6 +7,7 @@ import { exportResultsToPDF } from '../lib/exportPdf';
 import { getScenario } from '../lib/scenarios';
 import { getRecommendation } from '../lib/recommendations';
 import RecommendationCard from './RecommendationCard';
+import { trackOwnedEvent } from '../lib/ownedAnalytics';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
@@ -68,6 +69,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
           throw new Error(errorData.message || 'Submission failed');
       }
       setFormState({ status: 'success', message: 'Thank you! Your full report is unlocked below and a copy has been sent to your email.' });
+      trackOwnedEvent('lead_submitted', { flow: 'full_report_unlock' });
       setIsFullReportUnlocked(true);
     } catch (error) {
       setFormState({ status: 'error', message: error.message || 'Something went wrong. Please try again.' });
@@ -110,6 +112,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    trackOwnedEvent('download_completed', { format: 'csv', report: scenario || 'full' });
   };
 
   const handlePrint = () => {
@@ -122,6 +125,7 @@ export default function ResultsPage({ results, onGoBack, questions, answers, sce
         firm: leadFirm,
         email: leadEmail,
       });
+      trackOwnedEvent('download_completed', { format: 'pdf', report: scenario || 'full' });
     } catch (error) {
       console.error('PDF export failed:', error);
       alert('Failed to generate PDF. Please try again.');

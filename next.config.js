@@ -40,11 +40,11 @@ module.exports = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://owned-portfolio-analytics.mema-consultants.workers.dev",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' data: blob: https:",
               "font-src 'self' https://fonts.gstatic.com",
-              "connect-src 'self' https://openrouter.ai https://*.vercel.app",
+              "connect-src 'self' https://openrouter.ai https://*.vercel.app https://owned-portfolio-analytics.mema-consultants.workers.dev",
               "frame-ancestors 'self'",
               "base-uri 'self'",
               "form-action 'self'",

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
+import { trackOwnedEvent } from '../lib/ownedAnalytics';
 
 const CONTACT_REASONS = [
   { value: 'assessment', label: 'Request a Compliance Assessment' },
@@ -94,6 +95,10 @@ export default function ContactForm({ onClose }) {
       }
 
       setSubmitStatus('success');
+      trackOwnedEvent(
+        formData.reason === 'demo' ? 'demo_requested' : 'lead_submitted',
+        { form_id: 'contact', reason: formData.reason || 'other' }
+      );
       setTimeout(() => {
         onClose();
       }, 2500);

@@ -24,6 +24,11 @@ function MyApp({ Component, pageProps }) {
     <AuthProvider>
       <Component {...pageProps} />
       <Analytics />
+      <script
+        defer
+        src="https://owned-portfolio-analytics.mema-consultants.workers.dev/tracker.js"
+        data-project="mema-q-app"
+      />
     </AuthProvider>
   );
 }
